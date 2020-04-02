@@ -1,8 +1,8 @@
 import 'phaser'
-import BootScene from './scenes/BootScene'
-import MenuScene from './scenes/MenuScene'
+// import BootScene from './scenes/BootScene'
+// import MenuScene from './scenes/MenuScene'
+import Scene1 from '../assets/scenes/Scene1.js'
 
-console.log('Phaser', Phaser, Phaser.ScaleManager)
 const config = {
   // For more settings see <https://github.com/photonstorm/phaser/blob/master/src/boot/Config.js>
   type: Phaser.WEBGL,
@@ -25,8 +25,9 @@ const config = {
     autoCenter: Phaser.Scale.CENTER_BOTH
   },
   scene: [
-    BootScene,
-    MenuScene
+    Scene1
+    // BootScene,
+    // MenuScene
   ]
 }
 window.addEventListener('load', function () {
