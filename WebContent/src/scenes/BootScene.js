@@ -1,32 +1,27 @@
-import makeAnimations from '../helplers/animations'
+import store from '../helplers/globalStore'
 
-class Boot extends Phaser.Scene {
+class BootScene extends Phaser.Scene {
   constructor (test) {
     super({
-      key: 'Boot'
+      key: 'BootScene'
     })
   }
 
   preload () {
-    const progress = this.add.graphics()
+    this.load.image('background', 'assets/images/bg.png')
+    this.load.image('logo-card', 'assets/images/logo-card.png')
+    this.load.image('loading-background', 'assets/images/loading-background.png')
+  }
 
-    // Register a load progress event to show a load bar
-    this.load.on('progress', (value) => {
-      progress.clear()
-      progress.fillStyle(0xffffff, 1)
-      progress.fillRect(0, this.sys.game.config.height / 2, this.sys.game.config.width * value, 60)
+  create () {
+    store.setAll({
+      width: this.cameras.main.width,
+      height: this.cameras.main.height,
+      centerX: this.cameras.main.centerX,
+      centerY: this.cameras.main.centerY
     })
-
-    // Register a load complete event to launch the title screen when all files are loaded
-    this.load.on('complete', () => {
-      // prepare all animations, defined in a separate file
-      makeAnimations(this)
-      progress.destroy()
-      this.scene.start('Menu')
-    })
-
-    this.load.bitmapFont('font', '../../assets/fonts/font.png', '../../assets/fonts/font.fnt')
+    this.scene.start('PreloaderScene')
   }
 }
 
-export default Boot
+export default BootScene
