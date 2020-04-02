@@ -1,32 +1,27 @@
 import Phaser from "phaser";
-import logoImg from "./assets/logo.png";
+import Scene1 from '../src/assets/scenes/Scene1';
 
 const config = {
+  title: "card_game",
+  width: 1000,
+  height: 500,
   type: Phaser.AUTO,
-  parent: "phaser-example",
-  width: 800,
-  height: 600,
+  backgroundColor: "#88F",
+  parent: "game-container",
+  scale: {
+      "mode": Phaser.Scale.FIT,
+      "autoCenter": Phaser.Scale.CENTER_BOTH
+  },
   scene: {
     preload: preload,
     create: create
   }
-};
+}
 
 const game = new Phaser.Game(config);
 
-function preload() {
-  this.load.image("logo", logoImg);
-}
+function preload() {}
 
 function create() {
-  const logo = this.add.image(400, 150, "logo");
-
-  this.tweens.add({
-    targets: logo,
-    y: 450,
-    duration: 2000,
-    ease: "Power2",
-    yoyo: true,
-    loop: -1
-  });
+  this.scene.add('Scene1', Scene1, true);
 }
