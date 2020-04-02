@@ -70,7 +70,7 @@ module.exports = {
   },
   optimization: {
     minimize: true
-  }
+  },
   /*node: {
     fs: 'empty',
     net: 'empty',
