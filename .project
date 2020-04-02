@@ -14,6 +14,28 @@
 	<natures>
 		<nature>phasereditor.project.core.nature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>WebContent/assets/images/BG.jpg</name>
+			<type>1</type>
+			<location>/Users/duong.nguyen/Documents/BG.jpg</location>
+		</link>
+		<link>
+			<name>WebContent/assets/images/avatar.png</name>
+			<type>1</type>
+			<location>/Users/duong.nguyen/Documents/avatar.png</location>
+		</link>
+		<link>
+			<name>WebContent/assets/images/cards</name>
+			<type>2</type>
+			<location>/Users/duong.nguyen/Documents/cards</location>
+		</link>
+		<link>
+			<name>WebContent/assets/images/unvisible.jpg</name>
+			<type>1</type>
+			<location>/Users/duong.nguyen/Documents/unvisible.jpg</location>
+		</link>
+	</linkedResources>
 	<filteredResources>
 		<filter>
 			<id>1585729736653</id>

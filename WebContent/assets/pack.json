@@ -15,11 +15,281 @@
       "key": "textures",
       "url": "assets/atlas/textures.json",
       "path": "assets/atlas"
+    },
+    {
+      "type": "image",
+      "key": "BG",
+      "url": "assets/images/BG.jpg"
+    },
+    {
+      "type": "image",
+      "key": "image_part_001",
+      "url": "assets/images/cards/image_part_001.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_002",
+      "url": "assets/images/cards/image_part_002.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_003",
+      "url": "assets/images/cards/image_part_003.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_004",
+      "url": "assets/images/cards/image_part_004.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_005",
+      "url": "assets/images/cards/image_part_005.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_006",
+      "url": "assets/images/cards/image_part_006.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_007",
+      "url": "assets/images/cards/image_part_007.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_008",
+      "url": "assets/images/cards/image_part_008.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_009",
+      "url": "assets/images/cards/image_part_009.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_010",
+      "url": "assets/images/cards/image_part_010.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_011",
+      "url": "assets/images/cards/image_part_011.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_012",
+      "url": "assets/images/cards/image_part_012.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_013",
+      "url": "assets/images/cards/image_part_013.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_015",
+      "url": "assets/images/cards/image_part_015.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_016",
+      "url": "assets/images/cards/image_part_016.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_017",
+      "url": "assets/images/cards/image_part_017.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_018",
+      "url": "assets/images/cards/image_part_018.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_019",
+      "url": "assets/images/cards/image_part_019.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_020",
+      "url": "assets/images/cards/image_part_020.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_021",
+      "url": "assets/images/cards/image_part_021.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_022",
+      "url": "assets/images/cards/image_part_022.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_023",
+      "url": "assets/images/cards/image_part_023.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_024",
+      "url": "assets/images/cards/image_part_024.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_025",
+      "url": "assets/images/cards/image_part_025.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_026",
+      "url": "assets/images/cards/image_part_026.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_027",
+      "url": "assets/images/cards/image_part_027.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_029",
+      "url": "assets/images/cards/image_part_029.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_030",
+      "url": "assets/images/cards/image_part_030.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_031",
+      "url": "assets/images/cards/image_part_031.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_032",
+      "url": "assets/images/cards/image_part_032.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_033",
+      "url": "assets/images/cards/image_part_033.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_034",
+      "url": "assets/images/cards/image_part_034.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_035",
+      "url": "assets/images/cards/image_part_035.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_036",
+      "url": "assets/images/cards/image_part_036.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_037",
+      "url": "assets/images/cards/image_part_037.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_038",
+      "url": "assets/images/cards/image_part_038.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_039",
+      "url": "assets/images/cards/image_part_039.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_040",
+      "url": "assets/images/cards/image_part_040.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_041",
+      "url": "assets/images/cards/image_part_041.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_043",
+      "url": "assets/images/cards/image_part_043.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_044",
+      "url": "assets/images/cards/image_part_044.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_045",
+      "url": "assets/images/cards/image_part_045.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_046",
+      "url": "assets/images/cards/image_part_046.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_047",
+      "url": "assets/images/cards/image_part_047.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_048",
+      "url": "assets/images/cards/image_part_048.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_049",
+      "url": "assets/images/cards/image_part_049.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_050",
+      "url": "assets/images/cards/image_part_050.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_051",
+      "url": "assets/images/cards/image_part_051.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_052",
+      "url": "assets/images/cards/image_part_052.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_053",
+      "url": "assets/images/cards/image_part_053.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_054",
+      "url": "assets/images/cards/image_part_054.png"
+    },
+    {
+      "type": "image",
+      "key": "image_part_055",
+      "url": "assets/images/cards/image_part_055.png"
+    },
+    {
+      "type": "image",
+      "key": "unvisible",
+      "url": "assets/images/unvisible.jpg"
     }
   ]},
   "meta": {
-    "generated": "1563370262414",
-    "app": "Phaser Editor 2D - Asset Pack Editor - 2.1.3",
+    "generated": "1585732477298",
+    "app": "Phaser Editor 2D - Asset Pack Editor - 2.1.6",
     "contentType": "Phaser v3 Asset Pack",
     "url": "https://phasereditor2d.com",
     "version": "2"
