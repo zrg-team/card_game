@@ -82,7 +82,23 @@ export const RESOURCES = {
       width: 65,
       height: 64,
       load: ['dialog-close', 'assets/images/dialog-close.png']
-    }
+    },
+    {
+      key: 'avatar',
+      load: ['avatar', 'assets/images/avatar.png']
+    },
+    {
+      key: 'unvisible-card',
+      load: ['unvisible-card', 'assets/images/unvisible-card.jpg']
+    },
+    {
+      key: 'game-table',
+      load: ['game-table', 'assets/images/game-table.jpg']
+    },
+    {
+      key: 'kenh-bai',
+      load: ['kenh-bai', 'assets/images/kenh-bai.png']
+    },
   ],
   spritesheet: [
     {
