@@ -106,7 +106,23 @@ export const RESOURCES = {
       width: 234,
       height: 111,
       load: ['play-button', 'assets/images/play-button.png']
-    }
+    },
+    {
+      key: 'avatar',
+      load: ['avatar', 'assets/images/avatar.png']
+    },
+    {
+      key: 'unvisible-card',
+      load: ['unvisible-card', 'assets/images/unvisible-card.jpg']
+    },
+    {
+      key: 'game-table',
+      load: ['game-table', 'assets/images/game-table.jpg']
+    },
+    {
+      key: 'kenh-bai',
+      load: ['kenh-bai', 'assets/images/kenh-bai.png']
+    },
   ],
   spritesheet: [
     {
