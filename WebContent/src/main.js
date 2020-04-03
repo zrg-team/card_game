@@ -14,6 +14,9 @@ const config = {
   parent: 'game-container',
   width: 800,
   height: 450,
+  dom: {
+    createContainer: true
+  },
   physics: {
     // default: 'arcade',
     // arcade: {
@@ -28,11 +31,13 @@ const config = {
     autoCenter: Phaser.Scale.CENTER_BOTH
   },
   plugins: {
-    scene: [{
-      key: 'rexUI',
-      plugin: UIPlugin,
-      mapping: 'rexUI'
-    }]
+    scene: [
+      {
+        key: 'rexUI',
+        plugin: UIPlugin,
+        mapping: 'rexUI'
+      }
+    ]
   },
   scene: [
     // Scene1

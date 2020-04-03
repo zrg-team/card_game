@@ -70,6 +70,18 @@ export const RESOURCES = {
       width: 60,
       height: 60,
       load: ['setting-button', 'assets/images/setting-button.png']
+    },
+    {
+      key: 'dialog-bg',
+      width: 1664,
+      height: 990,
+      load: ['dialog-bg', 'assets/images/dialog-bg.png']
+    },
+    {
+      key: 'dialog-close',
+      width: 65,
+      height: 64,
+      load: ['dialog-close', 'assets/images/dialog-close.png']
     }
   ],
   spritesheet: [
