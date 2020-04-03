@@ -36,11 +36,12 @@ class PreloaderScene extends Phaser.Scene {
     this.load.on('progress', function (value) {
       progress.clear()
       progress.fillStyle(0xFF1D24, 1)
-      progress.fillRect(
+      progress.fillRoundedRect(
         loadingBg.x - (loadingBg.width * 0.5) + 5,
         loadingBg.y - (loadingBg.height * 0.5) + 12,
         320 + value,
-        25)
+        25,
+        5)
     })
     this.load.on('complete', () => {
       progress.destroy()

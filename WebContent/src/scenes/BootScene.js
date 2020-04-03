@@ -14,6 +14,8 @@ class BootScene extends Phaser.Scene {
   }
 
   create () {
+    // this.scale.startFullscreen()
+    this.scale.lockOrientation('landscape')
     store.setAll({
       width: this.cameras.main.width,
       height: this.cameras.main.height,

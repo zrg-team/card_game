@@ -1,5 +1,5 @@
-import { createButton } from '../helplers/button'
 import store from '../helplers/globalStore'
+import registerDialog from './RegisterDialog'
 
 class MenuScene extends Phaser.Scene {
   constructor (test) {
@@ -18,10 +18,14 @@ class MenuScene extends Phaser.Scene {
     this.bg = this.add
       .sprite(0, 0, 'main-background')
       .setOrigin(0, 0)
-      .setDisplaySize(800, 450)
+      .setDisplaySize(world.width, world.height)
 
     this.createTopPanel(world)
+    this.createMainMenu(world)
+    const text = this.add.text(world.width - 100, world.height - 16, '© 2020 Zrg-team', { font: '10px' })
+  }
 
+  createMainMenu (world) {
     this.title = this.add
       .sprite(world.centerX, world.centerY + 15, 'logo-game')
       .setOrigin(0.5, 0.5)
@@ -63,8 +67,6 @@ class MenuScene extends Phaser.Scene {
         })
       }
     })
-
-    const text = this.add.text(world.width - 100, world.height - 16, '© 2020 Zrg-team', { font: '10px' })
   }
 
   createTopPanel (world) {
@@ -120,10 +122,10 @@ class MenuScene extends Phaser.Scene {
   }
 
   handleStart () {
-    console.log('handleStart')
     this.buttonSfx.play({
       loop: false
     })
+    registerDialog(this)
   }
 
   update (time, delta) {
