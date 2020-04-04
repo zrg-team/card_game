@@ -125,7 +125,8 @@ class MenuScene extends Phaser.Scene {
     this.buttonSfx.play({
       loop: false
     })
-    registerDialog(this)
+    registerDialog(this);
+    // this.scene.start('Scene1');
   }
 
   update (time, delta) {
