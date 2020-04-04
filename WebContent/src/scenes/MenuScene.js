@@ -22,7 +22,7 @@ class MenuScene extends Phaser.Scene {
     this.world = store.getAll()
     // Create UI
     this.bg = this.add
-      .sprite(0, 0, 'main-background')
+      .image(0, 0, 'main-background')
       .setOrigin(0, 0)
       .setDisplaySize(this.world.width, this.world.height)
 
@@ -56,24 +56,24 @@ class MenuScene extends Phaser.Scene {
 
   createTopPanel (world) {
     this.topPanel = this.add
-      .sprite(-1, 0, 'top-panel')
+      .image(-1, 0, 'top-panel')
       .setOrigin(0, 0)
       .setDisplaySize(801, 60)
 
     this.userPanel = this.add
-      .sprite(0, 0, 'user-panel')
+      .image(0, 0, 'user-panel')
       .setOrigin(0, 0)
       .setDisplaySize(270, 64)
 
     this.userIcon = this.add
-      .sprite(4, 5, 'user-icon')
+      .image(4, 5, 'user-icon')
       .setOrigin(0, 0)
       .setDisplaySize(56, 56)
 
     this.createUserPanel()
 
     this.userSetting = this.add
-      .sprite(world.width - 35, 30, 'setting-button')
+      .image(world.width - 35, 30, 'setting-button')
       .setOrigin(0.5, 0.5)
       .setDisplaySize(50, 50)
   }
@@ -98,9 +98,9 @@ class MenuScene extends Phaser.Scene {
       this.createUserInformationPanel()
     } else {
       this.userLogin = this.add
-        .sprite(106, 30, 'login-button')
+        .image(115, 30, 'login-button')
         .setOrigin(0.5, 0.5)
-        .setDisplaySize(80, 26)
+        .setDisplaySize(100, 34)
         .setInteractive()
         .on('pointerdown', this.handleLogin)
 
@@ -115,9 +115,9 @@ class MenuScene extends Phaser.Scene {
       })
 
       this.userSignup = this.add
-        .sprite(196, 30, 'register-button')
+        .image(196, 30, 'register-button')
         .setOrigin(0.5, 0.5)
-        .setDisplaySize(80, 26)
+        .setDisplaySize(100, 34)
         .setInteractive()
         .on('pointerdown', this.handleRegister)
 
@@ -211,7 +211,7 @@ class MenuScene extends Phaser.Scene {
     //   .setDisplaySize(contentWidth, contentHeight * 0.2)
     //   .setOrigin(0.5, 0.5)
     const title = this.add
-      .sprite(0, 0, item.icon)
+      .image(0, 0, item.icon)
       .setDisplaySize(contentWidth - 60, contentHeight - 60)
       .setOrigin(0.5, 0.5)
 
@@ -228,7 +228,7 @@ class MenuScene extends Phaser.Scene {
     })
       .addBackground(
         this.add
-          .sprite(0, 0, 'game-background')
+          .image(0, 0, 'game-background')
           .setDisplaySize(contentWidth, contentHeight)
           .setOrigin(0, 0)
       ).add(

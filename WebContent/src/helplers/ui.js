@@ -99,7 +99,7 @@ export function createButton (scene, title, option = {}) {
     height: 40, // Minimum height of round-rectangle
     x: 100,
     background: background && backgroundColor !== null
-      ? scene.rexUI.add.roundRectangle(0, 0, 100, 40, 20, backgroundColor)
+      ? scene.rexUI.add.roundRectangle(0, 0, 100, 40, 5, backgroundColor)
         .setStrokeStyle(2, 0x000000)
       : null,
 
@@ -231,6 +231,6 @@ export function createConfirmPopup (scene, option = {}) {
   })
     .layout()
     // .drawBounds(this.add.graphics(), 0xff0000)
-    .popUp(1000)
+    .popUp(400)
   return dialog
 }

@@ -7,9 +7,9 @@ export default function generateLoginDialog (game, world, option = {}) {
   let loading = false
   let dialog = game.rexUI.add.dialog({
     x: 400,
-    y: 230,
-    width: 500,
-    height: 400,
+    y: 210,
+    width: 480,
+    height: 344,
     background: game.add.image(0, 0, 'dialog-bg'),
     title: createLabel(
       game,
@@ -23,7 +23,7 @@ export default function generateLoginDialog (game, world, option = {}) {
           space: {
             left: 82,
             right: 10,
-            top: 60,
+            top: 55,
             bottom: 10
           }
         }
@@ -79,7 +79,7 @@ export default function generateLoginDialog (game, world, option = {}) {
         game,
         'Submit',
         {
-          backgroundColor: 0xdcbf8a,
+          backgroundColor: 0xe0c48f,
           button: {
             space: {
               left: 20,
@@ -152,21 +152,18 @@ export default function generateLoginDialog (game, world, option = {}) {
       // choices: 'left',
       actions: 'right' // 'center'|'left'|'right'
     }
-    // click: {
-    //   mode: 'release'
-    // }
   })
     .setDraggable('background') // Draggable-background
     .layout()
     // .drawBounds(game.add.graphics(), 0xff0000)
-    .popUp(1000)
+    .popUp(800)
 
   const tween = game.tweens.add({
     targets: dialog,
     scaleX: 1,
     scaleY: 1,
     ease: 'Bounce', // 'Cubic', 'Elastic', 'Bounce', 'Back'
-    duration: 1000,
+    duration: 800,
     repeat: 0, // -1: infinity
     yoyo: false
   })
