@@ -9,24 +9,23 @@ export default function generateRegisterDialog (game, world) {
   let dialog = game.rexUI.add.dialog({
     x: 400,
     y: 230,
-    width: 500,
-    height: 400,
+    width: 640,
+    height: 450,
     background: game.add.image(0, 0, 'dialog-bg'),
     title: createLabel(
-        game,
-        'REGISTER' ,
-        {
-          background: false,
-          label: {
-            x: 40,
-            y: 40,
-            align: 'center',
-            space: {
-              left: 82,
-              right: 10,
-              top: 60,
-              bottom: 10
-            }
+      game,
+      'REGISTER',
+      {
+        background: false,
+        label: {
+          x: 40,
+          y: 40,
+          align: 'center',
+          space: {
+            left: 82,
+            right: 10,
+            top: 65,
+            bottom: 10
           }
         }
       ),
@@ -95,7 +94,7 @@ export default function generateRegisterDialog (game, world) {
         game,
         'Submit',
         {
-          backgroundColor: 0xdcbf8a,
+          backgroundColor: 0xe0c48f,
           button: {
             space: {
               left: 20,

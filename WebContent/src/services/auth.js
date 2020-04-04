@@ -10,6 +10,8 @@ export function register (email, password, displayName = '') {
         .then(() => {
           return result.user.updateProfile({
             displayName: displayName || ''
+          }).then((response) => {
+            return result.user
           })
         })
     }).catch(err => {
