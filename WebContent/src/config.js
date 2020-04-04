@@ -99,6 +99,10 @@ export const RESOURCES = {
       key: 'kenh-bai',
       load: ['kenh-bai', 'assets/images/kenh-bai.png']
     },
+    {
+      key: 'start-game-btn',
+      load: ['start-game-btn', 'assets/images/start-game-btn.png']
+    },
   ],
   spritesheet: [
     {
