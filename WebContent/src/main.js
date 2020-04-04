@@ -37,7 +37,8 @@ const config = {
         plugin: UIPlugin,
         mapping: 'rexUI'
       }
-    ]
+    ],
+    global: []
   },
   scene: [
     // Scene1

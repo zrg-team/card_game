@@ -4,6 +4,18 @@ class Storage {
     this.game = null
   }
 
+  localStorageSet (key, value) {
+    return localStorage.setItem(key, value)
+  }
+
+  localStorageGet (key) {
+    return localStorage.getItem(key)
+  }
+
+  localStorageDelete (key) {
+    return localStorage.removeItem(key)
+  }
+
   init (game) {
     this.game = game
   }

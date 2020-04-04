@@ -12,10 +12,10 @@ export const FIREBASE_CONFIG = {
 export const RESOURCES = {
   image: [
     {
-      key: 'logo-game',
+      key: 'logo-game-1',
       width: 2048,
       height: 2048,
-      load: ['logo-game', 'assets/images/logo-game.png']
+      load: ['logo-game-1', 'assets/images/logo-game-1.png']
     },
     {
       key: 'button',
@@ -82,6 +82,30 @@ export const RESOURCES = {
       width: 65,
       height: 64,
       load: ['dialog-close', 'assets/images/dialog-close.png']
+    },
+    {
+      key: 'game-background',
+      width: 1029,
+      height: 560,
+      load: ['game-background', 'assets/images/game-bg-1.png']
+    },
+    {
+      key: 'icon-mau-binh',
+      width: 234,
+      height: 234,
+      load: ['icon-mau-binh', 'assets/images/mau-binh.jpeg']
+    },
+    {
+      key: 'icon-poker',
+      width: 300,
+      height: 256,
+      load: ['icon-poker', 'assets/images/icon-poker.png']
+    },
+    {
+      key: 'play-button',
+      width: 234,
+      height: 111,
+      load: ['play-button', 'assets/images/play-button.png']
     }
   ],
   spritesheet: [
