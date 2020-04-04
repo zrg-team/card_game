@@ -10,6 +10,7 @@ class MenuScene extends Phaser.Scene {
       key: 'MenuScene'
     })
     this.wathUserInformation = this.wathUserInformation.bind(this)
+    this.handleFullscreen = this.handleFullscreen.bind(this)
     this.handleRegister = this.handleRegister.bind(this)
     this.handleLogout = this.handleLogout.bind(this)
     this.handleLogin = this.handleLogin.bind(this)
@@ -76,6 +77,8 @@ class MenuScene extends Phaser.Scene {
       .image(world.width - 35, 30, 'setting-button')
       .setOrigin(0.5, 0.5)
       .setDisplaySize(50, 50)
+      .setInteractive()
+      .on('pointerdown', this.handleFullscreen)
   }
 
   createUserPanel () {
@@ -276,6 +279,22 @@ class MenuScene extends Phaser.Scene {
     //   })
 
     return sizer
+  }
+
+  handleFullscreen () {
+    this.buttonSfx.play({
+      loop: false
+    })
+    this.tweens.add({
+      targets: this.userSetting,
+      scaleX: 0.5,
+      scaleY: 0.5,
+      ease: 'Sine.easeInOut',
+      duration: 100,
+      repeat: 0,
+      yoyo: true,
+      onComplete: () => this.scale.toggleFullscreen()
+    })
   }
 
   handleLogout () {

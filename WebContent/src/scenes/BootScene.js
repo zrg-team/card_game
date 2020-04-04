@@ -15,8 +15,9 @@ class BootScene extends Phaser.Scene {
   }
 
   create () {
-    // this.scale.startFullscreen()
-    this.scale.lockOrientation('landscape')
+    if (!this.scale.isPortrait) {
+      this.scale.lockOrientation('landscape-primary')
+    }
     const user = parseJSON(store.localStorageGet('user'))
     const information = parseJSON(store.localStorageGet('information'))
 
