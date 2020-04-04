@@ -1,11 +1,3 @@
-export const setIntervalXTimes = (callback, delay, repetitions) => {
-  var x = 0;
-  var intervalID = window.setInterval(function () {
-
-     callback();
-
-     if (++x === repetitions) {
-         window.clearInterval(intervalID);
-     }
-  }, delay);
-};
+export const delay = async (ms) => {
+  return await new Promise(resolve => setTimeout(resolve, ms));
+}
