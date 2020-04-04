@@ -19,7 +19,7 @@ class BootScene extends Phaser.Scene {
     this.scale.lockOrientation('landscape')
     const user = parseJSON(store.localStorageGet('user'))
     const information = parseJSON(store.localStorageGet('information'))
-    
+
     store.setAll({
       width: this.cameras.main.width,
       height: this.cameras.main.height,

@@ -12,23 +12,23 @@ export default function generateLoginDialog (game, world, option = {}) {
     height: 400,
     background: game.add.image(0, 0, 'dialog-bg'),
     title: createLabel(
-        game,
-        'LOGIN' ,
-        {
-          background: false,
-          label: {
-            x: 40,
-            y: 40,
-            align: 'center',
-            space: {
-              left: 82,
-              right: 10,
-              top: 60,
-              bottom: 10
-            }
+      game,
+      'LOGIN',
+      {
+        background: false,
+        label: {
+          x: 40,
+          y: 40,
+          align: 'center',
+          space: {
+            left: 82,
+            right: 10,
+            top: 60,
+            bottom: 10
           }
         }
-      ),
+      }
+    ),
     toolbar: [
       game.add
         .image(0, 0, 'dialog-close')
@@ -103,22 +103,22 @@ export default function generateLoginDialog (game, world, option = {}) {
             })
             loading = true
             login(email, password)
-            .then(result => {
-              loading = false
-              if (result.errorCode || result.errorMessage) {
-                return createToast(game, world.width / 2, world.height - 40)
+              .then(result => {
+                loading = false
+                if (result.errorCode || result.errorMessage) {
+                  return createToast(game, world.width / 2, world.height - 40)
+                    .setOrigin(0.5, 0.5)
+                    .show(result.errorMessage)
+                }
+                createToast(game, world.width / 2, world.height - 40)
                   .setOrigin(0.5, 0.5)
-                  .show(result.errorMessage)
-              }
-              createToast(game, world.width / 2, world.height - 40)
-                .setOrigin(0.5, 0.5)
-                .show('Login success.')
-              dialog.setVisible(false)
-              dialog = null
-              if (option.loginSuccess) {
-                option.loginSuccess(result)
-              }
-            })
+                  .show('Login success.')
+                dialog.setVisible(false)
+                dialog = null
+                if (option.loginSuccess) {
+                  option.loginSuccess(result)
+                }
+              })
           }
         }
       )
@@ -151,7 +151,7 @@ export default function generateLoginDialog (game, world, option = {}) {
       // description: 'left',
       // choices: 'left',
       actions: 'right' // 'center'|'left'|'right'
-    },
+    }
     // click: {
     //   mode: 'release'
     // }

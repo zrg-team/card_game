@@ -13,23 +13,23 @@ export default function generateRegisterDialog (game, world) {
     height: 400,
     background: game.add.image(0, 0, 'dialog-bg'),
     title: createLabel(
-        game,
-        'REGISTER' ,
-        {
-          background: false,
-          label: {
-            x: 40,
-            y: 40,
-            align: 'center',
-            space: {
-              left: 82,
-              right: 10,
-              top: 60,
-              bottom: 10
-            }
+      game,
+      'REGISTER',
+      {
+        background: false,
+        label: {
+          x: 40,
+          y: 40,
+          align: 'center',
+          space: {
+            left: 82,
+            right: 10,
+            top: 60,
+            bottom: 10
           }
         }
-      ),
+      }
+    ),
     toolbar: [
       game.add
         .image(0, 0, 'dialog-close')
@@ -119,19 +119,19 @@ export default function generateRegisterDialog (game, world) {
             })
             loading = true
             register(email, password, displayName)
-            .then(result => {
-              loading = false
-              if (result.errorCode) {
-                return createToast(game, world.width / 2, world.height - 40)
+              .then(result => {
+                loading = false
+                if (result.errorCode) {
+                  return createToast(game, world.width / 2, world.height - 40)
+                    .setOrigin(0.5, 0.5)
+                    .show(result.errorMessage)
+                }
+                createToast(game, world.width / 2, world.height - 40)
                   .setOrigin(0.5, 0.5)
-                  .show(result.errorMessage)
-              }
-              createToast(game, world.width / 2, world.height - 40)
-                .setOrigin(0.5, 0.5)
-                .show('Please check your inbox to confirm your email.')
-              dialog.setVisible(false)
-              dialog = null
-            })
+                  .show('Please check your inbox to confirm your email.')
+                dialog.setVisible(false)
+                dialog = null
+              })
           }
         }
       )
@@ -164,7 +164,7 @@ export default function generateRegisterDialog (game, world) {
       // description: 'left',
       // choices: 'left',
       actions: 'right' // 'center'|'left'|'right'
-    },
+    }
     // click: {
     //   mode: 'release'
     // }

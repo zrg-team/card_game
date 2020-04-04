@@ -50,7 +50,7 @@ class MenuScene extends Phaser.Scene {
         }
       ]
     )
-    
+
     this.add.text(this.world.width - 100, this.world.height - 16, '© 2020 Zrg-team', { font: '10px' })
   }
 
@@ -144,11 +144,11 @@ class MenuScene extends Phaser.Scene {
       }
     )
     this.userLogout = this.add
-        .image(240, 30, 'dialog-close')
-        .setScale(0.8, 0.8)
-        .setOrigin(0.5, 0.5)
-        .setInteractive()
-        .on('pointerdown', this.handleLogout)
+      .image(240, 30, 'dialog-close')
+      .setScale(0.8, 0.8)
+      .setOrigin(0.5, 0.5)
+      .setInteractive()
+      .on('pointerdown', this.handleLogout)
     wathUserChangeInfo(this.world.user.uid)
     setOnUserInformationChange(this.wathUserInformation)
   }
@@ -163,31 +163,31 @@ class MenuScene extends Phaser.Scene {
       scrollMode: 1,
       // background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, 0x4e342e),
       panel: {
-          child: this.createGameItems(data),
-          mask: {
-              padding: 1
-          },
+        child: this.createGameItems(data),
+        mask: {
+          padding: 1
+        }
       },
       slider: {
-          track: this.rexUI.add.roundRectangle(0, 0, 20, 10, 10, 0x00000),
-          thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, 13, 0xe1b884),
+        track: this.rexUI.add.roundRectangle(0, 0, 20, 10, 10, 0x00000),
+        thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, 13, 0xe1b884)
       },
       // scroller: true,
       space: {
-          left: 10,
-          right: 10,
-          top: 10,
-          bottom: 10,
+        left: 10,
+        right: 10,
+        top: 10,
+        bottom: 10,
 
-          panel: 10,
+        panel: 10
       }
     })
-    .layout()
+      .layout()
   }
 
   createGameItems (data) {
     this.gameSizer = this.rexUI.add.sizer({
-      orientation: 'x',
+      orientation: 'x'
     })
     const len = data.length
     for (let i = 0; i < len; i++) {
@@ -203,15 +203,18 @@ class MenuScene extends Phaser.Scene {
   }
 
   createGameItem (item) {
+    const world = store.getAll()
+    const contentHeight = world.height - 60 - 50
+    const contentWidth = 250
+    // const playButton = this.add
+    //   .sprite(0, 120, 'play-button')
+    //   .setDisplaySize(contentWidth, contentHeight * 0.2)
+    //   .setOrigin(0.5, 0.5)
     const title = this.add
       .sprite(0, 0, item.icon)
+      .setDisplaySize(contentWidth - 60, contentHeight - 60)
       .setOrigin(0.5, 0.5)
 
-    const playButton = this.add
-      .sprite(0, 140, 'play-button')
-      .setDisplaySize(200, 70)
-      .setOrigin(0.5, 0.5)
-      
     if (item.scale) {
       title.setScale(...item.scale)
     }
@@ -219,55 +222,58 @@ class MenuScene extends Phaser.Scene {
       title.setDisplaySize(...item.size)
     }
     const sizer = this.rexUI.add.sizer({
-      orientation: 0,
-      width: 250
+      orientation: 'v',
+      width: contentWidth,
+      height: contentHeight
     })
-    .addBackground(
-      this.add
-        .sprite(0, 0, 'game-background')
-        .setDisplaySize(100, 200)
-        .setOrigin(0, 0)
-    ).add(
-      this.add.text(-110, -150, item.title), // child
-      null, // proportion
-      'left', // align
-      {
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0
-      }, // paddingConfig
-      true // expand
-    ).add(
-      title, // child
-      null, // proportion
-      'left', // align
-      5, // paddingConfig
-      true // expand
-    ).add(
-      playButton,
-      null, // proportion
-      'left', // align
-      5, // paddingConfig
-      true // expand
-    )
-    // console.log('item.onClick>>>>>>>>>', item.onClick)
-    playButton
-      .setInteractive()
-      .on('pointerdown', () => {
-        this.tweens.add({
-          targets: playButton,
-          scale: 1.1,
-          duration: 200,
-          ease: 'Sine.easeInOut',
-          yoyo: 1,
-          loop: 0,
-          delay: 0
-        })
-        if (item.onClick) {
-          item.onClick()
-        }
-      })
+      .addBackground(
+        this.add
+          .sprite(0, 0, 'game-background')
+          .setDisplaySize(contentWidth, contentHeight)
+          .setOrigin(0, 0)
+      ).add(
+        this.add.text(-contentWidth /2 + 20, -contentHeight / 2 + 20, item.title), // child
+        null, // proportion
+        'center', // align
+        {
+          left: 0,
+          right: 0,
+          top: 0,
+          bottom: 0
+        }, // paddingConfig
+        true // expand
+      )
+      .add(
+        title, // child
+        null, // proportion
+        'left', // align
+        0, // paddingConfig
+        true, // expand
+      )
+      // .add(
+      //   playButton,
+      //   null, // proportion
+      //   'left', // align
+      //   5, // paddingConfig
+      //   true // expand
+      // )
+
+    // playButton
+    //   .setInteractive()
+    //   .on('pointerdown', () => {
+    //     this.tweens.add({
+    //       targets: playButton,
+    //       scale: 1.1,
+    //       duration: 200,
+    //       ease: 'Sine.easeInOut',
+    //       yoyo: 1,
+    //       loop: 0,
+    //       delay: 0
+    //     })
+    //     if (item.onClick) {
+    //       item.onClick()
+    //     }
+    //   })
 
     return sizer
   }
@@ -346,7 +352,6 @@ class MenuScene extends Phaser.Scene {
       this.world,
       {
         loginSuccess: (user) => {
-
           this.userLogin.removeAllListeners()
           this.userLogin.destroy()
           this.userSignup.removeAllListeners()

@@ -80,7 +80,7 @@ export function login (email, password) {
             ...userInformation
           }
         })
-        .catch(function(error) {
+        .catch(function (error) {
           return {
             errorCode: 101,
             errorMessage: error.message
