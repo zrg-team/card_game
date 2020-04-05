@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 import Phaser from "phaser";
 import { delay } from '../utils/index';
+=======
+import Phaser from 'phaser'
+import firebase from '../helplers/firebase'
+
+import { delay } from '../utils/index'
+>>>>>>> add scense 2
 
 var hiddenCardNumber;
 var hiddenCardNumberStyle;
@@ -191,12 +198,16 @@ class Scene1 extends Phaser.Scene {
 		this.add.text(745, 255, 'Player', { fontFamily: '"Arial Black"', fontSize: 15 });
 
 		// right top
-		this.add.image(60.0, 80.0, 'avatar');
-		this.add.text(40, 35, 'Player', { fontFamily: '"Arial Black"', fontSize: 15 });
-
-		// left top
 		this.add.image(740.0, 80.0, 'avatar');
 		this.add.text(720, 35, 'Player', { fontFamily: '"Arial Black"', fontSize: 15 });
+
+		// left top
+		this.add.image(60.0, 80.0, 'avatar');
+    this.add.text(40, 35, 'Player', { fontFamily: '"Arial Black"', fontSize: 15 });
+    
+    // firebase.corsEnabledFunction().then(function(result) {
+    //   console.log('Cloud Function called successfully.', result);
+    // });
 	}
 	
 	preload() {
