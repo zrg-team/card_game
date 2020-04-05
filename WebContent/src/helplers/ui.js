@@ -3,7 +3,7 @@ export function createTextBox (scene, x, y, config) {
   const wrapWidth = GetValue(config, 'wrapWidth', 0)
   const fixedWidth = GetValue(config, 'fixedWidth', 0)
   const fixedHeight = GetValue(config, 'fixedHeight', 0)
-
+  let editor = null
   const printText = getBBcodeText(scene, x, y, '', {
     color: 'white',
     fontSize: '24px',
@@ -17,6 +17,10 @@ export function createTextBox (scene, x, y, config) {
     .setOrigin(0.5)
     .setInteractive()
     .on('pointerdown', () => {
+      if (editor) {
+        editor.close()
+        editor.destroy()
+      }
       if (config.input && config.input.type === 'password') {
         printText.text = ''
         if (config.onTextChanged) {
@@ -37,7 +41,11 @@ export function createTextBox (scene, x, y, config) {
           }
         }
       }
-      scene.rexUI.edit(printText, editorConfig)
+      editor = scene.rexUI.edit(printText, editorConfig)
+      if (config.onEditor) {
+        config.onEditor(editor)
+      }
+      console.log('editor', editor)
     })
 
   return printText

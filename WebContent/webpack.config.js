@@ -74,7 +74,7 @@ module.exports = {
     */
     resolve: {
         alias: {
-            'phaser': phaser,
+            'Phaser': phaser,
         }
     }
 }

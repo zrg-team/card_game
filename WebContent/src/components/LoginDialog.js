@@ -5,6 +5,24 @@ export default function generateLoginDialog (game, world, option = {}) {
   let email = ''
   let password = ''
   let loading = false
+
+  let emailEditor = null
+  let passwordEditor = null
+
+  const destroyAll = () => {
+    if (emailEditor) {
+      emailEditor.close()
+      emailEditor.destroy()
+    }
+    if (passwordEditor) {
+      passwordEditor.close()
+      passwordEditor.destroy()
+    }
+    dialog.setVisible(false)
+    dialog.destroy()
+    dialog = null
+  }
+
   let dialog = game.rexUI.add.dialog({
     x: 400,
     y: 210,
@@ -34,8 +52,7 @@ export default function generateLoginDialog (game, world, option = {}) {
         .image(0, 0, 'dialog-close')
         .setInteractive()
         .on('pointerdown', () => {
-          dialog.setVisible(false)
-          dialog = null
+          destroyAll()
         })
     ],
     leftToolbar: [],
@@ -53,6 +70,9 @@ export default function generateLoginDialog (game, world, option = {}) {
         },
         onTextChanged: (objTxt, text) => {
           email = text
+        },
+        onEditor: (editor) => {
+          emailEditor = editor
         }
       }),
       createLabel(game, 'Password', {
@@ -71,6 +91,9 @@ export default function generateLoginDialog (game, world, option = {}) {
         },
         onTextChanged: (objTxt, text) => {
           password = text
+        },
+        onEditor: (editor) => {
+          passwordEditor = editor
         }
       })
     ],
@@ -113,8 +136,7 @@ export default function generateLoginDialog (game, world, option = {}) {
                 createToast(game, world.width / 2, world.height - 40)
                   .setOrigin(0.5, 0.5)
                   .show('Login success.')
-                dialog.setVisible(false)
-                dialog = null
+                  destroyAll()
                 if (option.loginSuccess) {
                   option.loginSuccess(result)
                 }

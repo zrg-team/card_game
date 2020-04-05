@@ -2,7 +2,8 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8">
-		<title>Phaser3</title>
+		<title>Card game</title>
+		<link rel="manifest" href="./assets/manifest.json">
 		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 		<meta name="HandheldFriendly" content="True">
 		<meta name="MobileOptimized" content="320">
@@ -21,10 +22,62 @@
 					-ms-interpolation-mode: nearest-neighbor;    /* IE (non standard naming) */
 					image-rendering: pixelated;                  /* Chrome 41 */
 				}
+				#toggle {
+					position: absolute;
+					right: 20px;
+					bottom: 20px;
+					background-image: url("./assets/images/setting-button.png");
+					background-position: center;
+					background-repeat: no-repeat;
+					background-size: contain;
+					width: 60px;
+					height: 60px;
+				}
 		</style>
 	</head>
-
 	<body style="background-color: black;">
+		<div id="toggle"></div>
 		<div id="game-container" style="display: block; width: 100%;"></div>
+		<script>
+			const button = document.getElementById('toggle')
+
+			button.addEventListener('click', function () {
+				const elem = document.getElementById('game-container')
+
+				if (elem.requestFullscreen) {
+					elem.requestFullscreen()
+				} else if (elem.mozRequestFullScreen) { /* Firefox */
+					elem.mozRequestFullScreen()
+				} else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+					elem.webkitRequestFullscreen()
+				} else if (elem.msRequestFullscreen) { /* IE/Edge */
+					elem.msRequestFullscreen()
+				}
+			})
+			watchFullScreen(function () {
+				if(window.innerHeight > window.innerWidth){
+    			const prefix = 'orientation' in window.screen ? 'orientation' :
+						'mozOrientation' in window.screen ? 'mozOrientation' :
+						'msOrientation' in window.screen ? 'msOrientation' :
+						null
+					if (prefix) {
+						window.screen[prefix].lock('landscape')
+					} else {
+					}
+				}
+			})
+			function watchFullScreen (func) {
+				const arr = ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'msfullscreenchange']
+				arr.forEach(
+					eventType => {
+						try {
+							document.removeEventListener(eventType, func, false)
+							document.addEventListener(eventType, func, false)
+						} catch (err) {
+						}
+					}
+				)
+			}
+		</script>
 	</body>
 </html>
