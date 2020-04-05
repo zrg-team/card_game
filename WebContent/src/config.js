@@ -132,6 +132,10 @@ export const RESOURCES = {
     {
       key: 'start-game-btn',
       load: ['start-game-btn', 'assets/images/start-game-btn.png']
+    },
+    {
+      key: 'gamelist-bg',
+      load: ['gamelist-bg', 'assets/images/gamelist-bg.png']
     }
   ],
   spritesheet: [
