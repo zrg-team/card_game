@@ -10,8 +10,9 @@ const functions = firebase.functions()
 db.settings({
   timestampsInSnapshots: true
 })
+
 export default {
   auth: firebaseApp.auth(),
   functions,
-  db
+  db,
 }
