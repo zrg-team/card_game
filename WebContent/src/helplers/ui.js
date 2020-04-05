@@ -45,7 +45,6 @@ export function createTextBox (scene, x, y, config) {
       if (config.onEditor) {
         config.onEditor(editor)
       }
-      console.log('editor', editor)
     })
 
   return printText
@@ -72,13 +71,19 @@ export function createToast (scene, x, y, config = {}) {
 }
 
 export function createLabel (scene, title, option = {}) {
-  const { background = true, backgroundColor = 0x5e92f3, text = {}, label = {} } = option
+  const {
+    background = true,
+    backgroundComponent,
+    backgroundColor = 0x5e92f3,
+    text = {},
+    label = {}
+  } = option
   return scene.rexUI.add.label({
     width: 40, // Minimum width of round-rectangle
     height: 40, // Minimum height of round-rectangle
     x: 100,
-    background: background && backgroundColor !== null
-      ? scene.rexUI.add.roundRectangle(0, 0, 100, 40, 20, backgroundColor)
+    background: background && (backgroundColor !== null || backgroundComponent)
+      ? backgroundComponent || scene.rexUI.add.roundRectangle(0, 0, 100, 40, 20, backgroundColor)
       : null,
 
     text: scene.add.text(
@@ -101,14 +106,23 @@ export function createLabel (scene, title, option = {}) {
 }
 
 export function createButton (scene, title, option = {}) {
-  const { background = true, backgroundColor = 0x5e92f3, text = {}, button = {} } = option
+  const {
+    background = true,
+    backgroundComponent,
+    backgroundColor = 0x5e92f3,
+    text = {},
+    button = {}
+  } = option
   const buttonComponent = scene.rexUI.add.label({
     width: 40, // Minimum width of round-rectangle
     height: 40, // Minimum height of round-rectangle
     x: 100,
-    background: background && backgroundColor !== null
-      ? scene.rexUI.add.roundRectangle(0, 0, 100, 40, 5, backgroundColor)
-        .setStrokeStyle(2, 0x000000)
+    background: background && (backgroundColor !== null || backgroundComponent)
+      ? (
+        backgroundComponent ||
+        scene.rexUI.add.roundRectangle(0, 0, 100, 40, 5, backgroundColor)
+          .setStrokeStyle(2, 0x000000)
+      )
       : null,
 
     text: scene.add.text(

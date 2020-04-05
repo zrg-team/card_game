@@ -1,6 +1,7 @@
 import store from '../helplers/globalStore'
 import generateRegisterDialog from '../components/RegisterDialog'
 import generateLoginDialog from '../components/LoginDialog'
+import generateRoomDialog from '../components/RoomDialog'
 import { createConfirmPopup } from '../helplers/ui'
 import { setOnUserInformationChange, wathUserChangeInfo, logout } from '../services/auth'
 
@@ -22,7 +23,6 @@ class MenuScene extends Phaser.Scene {
   create () {
     this.createZoomButton()
     this.watchFullScreen(() => {
-      console.log('this.userSetting', this.scale.isLandscape)
       this.createZoomButton()
     })
     this.world = store.getAll()
@@ -44,7 +44,9 @@ class MenuScene extends Phaser.Scene {
           icon: 'icon-mau-binh',
           // scale: [0.8, 0.8],
           size: [220, 220],
-          onClick: () => {}
+          onClick: () => {
+            generateRoomDialog(this, store.getAll())
+          }
         },
         {
           id: 'poker',
@@ -164,14 +166,16 @@ class MenuScene extends Phaser.Scene {
       scrollMode: 1,
       // background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, 0x4e342e),
       panel: {
-          child: this.createGameItems(data),
-          mask: {
-              padding: 1
-          },
+        child: this.rexUI.add.sizer({
+          orientation: 'x'
+        }),
+        mask: {
+          padding: 1
+        }
       },
       slider: {
-          track: this.rexUI.add.roundRectangle(0, 0, 20, 10, 10, 0x00000),
-          thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, 13, 0xe1b884),
+        track: this.rexUI.add.roundRectangle(0, 0, 10, 10, 10, 0x00000),
+        thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, 13, 0xe1b884)
       },
       // scroller: true,
       space: {
@@ -183,54 +187,50 @@ class MenuScene extends Phaser.Scene {
           panel: 10,
       }
     })
-    .layout()
+      .layout()
+      // .drawBounds(this.add.graphics(), 0xff0000)
+
+    this.createGameItems(this.scrollableGamesPanel, data)
   }
 
-  createGameItems (data) {
-    this.gameSizer = this.rexUI.add.sizer({
-      orientation: 'x',
-    })
+  createGameItems (panel, data) {
+    const sizerList = panel.getElement('panel')
+
     const len = data.length
     for (let i = 0; i < len; i++) {
-      this.gameSizer.add(
-        this.createGameItem(data[i]), // child
+      sizerList.add(
+        this.createGameItem(panel, data[i]), // child
         0, // proportion
         'top', // align
-        0, // paddingConfig
+        {
+          right: 8
+        }, // paddingConfig
         true // expand
       )
     }
-    return this.gameSizer
+    panel.layout();
+    return panel;
   }
 
-  createGameItem (item) {
-    const title = this.add
-      .image(0, 0, item.icon)
-      .setDisplaySize(contentWidth - 60, contentHeight - 60)
-      .setOrigin(0.5, 0.5)
+  createGameItem (panel, item) {
+    const scene = panel.scene
 
-    const playButton = this.add
-      .sprite(0, 140, 'play-button')
-      .setDisplaySize(200, 70)
-      .setOrigin(0.5, 0.5)
-      
-    if (item.scale) {
-      title.setScale(...item.scale)
-    }
-    if (item.size) {
-      title.setDisplaySize(...item.size)
-    }
-    const sizer = this.rexUI.add.sizer({
-      orientation: 0,
-      width: 250
+    const contentHeight = panel.displayHeight - 10
+    const contentWidth = 250
+
+
+    const sizer = scene.rexUI.add.sizer({
+      orientation: 'v',
+      width: contentWidth,
+      height: contentHeight
     })
       .addBackground(
-        this.add
+        scene.add
           .image(0, 0, 'game-background')
           .setDisplaySize(contentWidth, contentHeight)
           .setOrigin(0, 0)
       ).add(
-        this.add.text(-contentWidth /2 + 20, -contentHeight / 2 + 20, item.title), // child
+        scene.add.text(-contentWidth /2 + 20, -contentHeight / 2 + 36, item.title), // child
         null, // proportion
         'center', // align
         {
@@ -242,36 +242,30 @@ class MenuScene extends Phaser.Scene {
         true // expand
       )
       .add(
-        title, // child
+        scene.add
+          .image(0, 22, item.icon)
+          .setDisplaySize(contentWidth - 20, contentHeight - 110)
+          .setOrigin(0.5, 0.5)
+          .setInteractive()
+          .on('pointerdown', function () {
+            scene.tweens.add({
+              targets: this,
+              alpha: { from: 0, to: 1 },
+              duration: 200,
+              ease: 'Sine.easeInOut',
+              yoyo: 0,
+              loop: 0,
+              delay: 0
+            })
+            if (item.onClick) {
+              item.onClick(item)
+            }
+          }),
         null, // proportion
         'left', // align
         0, // paddingConfig
         true, // expand
       )
-      // .add(
-      //   playButton,
-      //   null, // proportion
-      //   'left', // align
-      //   5, // paddingConfig
-      //   true // expand
-      // )
-
-    // playButton
-    //   .setInteractive()
-    //   .on('pointerdown', () => {
-    //     this.tweens.add({
-    //       targets: playButton,
-    //       scale: 1.1,
-    //       duration: 200,
-    //       ease: 'Sine.easeInOut',
-    //       yoyo: 1,
-    //       loop: 0,
-    //       delay: 0
-    //     })
-    //     if (item.onClick) {
-    //       item.onClick()
-    //     }
-    //   })
 
     return sizer
   }
@@ -312,7 +306,7 @@ class MenuScene extends Phaser.Scene {
         y: world.height / 2
       },
       title: {
-        title: 'LOGOUT'
+        title: 'Confirm'
       },
       content: {
         title: 'Do you want to logout ?'

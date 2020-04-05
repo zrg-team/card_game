@@ -5,6 +5,7 @@ import BootScene from './scenes/BootScene'
 import PreloaderScene from './scenes/PreloaderScene'
 import MenuScene from './scenes/MenuScene'
 import Scene1 from './scenes/Scene1'
+import DemoScene from './scenes/DemoScene'
 
 const config = {
   // For more settings see <https://github.com/photonstorm/phaser/blob/master/src/boot/Config.js>
@@ -41,6 +42,7 @@ const config = {
     global: []
   },
   scene: [
+    // DemoScene,
     BootScene,
     PreloaderScene,
     MenuScene,
