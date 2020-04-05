@@ -6,6 +6,29 @@ export default function generateRegisterDialog (game, world) {
   let password = ''
   let displayName = ''
   let loading = false
+
+  let nameEditor = null
+  let emailEditor = null
+  let passwordEditor = null
+
+  const destroyAll = () => {
+    if (emailEditor) {
+      emailEditor.close()
+      emailEditor.destroy()
+    }
+    if (passwordEditor) {
+      passwordEditor.close()
+      passwordEditor.destroy()
+    }
+    if (nameEditor) {
+      nameEditor.close()
+      nameEditor.destroy()
+    }
+    dialog.setVisible(false)
+    dialog.destroy()
+    dialog = null
+  }
+
   let dialog = game.rexUI.add.dialog({
     x: 400,
     y: 230,
@@ -34,8 +57,7 @@ export default function generateRegisterDialog (game, world) {
         .image(0, 0, 'dialog-close')
         .setInteractive()
         .on('pointerdown', () => {
-          dialog.setVisible(false)
-          dialog = null
+          destroyAll()
         })
     ],
     leftToolbar: [],
@@ -53,6 +75,9 @@ export default function generateRegisterDialog (game, world) {
         },
         onTextChanged: (objTxt, text) => {
           displayName = text
+        },
+        onEditor: (editor) => {
+          nameEditor = editor
         }
       }),
       createLabel(game, 'Email', {
@@ -68,6 +93,9 @@ export default function generateRegisterDialog (game, world) {
         },
         onTextChanged: (objTxt, text) => {
           email = text
+        },
+        onEditor: (editor) => {
+          emailEditor = editor
         }
       }),
       createLabel(game, 'Password', {
@@ -86,6 +114,9 @@ export default function generateRegisterDialog (game, world) {
         },
         onTextChanged: (objTxt, text) => {
           password = text
+        },
+        passwordEditor: (editor) => {
+          emailEditor = editor
         }
       })
     ],
@@ -123,14 +154,9 @@ export default function generateRegisterDialog (game, world) {
               if (result.errorCode) {
                 return createToast(game, world.width / 2, world.height - 40)
                   .setOrigin(0.5, 0.5)
-                  .show(result.errorMessage)
-              }
-              createToast(game, world.width / 2, world.height - 40)
-                .setOrigin(0.5, 0.5)
-                .show('Please check your inbox to confirm your email.')
-              dialog.setVisible(false)
-              dialog = null
-            })
+                  .show('Please check your inbox to confirm your email.')
+                destroyAll()
+              })
           }
         }
       )

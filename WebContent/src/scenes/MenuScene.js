@@ -20,6 +20,11 @@ class MenuScene extends Phaser.Scene {
   }
 
   create () {
+    this.createZoomButton()
+    this.watchFullScreen(() => {
+      console.log('this.userSetting', this.scale.isLandscape)
+      this.createZoomButton()
+    })
     this.world = store.getAll()
     // Create UI
     this.bg = this.add
@@ -72,13 +77,6 @@ class MenuScene extends Phaser.Scene {
       .setDisplaySize(56, 56)
 
     this.createUserPanel()
-
-    this.userSetting = this.add
-      .image(world.width - 35, 30, 'setting-button')
-      .setOrigin(0.5, 0.5)
-      .setDisplaySize(50, 50)
-      .setInteractive()
-      .on('pointerdown', this.handleFullscreen)
   }
 
   createUserPanel () {
@@ -289,9 +287,9 @@ class MenuScene extends Phaser.Scene {
       ease: 'Sine.easeInOut',
       duration: 100,
       repeat: 0,
-      yoyo: true,
-      onComplete: () => this.scale.toggleFullscreen()
+      yoyo: true
     })
+    this.scale.stopFullscreen()
   }
 
   handleLogout () {
@@ -332,6 +330,20 @@ class MenuScene extends Phaser.Scene {
         this.confirmLogoutDialog = null
       }
     })
+  }
+
+  createZoomButton () {
+    const world = store.getAll()
+    if(this.scale.isFullscreen) {
+      this.userSetting = this.add
+        .image(world.width - 35, 30, 'zoomout-button')
+        .setOrigin(0.5, 0.5)
+        .setDisplaySize(50, 50)
+        .setInteractive()
+        .on('pointerdown', this.handleFullscreen)
+    } else if (this.userSetting) {
+      this.userSetting.destroy()
+    }
   }
 
   handleRegister () {
@@ -380,6 +392,19 @@ class MenuScene extends Phaser.Scene {
     )
   }
 
+  watchFullScreen (func) {
+    const arr = ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'msfullscreenchange']
+    arr.forEach(
+      eventType => {
+        try {
+          document.removeEventListener(eventType, func, false)
+          document.addEventListener(eventType, func, false)
+        } catch (err) {
+        }
+      }
+    )
+  }
+
   wathUserInformation () {
     const user = store.get('information')
     this.userBalance.text = `${user.balance} 💎`
@@ -389,10 +414,6 @@ class MenuScene extends Phaser.Scene {
     // if (this.startKey.isDown) {
     //   this.startGame()
     // }
-  }
-
-  startGame () {
-    this.scene.start('Scene1')
   }
 }
 

@@ -15,9 +15,6 @@ class BootScene extends Phaser.Scene {
   }
 
   create () {
-    if (!this.scale.isPortrait) {
-      this.scale.lockOrientation('landscape-primary')
-    }
     const user = parseJSON(store.localStorageGet('user'))
     const information = parseJSON(store.localStorageGet('information'))
     

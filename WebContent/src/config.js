@@ -72,6 +72,12 @@ export const RESOURCES = {
       load: ['setting-button', 'assets/images/setting-button.png']
     },
     {
+      key: 'zoomout-button',
+      width: 60,
+      height: 60,
+      load: ['zoomout-button', 'assets/images/zoomout-button.png']
+    },
+    {
       key: 'dialog-bg',
       width: 1664,
       height: 990,
