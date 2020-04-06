@@ -1,9 +1,9 @@
-import { createLabel, createButton, createToast } from '../helplers/ui'
-import { getRooms, createRoom } from '../services/game'
+import { createLabel, createButton, createToast, createLoading } from '../helplers/ui'
+import { getRooms, createRoom, joinRoom } from '../services/game'
 
-export default function generateRoomDialog (scene, world, option = {}) {
+export default function generateRoomDialog (scene, store, option = {}) {
   let loading = false
-  const panel = scene.rexUI.add.scrollablePanel({
+  let panel = scene.rexUI.add.scrollablePanel({
     x: 400,
     y: 220,
     width: 600,
@@ -72,23 +72,25 @@ export default function generateRoomDialog (scene, world, option = {}) {
               return
             }
             loading = true
+            const loadingComponent = createLoading(scene, 'Creating...', store)
             return createRoom('maubing').then((result) => {
               if (result.errorCode) {
-                loading = false
-                createToast(scene, world.width / 2, world.height - 40)
+                createToast(scene, store.width / 2, store.height - 40)
                   .setOrigin(0.5, 0.5)
                   .show(result.errorMessage)
               } else {
                 panel.setVisible(false)
                 panel.destroy()
                 panel = null
-                createToast(scene, world.width / 2, world.height - 40)
+                createToast(scene, store.width / 2, store.height - 40)
                   .setOrigin(0.5, 0.5)
                   .show('Room create.')
-                if (option.onSuccess) {
-                  option.onSuccess(result)
+                if (option.onCreateRoomSuccess) {
+                  option.onCreateRoomSuccess(result)
                 }
               }
+              loadingComponent.setVisible(false)
+              loadingComponent.destroy()
             })
           }
         }
@@ -116,9 +118,20 @@ export default function generateRoomDialog (scene, world, option = {}) {
       const sizerList = panel.getElement('panel')
       if (!result.empty) {
         result.forEach(doc => {
-          const room = doc.data()
+          const room = {
+            id: doc.id,
+            ...doc.data()
+          }
+          const status = room.host === store.user.uid
+            ? '(host)'
+            : room.players.includes(store.user.uid)
+              ? '(joined)'
+              : ''
           sizerList.add(
-            createLabel(panel.scene, room.title, {
+            createLabel(
+              panel.scene,
+              `${room.title} ${status} ${room.player === room.length ? '(full)' : ''}`,
+              {
               label: {
                 x: 0,
                 y: 0,
@@ -139,12 +152,27 @@ export default function generateRoomDialog (scene, world, option = {}) {
             .on('pointerdown', function () {
               scene.tweens.add({
                 targets: this,
-                scaleX: 1,
-                scaleY: 1,
-                ease: 'Bounce', // 'Cubic', 'Elastic', 'Bounce', 'Back'
-                duration: 800,
+                scaleX: 0.92,
+                ease: 'Cubic', // 'Cubic', 'Elastic', 'Bounce', 'Back'
+                duration: 200,
                 repeat: 0, // -1: infinity
-                yoyo: false
+                yoyo: true
+              })
+              const loadingComponent = createLoading(scene, 'Joining...', store)
+              joinRoom('maubing', room.id)
+              .then((result) => {
+                loadingComponent.setVisible(false)
+                loadingComponent.destroy()
+                if (result.errorCode) {
+                  createToast(scene, store.width / 2, store.height - 40)
+                    .setOrigin(0.5, 0.5)
+                    .show(result.errorMessage)
+                } else {
+                  createToast(scene, store.width / 2, store.height - 40)
+                    .setOrigin(0.5, 0.5)
+                    .show(`Joined to room ${room.title}.`)
+                  option.onJoinRoom(room)
+                }
               })
             })
           )
