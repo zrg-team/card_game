@@ -93,7 +93,6 @@ var updatePanel = function (panel, content) {
                   .setOrigin(0.5, 0.5)
                   .setInteractive()
                   .on('pointerdown', function () {
-                    console.log('>>>>>>>>>>>>>>')
                       this.scene.print.text = this.text;
                       this.setTint(Phaser.Math.Between(0, 0xffffff))
                   }),

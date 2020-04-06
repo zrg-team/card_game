@@ -12,6 +12,8 @@ class MenuScene extends Phaser.Scene {
     })
     this.wathUserInformation = this.wathUserInformation.bind(this)
     this.handleFullscreen = this.handleFullscreen.bind(this)
+    this.createRoomDialog = this.createRoomDialog.bind(this)
+    this.handleJoinRoom = this.handleJoinRoom.bind(this)
     this.handleRegister = this.handleRegister.bind(this)
     this.handleLogout = this.handleLogout.bind(this)
     this.handleLogin = this.handleLogin.bind(this)
@@ -45,7 +47,11 @@ class MenuScene extends Phaser.Scene {
           // scale: [0.8, 0.8],
           size: [220, 220],
           onClick: () => {
-            generateRoomDialog(this, store.getAll())
+            const user = store.get('user')
+            if (!user) {
+              return
+            }
+            this.createRoomDialog()
           }
         },
         {
@@ -60,6 +66,13 @@ class MenuScene extends Phaser.Scene {
     )
 
     this.add.text(this.world.width - 100, this.world.height - 16, '© 2020 Zrg-team', { font: '10px' })
+  }
+
+  createRoomDialog () {
+    generateRoomDialog(this, store.getAll(), {
+      onCreateRoomSuccess: this.createRoomDialog,
+      onJoinRoom: this.handleJoinRoom
+    })
   }
 
   createTopPanel (world) {
@@ -270,6 +283,11 @@ class MenuScene extends Phaser.Scene {
     return sizer
   }
 
+  handleJoinRoom (room) {
+    // TODO: Handle join game
+    this.scene.start('Scene1', { room })
+  }
+
   handleFullscreen () {
     this.buttonSfx.play({
       loop: false
@@ -404,9 +422,6 @@ class MenuScene extends Phaser.Scene {
   }
 
   update (time, delta) {
-    // if (this.startKey.isDown) {
-    //   this.startGame()
-    // }
   }
 }
 

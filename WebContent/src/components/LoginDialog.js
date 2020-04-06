@@ -1,7 +1,7 @@
-import { createLabel, createTextBox, createToast, createButton } from '../helplers/ui'
+import { createLabel, createTextBox, createToast, createButton, createLoading } from '../helplers/ui'
 import { login } from '../services/auth'
 
-export default function generateLoginDialog (game, world, option = {}) {
+export default function generateLoginDialog (scene, store, option = {}) {
   let email = ''
   let password = ''
   let loading = false
@@ -23,14 +23,14 @@ export default function generateLoginDialog (game, world, option = {}) {
     dialog = null
   }
 
-  let dialog = game.rexUI.add.dialog({
+  let dialog = scene.rexUI.add.dialog({
     x: 400,
     y: 210,
     width: 480,
     height: 344,
-    background: game.add.image(0, 0, 'dialog-bg'),
+    background: scene.add.image(0, 0, 'dialog-bg'),
     title: createLabel(
-      game,
+      scene,
       'LOGIN',
       {
         background: false,
@@ -48,7 +48,7 @@ export default function generateLoginDialog (game, world, option = {}) {
       }
     ),
     toolbar: [
-      game.add
+      scene.add
         .image(0, 0, 'dialog-close')
         .setInteractive()
         .on('pointerdown', () => {
@@ -57,10 +57,10 @@ export default function generateLoginDialog (game, world, option = {}) {
     ],
     leftToolbar: [],
     choices: [
-      createLabel(game, 'Email', {
+      createLabel(scene, 'Email', {
         backgroundColor: null
       }),
-      createTextBox(game, 0, 0, {
+      createTextBox(scene, 0, 0, {
         fixedWidth: 440,
         fixedHeight: 45,
         styles: {
@@ -75,10 +75,10 @@ export default function generateLoginDialog (game, world, option = {}) {
           emailEditor = editor
         }
       }),
-      createLabel(game, 'Password', {
+      createLabel(scene, 'Password', {
         backgroundColor: null
       }),
-      createTextBox(game, 0, 0, {
+      createTextBox(scene, 0, 0, {
         fixedWidth: 440,
         fixedHeight: 45,
         input: {
@@ -99,7 +99,7 @@ export default function generateLoginDialog (game, world, option = {}) {
     ],
     actions: [
       createButton(
-        game,
+        scene,
         'Submit',
         {
           backgroundColor: 0xe0c48f,
@@ -115,7 +115,7 @@ export default function generateLoginDialog (game, world, option = {}) {
             if (loading) {
               return
             }
-            game.tweens.add({
+            scene.tweens.add({
               targets: button,
               scaleX: 1.2,
               scaleY: 1.2,
@@ -125,15 +125,18 @@ export default function generateLoginDialog (game, world, option = {}) {
               yoyo: true
             })
             loading = true
+            const loadingComponent = createLoading(scene, 'Login...', store)
             login(email, password)
               .then(result => {
                 loading = false
+                loadingComponent.setVisible(false)
+                loadingComponent.destroy()
                 if (result.errorCode || result.errorMessage) {
-                  return createToast(game, world.width / 2, world.height - 40)
+                  return createToast(scene, store.width / 2, store.height - 40)
                     .setOrigin(0.5, 0.5)
                     .show(result.errorMessage)
                 }
-                createToast(game, world.width / 2, world.height - 40)
+                createToast(scene, store.width / 2, store.height - 40)
                   .setOrigin(0.5, 0.5)
                   .show('Login success.')
                   destroyAll()
@@ -177,10 +180,10 @@ export default function generateLoginDialog (game, world, option = {}) {
   })
     .setDraggable('background') // Draggable-background
     .layout()
-    // .drawBounds(game.add.graphics(), 0xff0000)
+    // .drawBounds(scene.add.graphics(), 0xff0000)
     .popUp(800)
 
-  const tween = game.tweens.add({
+  const tween = scene.tweens.add({
     targets: dialog,
     scaleX: 1,
     scaleY: 1,

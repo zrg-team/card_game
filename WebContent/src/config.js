@@ -136,6 +136,10 @@ export const RESOURCES = {
     {
       key: 'gamelist-bg',
       load: ['gamelist-bg', 'assets/images/gamelist-bg.png']
+    },
+    {
+      key: 'overlay',
+      load: ['overlay', 'assets/images/overlay.png']
     }
   ],
   spritesheet: [

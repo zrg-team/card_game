@@ -1,7 +1,7 @@
 import { createLabel, createTextBox, createToast, createButton } from '../helplers/ui'
 import { register } from '../services/auth'
 
-export default function generateRegisterDialog (game, world) {
+export default function generateRegisterDialog (scene, store) {
   let email = ''
   let password = ''
   let displayName = ''
@@ -29,14 +29,14 @@ export default function generateRegisterDialog (game, world) {
     dialog = null
   }
 
-  let dialog = game.rexUI.add.dialog({
+  let dialog = scene.rexUI.add.dialog({
     x: 400,
     y: 230,
     width: 640,
     height: 450,
-    background: game.add.image(0, 0, 'dialog-bg'),
+    background: scene.add.image(0, 0, 'dialog-bg'),
     title: createLabel(
-      game,
+      scene,
       'REGISTER',
       {
         background: false,
@@ -54,7 +54,7 @@ export default function generateRegisterDialog (game, world) {
       }
     ),
     toolbar: [
-      game.add
+      scene.add
         .image(0, 0, 'dialog-close')
         .setInteractive()
         .on('pointerdown', () => {
@@ -63,10 +63,10 @@ export default function generateRegisterDialog (game, world) {
     ],
     leftToolbar: [],
     choices: [
-      createLabel(game, 'Display Name', {
+      createLabel(scene, 'Display Name', {
         backgroundColor: null
       }),
-      createTextBox(game, 0, 0, {
+      createTextBox(scene, 0, 0, {
         fixedWidth: 440,
         fixedHeight: 45,
         styles: {
@@ -81,10 +81,10 @@ export default function generateRegisterDialog (game, world) {
           nameEditor = editor
         }
       }),
-      createLabel(game, 'Email', {
+      createLabel(scene, 'Email', {
         backgroundColor: null
       }),
-      createTextBox(game, 0, 0, {
+      createTextBox(scene, 0, 0, {
         fixedWidth: 440,
         fixedHeight: 45,
         styles: {
@@ -99,10 +99,10 @@ export default function generateRegisterDialog (game, world) {
           emailEditor = editor
         }
       }),
-      createLabel(game, 'Password', {
+      createLabel(scene, 'Password', {
         backgroundColor: null
       }),
-      createTextBox(game, 0, 0, {
+      createTextBox(scene, 0, 0, {
         fixedWidth: 440,
         fixedHeight: 45,
         input: {
@@ -123,7 +123,7 @@ export default function generateRegisterDialog (game, world) {
     ],
     actions: [
       createButton(
-        game,
+        scene,
         'Submit',
         {
           backgroundColor: 0xe0c48f,
@@ -139,7 +139,7 @@ export default function generateRegisterDialog (game, world) {
             if (loading) {
               return
             }
-            game.tweens.add({
+            scene.tweens.add({
               targets: button,
               scaleX: 1.2,
               scaleY: 1.2,
@@ -149,15 +149,18 @@ export default function generateRegisterDialog (game, world) {
               yoyo: true
             })
             loading = true
+            const loadingComponent = createLoading(scene, 'Signup...', store)
             register(email, password, displayName)
               .then(result => {
                 loading = false
+                loadingComponent.setVisible(false)
+                loadingComponent.destroy()
                 if (result.errorCode) {
-                  return createToast(game, world.width / 2, world.height - 40)
+                  return createToast(scene, store.width / 2, store.height - 40)
                     .setOrigin(0.5, 0.5)
                     .show(result.errorMessage)
                 }
-                createToast(game, world.width / 2, world.height - 40)
+                createToast(scene, store.width / 2, store.height - 40)
                   .setOrigin(0.5, 0.5)
                   .show('Please check your inbox to confirm your email.')
                 destroyAll()
@@ -201,10 +204,10 @@ export default function generateRegisterDialog (game, world) {
   })
     .setDraggable('background') // Draggable-background
     .layout()
-    // .drawBounds(game.add.graphics(), 0xff0000)
+    // .drawBounds(scene.add.graphics(), 0xff0000)
     .popUp(1000)
 
-  const tween = game.tweens.add({
+  const tween = scene.tweens.add({
     targets: dialog,
     scaleX: 1,
     scaleY: 1,

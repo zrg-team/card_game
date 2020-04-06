@@ -105,6 +105,34 @@ export function createLabel (scene, title, option = {}) {
   })
 }
 
+export function createLoading (scene, title, world) {
+  const loadingComponent = scene.rexUI.add.label({
+    width: world.width, // Minimum width of round-rectangle
+    height: world.height, // Minimum height of round-rectangle
+    x: 0,
+    y: 0,
+    background: scene.add.image(world.width / 2, world.height / 2, 'overlay')
+      .setSize(world.width, world.height),
+
+    text: scene.add.text(
+      world.width / 2 - 50,
+      world.height / 2 - 30,
+      title,
+      {
+        fontSize: '20px'
+      }
+    ),
+
+    space: {
+      left: 0,
+      right: 0,
+      top: 10,
+      bottom: 10
+    }
+  })
+  return loadingComponent
+}
+
 export function createButton (scene, title, option = {}) {
   const {
     background = true,
