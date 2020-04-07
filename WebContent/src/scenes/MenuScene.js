@@ -33,6 +33,7 @@ class MenuScene extends Phaser.Scene {
       .image(0, 0, 'main-background')
       .setOrigin(0, 0)
       .setDisplaySize(this.world.width, this.world.height)
+      .setDepth(0)
 
     this.buttonSfx = this.sound.add('sound-click')
 

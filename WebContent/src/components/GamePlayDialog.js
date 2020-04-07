@@ -6,8 +6,8 @@ export default function generateGamePlayDialog (scene, store, option = {}) {
   const scrollablePanel = scene.rexUI.add.scrollablePanel({
     width: store.width, // Minimum width of round-rectangle
     height: store.height, // Minimum height of round-rectangle
-    x: 0,
-    y: 0,
+    x: store.width / 2,
+    y: store.height / 2,
 
     scrollMode: 1,
 
@@ -42,5 +42,6 @@ export default function generateGamePlayDialog (scene, store, option = {}) {
     }
   })
   .layout()
+  .setDepth(9999)
   return scrollablePanel
 }

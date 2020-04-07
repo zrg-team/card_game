@@ -123,7 +123,7 @@ export const RESOURCES = {
     },
     {
       key: 'game-table',
-      load: ['game-table', 'assets/images/game-table.jpg']
+      load: ['game-table', 'assets/images/game-table.png']
     },
     {
       key: 'kenh-bai',
