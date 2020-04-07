@@ -130,7 +130,7 @@ export default function generateRoomDialog (scene, store, option = {}) {
           sizerList.add(
             createLabel(
               panel.scene,
-              `${room.title} ${status} ${room.player === room.length ? '(full)' : ''}`,
+              `${room.title} - ${room.players.length}/${room.player} ${status}`,
               {
               label: {
                 x: 0,

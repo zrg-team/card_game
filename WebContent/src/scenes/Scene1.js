@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import { delay } from '../utils/index'
+import generateGamePlayDialog from '../components/GamePlayDialog'
 
 var hiddenCardNumber
 var hiddenCardNumberStyle
@@ -12,13 +13,13 @@ var GAME_STATE = {
 
 class Scene1 extends Phaser.Scene {
   constructor () {
-    console.log('scense1')
     super('Scene1')
     this.handleChooseHiddenCard = this.handleChooseHiddenCard.bind(this)
     this.handleDealCard = this.handleDealCard(this)
   }
 
   _create () {
+    generateGamePlayDialog(this, store.getAll())
     this.add.image(400.0, 225.0, 'game-table').setScale(1.4, 1.4)
 
     centralBtn = this.add.image(400.0, 225.0, 'kenh-bai').setInteractive().on('pointerdown', this.handleChooseHiddenCard).setScale(0.2, 0.2)

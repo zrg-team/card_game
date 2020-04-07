@@ -69,7 +69,6 @@ export default class Demo extends Phaser.Scene {
 
 var updatePanel = function (panel, content) {
     var sizer = panel.getElement('panel');
-    console.log('>>>>>>>>>', sizer)
     var scene = panel.scene;
 
     // sizer.clear(true);
