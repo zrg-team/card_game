@@ -51,7 +51,8 @@ export default function generateRegisterDialog (scene, store) {
             bottom: 10
           }
         }
-      ),
+      }
+    ),
     toolbar: [
       scene.add
         .image(0, 0, 'dialog-close')
@@ -196,7 +197,7 @@ export default function generateRegisterDialog (scene, store) {
       // description: 'left',
       // choices: 'left',
       actions: 'right' // 'center'|'left'|'right'
-    },
+    }
     // click: {
     //   mode: 'release'
     // }

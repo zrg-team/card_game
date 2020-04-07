@@ -56,3 +56,23 @@ export function getRooms (game) {
       return { errorCode, errorMessage, empty: true }
     })
 }
+
+export function randomAllCards () {
+  const user = store.get('user')
+  if (!user || !user.uid) {
+    return
+  }
+  return firebase
+    .functions
+    .httpsCallable('games-randomAllCards')
+    ()
+    .then(result => {
+      debugger;
+      return result
+    }).catch(err => {
+      debugger;
+      const errorCode = err.code
+      const errorMessage = err.message
+      return { errorCode, errorMessage }
+    })
+}
