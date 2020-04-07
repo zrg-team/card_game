@@ -111,7 +111,7 @@ export default function generateRoomDialog (scene, store, option = {}) {
         panel: 10,
         footer: 10
     }
-  }).layout()
+  }).layout().setDepth(999)
 
   return getRooms()
     .then((result) => {
@@ -178,7 +178,7 @@ export default function generateRoomDialog (scene, store, option = {}) {
           )
         })
       }  
-      panel.layout()
+      panel.layout().setDepth(999)
       return panel
     })
 

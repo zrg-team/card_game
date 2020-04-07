@@ -1,3 +1,5 @@
+import cards from './json/cards.json'
+
 export const FIREBASE_CONFIG = {
   apiKey: 'AIzaSyDGCpgkZ8XJE_e2Xwp-9iVUtFOfKVTVbM0',
   authDomain: 'card-game-1.firebaseapp.com',
@@ -11,6 +13,7 @@ export const FIREBASE_CONFIG = {
 
 export const RESOURCES = {
   image: [
+    ...cards,
     {
       key: 'logo-game-1',
       width: 2048,
@@ -114,12 +117,8 @@ export const RESOURCES = {
       load: ['play-button', 'assets/images/play-button.png']
     },
     {
-      key: 'avatar',
-      load: ['avatar', 'assets/images/avatar.png']
-    },
-    {
       key: 'unvisible-card',
-      load: ['unvisible-card', 'assets/images/unvisible-card.jpg']
+      load: ['unvisible-card', 'assets/images/cards/red_back.png']
     },
     {
       key: 'game-table',
@@ -140,7 +139,19 @@ export const RESOURCES = {
     {
       key: 'overlay',
       load: ['overlay', 'assets/images/overlay.png']
-    }
+    },
+    {
+      key: 'bottom-panel',
+      load: ['bottom-panel', 'assets/images/bottom-panel.jpg']
+    },
+    {
+      key: 'time-bg',
+      load: ['time-bg', 'assets/images/time-bg.png']
+    },
+    {
+      key: 'done-button',
+      load: ['done-button', 'assets/images/done-button.png']
+    },
   ],
   spritesheet: [
     {

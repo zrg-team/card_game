@@ -185,19 +185,19 @@ class Scene1 extends Phaser.Scene {
 		unvisibleCard[51].setScale(0.07, 0.07);
 		
 		// left bottom
-		this.add.image(30.0, 300.0, 'avatar');
+		this.add.image(30.0, 300.0, 'user-icon');
 		this.add.text(5, 255, 'Player', { fontFamily: '"Arial Black"', fontSize: 15 });
 
 		// right bottom
-		this.add.image(770.0, 300.0, 'avatar');
+		this.add.image(770.0, 300.0, 'user-icon');
 		this.add.text(745, 255, 'Player', { fontFamily: '"Arial Black"', fontSize: 15 });
 
 		// right top
-		this.add.image(740.0, 80.0, 'avatar');
+		this.add.image(740.0, 80.0, 'user-icon');
 		this.add.text(720, 35, 'Player', { fontFamily: '"Arial Black"', fontSize: 15 });
 
 		// left top
-		this.add.image(60.0, 80.0, 'avatar');
+		this.add.image(60.0, 80.0, 'user-icon');
     this.add.text(40, 35, 'Player', { fontFamily: '"Arial Black"', fontSize: 15 });
 	}
 	

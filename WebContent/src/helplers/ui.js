@@ -67,7 +67,7 @@ export function createToast (scene, x, y, config = {}) {
       ...config.text
     }),
     ...config.toast
-  })
+  }).setDepth(9998)
 }
 
 export function createLabel (scene, title, option = {}) {
@@ -129,7 +129,7 @@ export function createLoading (scene, title, world) {
       top: 10,
       bottom: 10
     }
-  })
+  }).setDepth(9999)
   return loadingComponent
 }
 
