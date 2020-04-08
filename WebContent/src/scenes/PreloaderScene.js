@@ -35,7 +35,7 @@ class PreloaderScene extends Phaser.Scene {
     })
     this.load.on('complete', () => {
       progress.destroy()
-      this.scene.start('MenuScene')
+      this.scene.start('Scene1')
     })
 
     for (const method in RESOURCES) {
