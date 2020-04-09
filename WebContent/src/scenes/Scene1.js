@@ -5,6 +5,7 @@ import firebase from "../helplers/firebase";
 import generateGamePlayDialog from "../components/GamePlayDialog";
 import { randomAllCards } from "../services/game";
 import { createButton } from '../helplers/ui'
+import { deepEqual } from "assert";
 
 var centralBtn;
 var GAME_STATE = {
@@ -135,9 +136,7 @@ class Scene1 extends Phaser.Scene {
       .setOrigin(0, 0)
 
     this.createCommonUI(world)
-
     this.createUserIcons(world)
-
     this.createUnvisibleCards(world)
 
     const result = await randomAllCards();
@@ -153,7 +152,7 @@ class Scene1 extends Phaser.Scene {
       .setDisplaySize(200, 64)
       .setOrigin(0.5, 0.5)
       .setInteractive()
-      .on('pointerdown', () => {
+      .on('pointerdown', async () => {
         this.tweens.add({
           targets: this.buttonStart,
           scale: 1.2,
@@ -162,7 +161,11 @@ class Scene1 extends Phaser.Scene {
           repeat: 0,
           yoyo: true
         })
+        const loading = this.handleShufflingCard()
+        await delay(2000)
+        await loading()
         this.handleChooseHiddenCard()
+        
       })
 
     this.tweens.add({
@@ -189,7 +192,7 @@ class Scene1 extends Phaser.Scene {
     const cardWidth = this.UISizes.card.width
     const cardHeight = this.UISizes.card.height
     const bottom = world.height - (cardHeight / 2) - 2
-    const spaceBetweenCard = 10
+    const spaceBetweenCard = 0.25
     let startWidth = (world.width - (51 * spaceBetweenCard)) / 2
     for (let i = 0; i < 52; i++) {
       this.unvisibleCard[i] = this.add.image(startWidth, bottom, "unvisible-card")
@@ -214,47 +217,141 @@ class Scene1 extends Phaser.Scene {
   }
 
   async handleChooseHiddenCard() {
+    this.buttonStart.disableInteractive()
+    this.buttonStart.setVisible(false)
+  
     const random = Math.floor(Math.random() * 51)
-    await delay(1500)
-
+    await delay(200)
     // clear tint
+    const cardNumber = 51
     if (this.randomChangeOrder) {
       for (let i = 0; i < this.randomChangeOrder; i++) {
-        this.unvisibleCard[i].clearTint();
+        this.unvisibleCard[cardNumber - i].y += 10
       }
     }
     
     for (let i = 0; i < random; i++) {
-      this.unvisibleCard[i].setTint(0x919191, 0x919191, 0x919191, 0x919191);
+      this.unvisibleCard[cardNumber - i].y -= 10
     }
     this.randomChangeOrder = random
-
-    await delay(1000)
+    await delay(400)
     this.handleDealCard()
   }
 
   async sendCardAnimation(count, i) {
     const position = this.UISizes.users[(count % 4) + 1].card
-    const tween = this.tweens.add({
+    this.tweens.add({
       targets: this.unvisibleCard[i],
       repeat: 0,
       yoyo: false,
       props: {
         x: { value: position.x, duration: 100, ease: "Bounce" },
         y: { value: position.y, duration: 100, ease: "Bounce" },
+        scale: { value: 0.105, duration: 100 }
       },
     });
     await delay(100);
-    this.unvisibleCard[0].destroy();
+    // this.unvisibleCard[0].destroy();
+  }
+
+  handleShufflingCard () {
+    const world = store.getAll()
+    for (let i = 0; i < 25; i++) {
+      this.tweens.add({
+        targets: this.unvisibleCard[i],
+        repeat: 0,
+        yoyo: false,
+        props: {
+          x: { value: world.width / 2 - 50, duration: 300, ease: "Sine.easeInOut" }
+        },
+      })
+    }
+    for (let i = 25; i < 52; i++) {
+      this.tweens.add({
+        targets: this.unvisibleCard[i],
+        repeat: 0,
+        yoyo: false,
+        props: {
+          x: { value: world.width / 2 + 50, duration: 300, ease: "Sine.easeInOut" }
+        },
+      })
+    }
+    (async () => {
+      await delay(400)
+
+      const centerX = world.width / 2
+
+      this.intervalShuffling = setInterval(() => {
+        const random = Math.floor(Math.random() * 52)
+        const newX = this.unvisibleCard[random].x < centerX
+          ? centerX + 50
+          : centerX - 50
+        this.tweens.add({
+          targets: this.unvisibleCard[random],
+          repeat: 0,
+          yoyo: false,
+          props: {
+            x: { value: newX, duration: 180, ease: "Sine.easeInOut" }
+          },
+        })
+      }, 200)
+    })()
+    return async () => {
+      clearInterval(this.intervalShuffling)
+      await delay(100)
+      let spaceBetweenCard = 0.25
+      let startWidth = (world.width - (51 * spaceBetweenCard)) / 2
+      for (let i = 0; i < 52; i++) {
+        this.tweens.add({
+          targets: this.unvisibleCard[i],
+          repeat: 0,
+          yoyo: false,
+          props: {
+            x: { value: startWidth + spaceBetweenCard * i, duration: 100, ease: "Sine.easeInOut" }
+          }
+        })
+      }
+      await delay(100)
+    }
   }
 
   async handleDealCardTo4Players() {
-    let count = 1;
-    for (let i = this.randomChangeOrder; i < 52; i++) {
-      await this.sendCardAnimation(count, i);
-      count++;
-    }
+    const world = store.getAll()
+    const cardNumber = 51
     for (let i = 0; i < this.randomChangeOrder; i++) {
+      // this.unvisibleCard[cardNumber - i].setDepth(countAnimation)
+      this.tweens.add({
+        targets: this.unvisibleCard[cardNumber - i],
+        repeat: 0,
+        yoyo: false,
+        props: {
+          x: { value: world.width / 2 + this.randomChangeOrder * 0.2, duration: 1000, ease: "Sine.easeInOut" },
+          y: { value: world.height / 2, duration: 1000, ease: "Sine.easeInOut" }
+        },
+      })
+    }
+    await delay(1000)
+    let countAnimation = 0
+    for (let i = 0; i < this.randomChangeOrder; i++) {
+      this.unvisibleCard[cardNumber - i].setDepth(countAnimation)
+      countAnimation++
+    }
+    for (let i = this.randomChangeOrder; i < (cardNumber + 1); i++) {
+      this.unvisibleCard[cardNumber - i].setDepth(countAnimation)
+      this.tweens.add({
+        targets: this.unvisibleCard[cardNumber - i],
+        repeat: 0,
+        yoyo: false,
+        props: {
+          x: { value: world.width / 2 + 0.2 * i, duration: 1000, ease: "Sine.easeInOut" },
+          y: { value: world.height / 2, duration: 1000, ease: "Sine.easeInOut" }
+        },
+      })
+      countAnimation++
+    }
+    await delay(1000)
+    let count = 1
+    for (let i = 0; i < (cardNumber + 1); i++) {
       await this.sendCardAnimation(count, i);
       count++;
     }
