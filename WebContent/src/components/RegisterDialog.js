@@ -139,15 +139,6 @@ export default function generateRegisterDialog (scene, store) {
             if (loading) {
               return
             }
-            scene.tweens.add({
-              targets: button,
-              scaleX: 1.2,
-              scaleY: 1.2,
-              ease: 'Sine.easeInOut',
-              duration: 100,
-              repeat: 0,
-              yoyo: true
-            })
             loading = true
             const loadingComponent = createLoading(scene, 'Signup...', store)
             register(email, password, displayName)
