@@ -21,10 +21,8 @@ class Scene1 extends Phaser.Scene {
     this.handleChooseHiddenCard = this.handleChooseHiddenCard.bind(this);
     this.handleDealCard = this.handleDealCard.bind(this);
     this.sendCardAnimation = this.sendCardAnimation.bind(this);
-    // this.handleDealCardTo2Players = this.handleDealCardTo2Players.bind(this);
-    // this.handleDealCardTo3Players = this.handleDealCardTo3Players.bind(this);
-    this.handleDealCardTo4Players = this.handleDealCardTo4Players.bind(this);
   }
+
   init(roomData){
     this.room = roomData.room;
   }
@@ -125,8 +123,6 @@ class Scene1 extends Phaser.Scene {
       .setOrigin(0, 0)
       .setDisplaySize(world.width, world.height)
     	.setDepth(0)
-		// generateGamePlayDialog(this, world)
-
 
     this._create(world);
   }
@@ -190,7 +186,7 @@ class Scene1 extends Phaser.Scene {
       .setDisplaySize(200, 50)
       .setOrigin(0.5, 0.5)
       .setDepth(0)
-    this.hiddenCardNumber = this.add.text(world.width / 2 - 5, 40, "DRAW: 1", {
+    this.hiddenCardNumber = this.add.text(world.width / 2 - 5, 40, "0", {
       font: "30px Arial",
       fill: "#FFFFFF",
     }).setOrigin(0.5, 0.5)
@@ -226,8 +222,11 @@ class Scene1 extends Phaser.Scene {
   }
 
   async handleChooseHiddenCard() {
-    const random = Math.floor(Math.random() * 51)
-    await delay(1500)
+    let randomInterval = setInterval(() => {
+			this.hiddenCardNumber.setText(Math.floor(Math.random() * (10 - 1)) + 1); // random between 10 -> 1
+		}, 50);
+		await delay(1500);
+		window.clearInterval(randomInterval);
 
     // clear tint
     if (this.randomChangeOrder) {
@@ -235,7 +234,8 @@ class Scene1 extends Phaser.Scene {
         this.unvisibleCard[i].clearTint();
       }
     }
-    
+  
+    const random = Number(this.hiddenCardNumber._text);
     for (let i = 0; i < random; i++) {
       this.unvisibleCard[i].setTint(0x919191, 0x919191, 0x919191, 0x919191);
     }
@@ -245,8 +245,8 @@ class Scene1 extends Phaser.Scene {
     this.handleDealCard()
   }
 
-  async sendCardAnimation(count, i) {
-    const position = this.UISizes.users[(count % 4) + 1].card
+  async sendCardAnimation(count, i, totalPlayers) {
+    const position = this.UISizes.users[(count % totalPlayers) + 1].card
     const tween = this.tweens.add({
       targets: this.unvisibleCard[i],
       repeat: 0,
@@ -257,32 +257,33 @@ class Scene1 extends Phaser.Scene {
       },
     });
     await delay(100);
-    this.unvisibleCard[0].destroy();
-  }
-
-  async handleDealCardTo4Players() {
-    let count = 1;
-    for (let i = this.randomChangeOrder; i < 52; i++) {
-      await this.sendCardAnimation(count, i);
-      count++;
-    }
-    for (let i = 0; i < this.randomChangeOrder; i++) {
-      await this.sendCardAnimation(count, i);
-      count++;
-    }
   }
 
   async handleDealCard() {
-    // totalPlayer = Math.floor(Math.random() * (4 - 2 + 1)) + 2;
-    // if (totalPlayer === 2) {
-    // 	handleDealCardTo2Players();
-    // }
-    // if (totalPlayer === 3) {
-    // 	handleDealCardTo3Players();
-    // }
-    // if (totalPlayer === 4) {
-    this.handleDealCardTo4Players();
+    const world = store.getAll()
+
+    // const totalPlayers = this.room && this.room.players && this.room.players.length;
+    const totalPlayers = 4;
+    let count = 0;
+    let max;
+  
+    if (totalPlayers === 4) max = this.randomChangeOrder + 52;
+    if (totalPlayers === 3) max = this.randomChangeOrder + 39;
+    if (totalPlayers === 2) max = this.randomChangeOrder + 26;
+
+    for (let i = this.randomChangeOrder; i < max; i++) {
+      await this.sendCardAnimation(count, i, totalPlayers);
+      count++;
+    
+      if (i === 51) {
+        i = -1;
+        max = this.randomChangeOrder;
+      }
+    }
+
+    generateGamePlayDialog(this, world)
   }
 }
+
 
 export default Scene1;
