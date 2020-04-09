@@ -3,6 +3,7 @@ import { delay } from "../utils/index";
 import store from "../helplers/globalStore";
 import firebase from "../helplers/firebase";
 import generateGamePlayDialog from "../components/GamePlayDialog";
+
 import { randomAllCards } from "../services/game";
 import { createButton } from '../helplers/ui'
 import { deepEqual } from "assert";
@@ -21,11 +22,12 @@ class Scene1 extends Phaser.Scene {
     this.handleChooseHiddenCard = this.handleChooseHiddenCard.bind(this);
     this.handleDealCard = this.handleDealCard.bind(this);
     this.sendCardAnimation = this.sendCardAnimation.bind(this);
-    // this.handleDealCardTo2Players = this.handleDealCardTo2Players.bind(this);
-    // this.handleDealCardTo3Players = this.handleDealCardTo3Players.bind(this);
-    this.handleDealCardTo4Players = this.handleDealCardTo4Players.bind(this);
   }
 
+  init(roomData){
+    this.room = roomData.room;
+  }
+    
   preload() {
     this.playerTexts = []
     const world = store.getAll()
@@ -122,8 +124,6 @@ class Scene1 extends Phaser.Scene {
       .setOrigin(0, 0)
       .setDisplaySize(world.width, world.height)
     	.setDepth(0)
-		// generateGamePlayDialog(this, world)
-		
 
     this._create(world);
   }
@@ -131,9 +131,17 @@ class Scene1 extends Phaser.Scene {
   update() {}
 
   async _create(world) {
+    this.add.image(400.0, 225.0, "game-table").setScale(1.4, 1.4);
+
+    centralBtn = this.add
+      .image(400.0, 225.0, "kenh-bai")
+      .setScale(0.2, 0.2)
+      .setInteractive()
+      .on("pointerdown", this.handleChooseHiddenCard);
+
     this.gameTable = this.add.image(0, 0, "game-table")
       .setDisplaySize(world.width, world.height)
-      .setOrigin(0, 0)
+      .setOrigin(0, 0);
 
     this.createCommonUI(world)
     this.createUserIcons(world)
@@ -181,7 +189,7 @@ class Scene1 extends Phaser.Scene {
       .setDisplaySize(200, 50)
       .setOrigin(0.5, 0.5)
       .setDepth(0)
-    this.hiddenCardNumber = this.add.text(world.width / 2 - 5, 40, "DRAW: 1", {
+    this.hiddenCardNumber = this.add.text(world.width / 2 - 5, 40, "0", {
       font: "30px Arial",
       fill: "#FFFFFF",
     }).setOrigin(0.5, 0.5)
@@ -195,7 +203,7 @@ class Scene1 extends Phaser.Scene {
     const spaceBetweenCard = 0.25
     let startWidth = (world.width - (51 * spaceBetweenCard)) / 2
     for (let i = 0; i < 52; i++) {
-      this.unvisibleCard[i] = this.add.image(startWidth, bottom, "unvisible-card")
+      this.unvisibleCard[i] = this.add.image(startWidth, bottom, "green_back")
         .setDisplaySize(cardWidth, cardHeight)
         .setOrigin(0.5, 0.5)
         startWidth += spaceBetweenCard
@@ -220,7 +228,7 @@ class Scene1 extends Phaser.Scene {
     this.buttonStart.disableInteractive()
     this.buttonStart.setVisible(false)
   
-    const random = Math.floor(Math.random() * 51)
+    const random = Math.floor(Math.random() * 10)
     await delay(200)
     // clear tint
     const cardNumber = 51
@@ -229,7 +237,7 @@ class Scene1 extends Phaser.Scene {
         this.unvisibleCard[cardNumber - i].y += 10
       }
     }
-    
+  
     for (let i = 0; i < random; i++) {
       this.unvisibleCard[cardNumber - i].y -= 10
     }
@@ -315,7 +323,7 @@ class Scene1 extends Phaser.Scene {
     }
   }
 
-  async handleDealCardTo4Players() {
+  async handleDealCard() {
     const world = store.getAll()
     const cardNumber = 51
     for (let i = 0; i < this.randomChangeOrder; i++) {
@@ -354,20 +362,16 @@ class Scene1 extends Phaser.Scene {
     for (let i = 0; i < (cardNumber + 1); i++) {
       await this.sendCardAnimation(count, i);
       count++;
+    
+      if (i === 51) {
+        i = -1;
+        max = this.randomChangeOrder;
+      }
     }
-  }
 
-  async handleDealCard() {
-    // totalPlayer = Math.floor(Math.random() * (4 - 2 + 1)) + 2;
-    // if (totalPlayer === 2) {
-    // 	handleDealCardTo2Players();
-    // }
-    // if (totalPlayer === 3) {
-    // 	handleDealCardTo3Players();
-    // }
-    // if (totalPlayer === 4) {
-    this.handleDealCardTo4Players();
+    generateGamePlayDialog(this, world)
   }
 }
+
 
 export default Scene1;
