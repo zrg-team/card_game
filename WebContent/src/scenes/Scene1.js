@@ -135,14 +135,6 @@ class Scene1 extends Phaser.Scene {
   update() {}
 
   async _create(world) {
-    this.add.image(400.0, 225.0, "game-table").setScale(1.4, 1.4);
-
-    centralBtn = this.add
-      .image(400.0, 225.0, "kenh-bai")
-      .setScale(0.2, 0.2)
-      .setInteractive()
-      .on("pointerdown", this.handleChooseHiddenCard);
-
     this.gameTable = this.add.image(0, 0, "game-table")
       .setDisplaySize(world.width, world.height)
       .setOrigin(0, 0);
@@ -160,6 +152,10 @@ class Scene1 extends Phaser.Scene {
   }
 
   createButtonStart(world, callback) {
+    if (this.buttonStart) {
+      this.buttonStart.setVisible(false)
+      this.buttonStart.destroy()
+    }
     this.buttonStart = this.add.image(world.width / 2, world.height / 2 - 20, 'playnow-button')
       .setDisplaySize(200, 64)
       .setOrigin(0.5, 0.5)
@@ -191,7 +187,7 @@ class Scene1 extends Phaser.Scene {
   }
 
   createCommonUI (world) {
-    createButtonStart(world, this.handleReadyToPlay);
+    this.createButtonStart(world, this.handleReadyToPlay);
 
     this.hiddenCardNumberStyle = this.add.image(world.width / 2, 40, 'time-bg')
       .setDisplaySize(200, 50)
@@ -403,7 +399,7 @@ class Scene1 extends Phaser.Scene {
 
   handleChangeRoomInfo(roomInfo) {
     if (roomInfo.result && roomInfo.result.status === 'WAITING_FOR_RANDOM') {
-      createButtonStart(world, this.handleDealCard);
+      this.createButtonStart(world, this.handleDealCard);
     }
   }
 }
