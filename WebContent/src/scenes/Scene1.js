@@ -4,7 +4,7 @@ import store from "../helplers/globalStore";
 import firebase from "../helplers/firebase";
 import generateGamePlayDialog from "../components/GamePlayDialog";
 
-import { randomAllCards } from "../services/game";
+import { randomAllCards, readyToPlay, setOnRoomInfoChange } from "../services/game";
 import { createButton } from '../helplers/ui'
 
 var centralBtn;
@@ -21,6 +21,8 @@ class Scene1 extends Phaser.Scene {
     this.handleChooseHiddenCard = this.handleChooseHiddenCard.bind(this);
     this.handleDealCard = this.handleDealCard.bind(this);
     this.sendCardAnimation = this.sendCardAnimation.bind(this);
+    this.handleReadyToPlay = this.handleReadyToPlay.bind(this);
+    this.handleChangeRoomInfo = this.handleChangeRoomInfo.bind(this);
   }
 
   init(roomData){
@@ -125,6 +127,8 @@ class Scene1 extends Phaser.Scene {
     	.setDepth(0)
 
     this._create(world);
+
+    setOnRoomInfoChange(this.handleChangeRoomInfo);
   }
 
   update() {}
@@ -156,31 +160,35 @@ class Scene1 extends Phaser.Scene {
     store.set("allCards", result && result.data);
   }
 
-  createCommonUI (world) {
+  createButtonStart(world, callback) {
     this.buttonStart = this.add.image(world.width / 2, world.height / 2 - 20, 'playnow-button')
-      .setDisplaySize(200, 64)
-      .setOrigin(0.5, 0.5)
-      .setInteractive()
-      .on('pointerdown', () => {
-        this.tweens.add({
-          targets: this.buttonStart,
-          scale: 1.2,
-          ease: 'Sine.easeInOut',
-          duration: 100,
-          repeat: 0,
-          yoyo: true
-        })
-        this.handleChooseHiddenCard()
+    .setDisplaySize(200, 64)
+    .setOrigin(0.5, 0.5)
+    .setInteractive()
+    .on('pointerdown', () => {
+      this.tweens.add({
+        targets: this.buttonStart,
+        scale: 1.2,
+        ease: 'Sine.easeInOut',
+        duration: 100,
+        repeat: 0,
+        yoyo: true
       })
-
-    this.tweens.add({
-      targets: this.buttonStart,
-      scale: 1.3,
-      ease: 'Sine.easeInOut',
-      duration: 800,
-      repeat: -1,
-      yoyo: true
+      callback()
     })
+
+  this.tweens.add({
+    targets: this.buttonStart,
+    scale: 1.3,
+    ease: 'Sine.easeInOut',
+    duration: 800,
+    repeat: -1,
+    yoyo: true
+  })
+  }
+
+  createCommonUI (world) {
+    createButtonStart(world, this.handleReadyToPlay);
 
     this.hiddenCardNumberStyle = this.add.image(world.width / 2, 40, 'time-bg')
       .setDisplaySize(200, 50)
@@ -282,6 +290,33 @@ class Scene1 extends Phaser.Scene {
     }
 
     generateGamePlayDialog(this, world)
+  }
+
+  createWaitingForPlayText() {
+    debugger;
+    this.hiddenCardNumber = this.add.text(world.width / 2 - 5, 200, "Waiting for others...", {
+      font: "30px Arial",
+      fill: "#FFFFFF",
+    }).setOrigin(0.5, 0.5)
+    this.tweens.add({
+      targets: this.hiddenCardNumber,
+      scale: 1.3,
+      ease: 'Sine.easeInOut',
+      duration: 800,
+      repeat: -1,
+      yoyo: true
+    })
+  }
+
+  handleReadyToPlay() {
+    readyToPlay('maubing', this.room);
+    this.buttonStart.destroy();
+  }
+
+  handleChangeRoomInfo(roomInfo) {
+    if (roomInfo.result && roomInfo.result.status === 'WAITING_FOR_RANDOM') {
+      createButtonStart(world, this.handleDealCard);
+    }
   }
 }
 
