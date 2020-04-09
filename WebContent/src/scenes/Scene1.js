@@ -28,19 +28,6 @@ class Scene1 extends Phaser.Scene {
     // this.handleDealCardTo2Players = this.handleDealCardTo2Players.bind(this);
     // this.handleDealCardTo3Players = this.handleDealCardTo3Players.bind(this);
     this.handleDealCardTo4Players = this.handleDealCardTo4Players.bind(this);
-    // this.handleDealFirstRound = this.handleDealFirstRound.bind(this);
-    // this.handleDealSecondRound = this.handleDealSecondRound.bind(this);
-    // this.handleDealThirdRound = this.handleDealThirdRound.bind(this);
-    // this.handleDealFourthRound = this.handleDealFourthRound.bind(this);
-    // this.handleDealFifthRound = this.handleDealFifthRound.bind(this);
-    // this.handleDealSixthRound = this.handleDealSixthRound.bind(this);
-    // this.handleDealSeventhRound = this.handleDealSeventhRound.bind(this);
-    // this.handleDealEighthRound = this.handleDealEighthRound.bind(this);
-    // this.handleDealNinethRound = this.handleDealNinethRound.bind(this);
-    // this.handleDealTenthRound = this.handleDealTenthRound.bind(this);
-    // this.handleDealEleventhRound = this.handleDealEleventhRound.bind(this);
-    // this.handleDealTwelfthRound = this.handleDealTwelfthRound.bind(this);
-    // this.handleDealThirteenthRound = this.handleDealThirteenthRound.bind(this);
   }
 
   preload() {}
