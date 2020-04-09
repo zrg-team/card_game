@@ -3,7 +3,6 @@ import { delay } from "../utils/index";
 import store from "../helplers/globalStore";
 import firebase from "../helplers/firebase";
 import generateGamePlayDialog from "../components/GamePlayDialog";
-import { createButton } from '../helplers/ui'
 
 import { randomAllCards } from "../services/game";
 import { createButton } from '../helplers/ui'
@@ -126,7 +125,7 @@ class Scene1 extends Phaser.Scene {
       .setOrigin(0, 0)
       .setDisplaySize(world.width, world.height)
     	.setDepth(0)
-		generateGamePlayDialog(this, world)
+		// generateGamePlayDialog(this, world)
 
 
     this._create(world);
@@ -134,7 +133,7 @@ class Scene1 extends Phaser.Scene {
 
   update() {}
 
-  async _create() {
+  async _create(world) {
     this.add.image(400.0, 225.0, "game-table").setScale(1.4, 1.4);
 
     centralBtn = this.add
@@ -143,123 +142,9 @@ class Scene1 extends Phaser.Scene {
       .setInteractive()
       .on("pointerdown", this.handleChooseHiddenCard);
 
-    // centralBtn = createButton(
-    //   this,
-    //   'Submit aa a a',
-    //   {
-    //     backgroundColor: 0xe0c48f,
-    //     button: {
-    //       x: 400,
-    //       y: 225
-    //     },
-    //     onPress: () => {
-    //       this.handleChooseHiddenCard
-    //     }
-    //   }
-    // );
-   
-    hiddenCardNumberStyle = this.add.rectangle(400, 270, 50, 50, 0xf2e6e4, 1);
-    hiddenCardNumber = this.add.text(390, 250, "0", {
-      font: "40px Arial",
-      fill: "#000000",
-    });
-
     this.gameTable = this.add.image(0, 0, "game-table")
       .setDisplaySize(world.width, world.height)
-      .setOrigin(0, 0)
-
-    unvisibleCard[0] = this.add.image(160.0, 370.0, "unvisible-card");
-    unvisibleCard[0].setScale(0.07, 0.07);
-
-    unvisibleCard[1] = this.add.image(170.0, 370.0, "unvisible-card");
-    unvisibleCard[1].setScale(0.07, 0.07);
-
-    unvisibleCard[2] = this.add.image(180.0, 370.0, "unvisible-card");
-    unvisibleCard[2].setScale(0.07, 0.07);
-
-    unvisibleCard[3] = this.add.image(190.0, 370.0, "unvisible-card");
-    unvisibleCard[3].setScale(0.07, 0.07);
-
-    unvisibleCard[4] = this.add.image(200.0, 370.0, "unvisible-card");
-    unvisibleCard[4].setScale(0.07, 0.07);
-
-    unvisibleCard[5] = this.add.image(210.0, 370.0, "unvisible-card");
-    unvisibleCard[5].setScale(0.07, 0.07);
-
-    unvisibleCard[6] = this.add.image(220.0, 370.0, "unvisible-card");
-    unvisibleCard[6].setScale(0.07, 0.07);
-
-    unvisibleCard[7] = this.add.image(230.0, 370.0, "unvisible-card");
-    unvisibleCard[7].setScale(0.07, 0.07);
-
-    unvisibleCard[8] = this.add.image(240.0, 370.0, "unvisible-card");
-    unvisibleCard[8].setScale(0.07, 0.07);
-
-    unvisibleCard[9] = this.add.image(250.0, 370.0, "unvisible-card");
-    unvisibleCard[9].setScale(0.07, 0.07);
-
-    unvisibleCard[10] = this.add.image(260.0, 370.0, "unvisible-card");
-    unvisibleCard[10].setScale(0.07, 0.07);
-
-    unvisibleCard[11] = this.add.image(270.0, 370.0, "unvisible-card");
-    unvisibleCard[11].setScale(0.07, 0.07);
-
-    unvisibleCard[12] = this.add.image(280.0, 370.0, "unvisible-card");
-    unvisibleCard[12].setScale(0.07, 0.07);
-
-    unvisibleCard[13] = this.add.image(290.0, 370.0, "unvisible-card");
-    unvisibleCard[13].setScale(0.07, 0.07);
-
-    unvisibleCard[14] = this.add.image(300.0, 370.0, "unvisible-card");
-    unvisibleCard[14].setScale(0.07, 0.07);
-
-    unvisibleCard[15] = this.add.image(310.0, 370.0, "unvisible-card");
-    unvisibleCard[15].setScale(0.07, 0.07);
-
-    unvisibleCard[16] = this.add.image(320.0, 370.0, "unvisible-card");
-    unvisibleCard[16].setScale(0.07, 0.07);
-
-    unvisibleCard[17] = this.add.image(330.0, 370.0, "unvisible-card");
-    unvisibleCard[17].setScale(0.07, 0.07);
-
-    unvisibleCard[18] = this.add.image(340.0, 370.0, "unvisible-card");
-    unvisibleCard[18].setScale(0.07, 0.07);
-
-    unvisibleCard[19] = this.add.image(350.0, 370.0, "unvisible-card");
-    unvisibleCard[19].setScale(0.07, 0.07);
-
-    unvisibleCard[20] = this.add.image(360.0, 370.0, "unvisible-card");
-    unvisibleCard[20].setScale(0.07, 0.07);
-
-    unvisibleCard[21] = this.add.image(370.0, 370.0, "unvisible-card");
-    unvisibleCard[21].setScale(0.07, 0.07);
-
-    unvisibleCard[22] = this.add.image(380.0, 370.0, "unvisible-card");
-    unvisibleCard[22].setScale(0.07, 0.07);
-
-    unvisibleCard[23] = this.add.image(390.0, 370.0, "unvisible-card");
-    unvisibleCard[23].setScale(0.07, 0.07);
-
-    unvisibleCard[24] = this.add.image(400.0, 370.0, "unvisible-card");
-    unvisibleCard[24].setScale(0.07, 0.07);
-
-    unvisibleCard[25] = this.add.image(410.0, 370.0, "unvisible-card");
-    unvisibleCard[25].setScale(0.07, 0.07);
-
-    unvisibleCard[26] = this.add.image(420.0, 370.0, "unvisible-card");
-    unvisibleCard[26].setScale(0.07, 0.07);
-
-    unvisibleCard[27] = this.add.image(430.0, 370.0, "unvisible-card");
-    unvisibleCard[27].setScale(0.07, 0.07);
-
-    unvisibleCard[28] = this.add.image(440.0, 370.0, "unvisible-card");
-    unvisibleCard[28].setScale(0.07, 0.07);
-
-    unvisibleCard[29] = this.add.image(450.0, 370.0, "unvisible-card");
-    unvisibleCard[29].setScale(0.07, 0.07);
-
-    unvisibleCard[30] = this.add.image(460.0, 370.0, "unvisible-card");
-    unvisibleCard[30].setScale(0.07, 0.07);
+      .setOrigin(0, 0);
 
     this.createCommonUI(world)
 
@@ -319,7 +204,7 @@ class Scene1 extends Phaser.Scene {
     const spaceBetweenCard = 10
     let startWidth = (world.width - (51 * spaceBetweenCard)) / 2
     for (let i = 0; i < 52; i++) {
-      this.unvisibleCard[i] = this.add.image(startWidth, bottom, "unvisible-card")
+      this.unvisibleCard[i] = this.add.image(startWidth, bottom, "green_back")
         .setDisplaySize(cardWidth, cardHeight)
         .setOrigin(0.5, 0.5)
         startWidth += spaceBetweenCard
