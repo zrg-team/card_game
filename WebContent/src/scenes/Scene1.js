@@ -2,16 +2,13 @@ import Phaser from "phaser";
 import { delay } from "../utils/index";
 import store from "../helplers/globalStore";
 import firebase from "../helplers/firebase";
-
 import generateGamePlayDialog from "../components/GamePlayDialog";
 import { createButton } from '../helplers/ui'
 
 import { randomAllCards } from "../services/game";
+import { createButton } from '../helplers/ui'
 
-var hiddenCardNumber;
-var hiddenCardNumberStyle;
 var centralBtn;
-const unvisibleCard = [];
 var GAME_STATE = {
   isChoosingHiddenCard: true,
   chooseHiddenCardDone: false,
@@ -21,7 +18,6 @@ var totalPlayer;
 
 class Scene1 extends Phaser.Scene {
   constructor() {
-    console.log("scense1");
     super("Scene1");
     this.handleChooseHiddenCard = this.handleChooseHiddenCard.bind(this);
     this.handleDealCard = this.handleDealCard.bind(this);
@@ -30,24 +26,110 @@ class Scene1 extends Phaser.Scene {
     // this.handleDealCardTo3Players = this.handleDealCardTo3Players.bind(this);
     this.handleDealCardTo4Players = this.handleDealCardTo4Players.bind(this);
   }
-
   init(roomData){
     this.room = roomData.room;
   }
-
-  preload() {}
+    
+  preload() {
+    this.playerTexts = []
+    const world = store.getAll()
+    this.UISizes = {
+      card: {
+        width: 80,
+        height: 120
+      },
+      users: {
+        // BOTTOM
+        1: {
+          card: {
+            x: 130,
+            y: world.height - 200
+          },
+          icon: {
+            x: 40,
+            y: world.height - 200
+          },
+          text: {
+            x: 40,
+            y: world.height - 200 + 30,
+            style: {
+              wordWrap: { width: 120, useAdvancedWrap: true }
+            },
+            origin: [0.5, 0]
+          }
+        },
+        2: {
+          card: {
+            x: world.width - 130,
+            y: world.height - 200
+          },
+          icon: {
+            x: world.width - 40,
+            y: world.height - 200
+          },
+          text: {
+            x: world.width - 40,
+            y: world.height - 200 + 30,
+            style: {
+              wordWrap: { width: 120, useAdvancedWrap: true }
+            },
+            origin: [0.5, 0]
+          }
+        },
+        // TOP
+        3: {
+          card: {
+            x: world.width - 170,
+            y: 80
+          },
+          icon: {
+            x: world.width - 80,
+            y: 80
+          },
+          text: {
+            x: world.width - 80,
+            y: 110,
+            style: {
+              wordWrap: { width: 120, useAdvancedWrap: true }
+            },
+            origin: [0.5, 0]
+          }
+        },
+        4: {
+          card: {
+            x: 170,
+            y: 80
+          },
+          icon: {
+            x: 80,
+            y: 80,
+          },
+          text: {
+            x: 80,
+            y: 110,
+            style: {
+              wordWrap: { width: 120, useAdvancedWrap: true }
+            },
+            origin: [0.5, 0]
+          }
+        }
+      }
+    }
+    this.players = ['Player1', 'Player2', 'Player 3', 'Player 4']
+  }
 
   create() {
-    // const world = store.getAll()
-    // this.bg = this.add
-    //   .image(0, 0, 'main-background')
-    //   .setOrigin(0, 0)
-    //   .setDisplaySize(world.width, world.height)
-    // 	.setDepth(0)
-		// generateGamePlayDialog(this, world)
 		
+    const world = store.getAll()
+    this.bg = this.add
+      .image(0, 0, 'main-background')
+      .setOrigin(0, 0)
+      .setDisplaySize(world.width, world.height)
+    	.setDepth(0)
+		generateGamePlayDialog(this, world)
 
-    this._create();
+
+    this._create(world);
   }
 
   update() {}
@@ -81,6 +163,10 @@ class Scene1 extends Phaser.Scene {
       font: "40px Arial",
       fill: "#000000",
     });
+
+    this.gameTable = this.add.image(0, 0, "game-table")
+      .setDisplaySize(world.width, world.height)
+      .setOrigin(0, 0)
 
     unvisibleCard[0] = this.add.image(160.0, 370.0, "unvisible-card");
     unvisibleCard[0].setScale(0.07, 0.07);
@@ -175,96 +261,11 @@ class Scene1 extends Phaser.Scene {
     unvisibleCard[30] = this.add.image(460.0, 370.0, "unvisible-card");
     unvisibleCard[30].setScale(0.07, 0.07);
 
-    unvisibleCard[31] = this.add.image(470.0, 370.0, "unvisible-card");
-    unvisibleCard[31].setScale(0.07, 0.07);
+    this.createCommonUI(world)
 
-    unvisibleCard[32] = this.add.image(480.0, 370.0, "unvisible-card");
-    unvisibleCard[32].setScale(0.07, 0.07);
+    this.createUserIcons(world)
 
-    unvisibleCard[33] = this.add.image(490.0, 370.0, "unvisible-card");
-    unvisibleCard[33].setScale(0.07, 0.07);
-
-    unvisibleCard[34] = this.add.image(500.0, 370.0, "unvisible-card");
-    unvisibleCard[34].setScale(0.07, 0.07);
-
-    unvisibleCard[35] = this.add.image(510.0, 370.0, "unvisible-card");
-    unvisibleCard[35].setScale(0.07, 0.07);
-
-    unvisibleCard[36] = this.add.image(520.0, 370.0, "unvisible-card");
-    unvisibleCard[36].setScale(0.07, 0.07);
-
-    unvisibleCard[37] = this.add.image(530.0, 370.0, "unvisible-card");
-    unvisibleCard[37].setScale(0.07, 0.07);
-
-    unvisibleCard[38] = this.add.image(540.0, 370.0, "unvisible-card");
-    unvisibleCard[38].setScale(0.07, 0.07);
-
-    unvisibleCard[39] = this.add.image(550.0, 370.0, "unvisible-card");
-    unvisibleCard[39].setScale(0.07, 0.07);
-
-    unvisibleCard[40] = this.add.image(560.0, 370.0, "unvisible-card");
-    unvisibleCard[40].setScale(0.07, 0.07);
-
-    unvisibleCard[41] = this.add.image(570.0, 370.0, "unvisible-card");
-    unvisibleCard[41].setScale(0.07, 0.07);
-
-    unvisibleCard[42] = this.add.image(580.0, 370.0, "unvisible-card");
-    unvisibleCard[42].setScale(0.07, 0.07);
-
-    unvisibleCard[43] = this.add.image(590.0, 370.0, "unvisible-card");
-    unvisibleCard[43].setScale(0.07, 0.07);
-
-    unvisibleCard[44] = this.add.image(600.0, 370.0, "unvisible-card");
-    unvisibleCard[44].setScale(0.07, 0.07);
-
-    unvisibleCard[45] = this.add.image(610.0, 370.0, "unvisible-card");
-    unvisibleCard[45].setScale(0.07, 0.07);
-
-    unvisibleCard[46] = this.add.image(620.0, 370.0, "unvisible-card");
-    unvisibleCard[46].setScale(0.07, 0.07);
-
-    unvisibleCard[47] = this.add.image(630.0, 370.0, "unvisible-card");
-    unvisibleCard[47].setScale(0.07, 0.07);
-
-    unvisibleCard[48] = this.add.image(640.0, 370.0, "unvisible-card");
-    unvisibleCard[48].setScale(0.07, 0.07);
-
-    unvisibleCard[49] = this.add.image(650.0, 370.0, "unvisible-card");
-    unvisibleCard[49].setScale(0.07, 0.07);
-
-    unvisibleCard[50] = this.add.image(660.0, 370.0, "unvisible-card");
-    unvisibleCard[50].setScale(0.07, 0.07);
-
-    unvisibleCard[51] = this.add.image(670.0, 370.0, "unvisible-card");
-    unvisibleCard[51].setScale(0.07, 0.07);
-
-    // left bottom
-    this.add.image(30.0, 300.0, "user-icon").setScale(0.7, 0.7);
-    this.add.text(5, 255, "Player", {
-      fontFamily: '"Arial Black"',
-      fontSize: 15,
-    });
-
-    // right bottom
-    this.add.image(770.0, 300.0, "user-icon").setScale(0.7, 0.7);
-    this.add.text(745, 255, "Player", {
-      fontFamily: '"Arial Black"',
-      fontSize: 15,
-    });
-
-    // right top
-    this.add.image(740.0, 80.0, "user-icon").setScale(0.7, 0.7);
-    this.add.text(720, 35, "Player", {
-      fontFamily: '"Arial Black"',
-      fontSize: 15,
-    });
-
-    // left top
-    this.add.image(60.0, 80.0, "user-icon").setScale(0.7, 0.7);
-    this.add.text(40, 35, "Player", {
-      fontFamily: '"Arial Black"',
-      fontSize: 15,
-    });
+    this.createUnvisibleCards(world)
 
     const result = await randomAllCards();
     if (result.errorCode) {
@@ -274,44 +275,95 @@ class Scene1 extends Phaser.Scene {
     store.set("allCards", result && result.data);
   }
 
+  createCommonUI (world) {
+    this.buttonStart = this.add.image(world.width / 2, world.height / 2 - 20, 'playnow-button')
+      .setDisplaySize(200, 64)
+      .setOrigin(0.5, 0.5)
+      .setInteractive()
+      .on('pointerdown', () => {
+        this.tweens.add({
+          targets: this.buttonStart,
+          scale: 1.2,
+          ease: 'Sine.easeInOut',
+          duration: 100,
+          repeat: 0,
+          yoyo: true
+        })
+        this.handleChooseHiddenCard()
+      })
+
+    this.tweens.add({
+      targets: this.buttonStart,
+      scale: 1.3,
+      ease: 'Sine.easeInOut',
+      duration: 800,
+      repeat: -1,
+      yoyo: true
+    })
+
+    this.hiddenCardNumberStyle = this.add.image(world.width / 2, 40, 'time-bg')
+      .setDisplaySize(200, 50)
+      .setOrigin(0.5, 0.5)
+      .setDepth(0)
+    this.hiddenCardNumber = this.add.text(world.width / 2 - 5, 40, "DRAW: 1", {
+      font: "30px Arial",
+      fill: "#FFFFFF",
+    }).setOrigin(0.5, 0.5)
+  }
+
+  createUnvisibleCards (world) {
+    this.unvisibleCard = []
+    const cardWidth = this.UISizes.card.width
+    const cardHeight = this.UISizes.card.height
+    const bottom = world.height - (cardHeight / 2) - 2
+    const spaceBetweenCard = 10
+    let startWidth = (world.width - (51 * spaceBetweenCard)) / 2
+    for (let i = 0; i < 52; i++) {
+      this.unvisibleCard[i] = this.add.image(startWidth, bottom, "unvisible-card")
+        .setDisplaySize(cardWidth, cardHeight)
+        .setOrigin(0.5, 0.5)
+        startWidth += spaceBetweenCard
+    }
+  }
+
+  createUserIcons (world) {
+    for (let i = 0; i < this.players.length; i++) {
+      const user = this.UISizes.users[i + 1]
+      this.add.image(user.icon.x, user.icon.y, "user-icon")
+        .setOrigin(0.5, 0.5)
+        .setDisplaySize(80, 80)
+      this.playerTexts[i] = this.add.text(user.text.x, user.text.y, this.players[i], {
+        fontFamily: '"Arial Black"',
+        fontSize: 15,
+        ...user.text.style || {}
+      }).setOrigin(...user.text.origin || [0.5, 0.5])
+    }
+  }
+
   async handleChooseHiddenCard() {
-    let randomInterval = setInterval(() => {
-      hiddenCardNumber.setText(Math.floor(Math.random() * (9 - 1 + 1)) + 1);
-    }, 50);
-    await delay(1500);
-    window.clearInterval(randomInterval);
+    const random = Math.floor(Math.random() * 51)
+    await delay(1500)
 
     // clear tint
-    for (let i = 0; i < 10; i++) {
-      unvisibleCard[i].clearTint();
+    if (this.randomChangeOrder) {
+      for (let i = 0; i < this.randomChangeOrder; i++) {
+        this.unvisibleCard[i].clearTint();
+      }
     }
-    for (let i = 0; i < Number(hiddenCardNumber._text); i++) {
-      unvisibleCard[i].setTint(0x919191, 0x919191, 0x919191, 0x919191);
+    
+    for (let i = 0; i < random; i++) {
+      this.unvisibleCard[i].setTint(0x919191, 0x919191, 0x919191, 0x919191);
     }
+    this.randomChangeOrder = random
 
-    centralBtn = this.add
-      .image(400.0, 225.0, "start-game-btn")
-      .setScale(0.2, 0.2)
-      .setInteractive()
-      .on("pointerdown", this.handleDealCard);
+    await delay(1000)
+    this.handleDealCard()
   }
 
   async sendCardAnimation(count, i) {
-    let position = { x: 400, y: 225 };
-    if (count % 4 === 1) {
-      position = { x: 100, y: 280 };
-    }
-    if (count % 4 === 2) {
-      position = { x: 660, y: 280 };
-    }
-    if (count % 4 === 3) {
-      position = { x: 620, y: 90 };
-    }
-    if (count % 4 === 0) {
-      position = { x: 130, y: 90 };
-    }
+    const position = this.UISizes.users[(count % 4) + 1].card
     const tween = this.tweens.add({
-      targets: unvisibleCard[i],
+      targets: this.unvisibleCard[i],
       repeat: 0,
       yoyo: false,
       props: {
@@ -320,16 +372,16 @@ class Scene1 extends Phaser.Scene {
       },
     });
     await delay(100);
-    unvisibleCard[0].destroy();
+    this.unvisibleCard[0].destroy();
   }
 
   async handleDealCardTo4Players() {
     let count = 1;
-    for (let i = Number(hiddenCardNumber._text); i < 52; i++) {
+    for (let i = this.randomChangeOrder; i < 52; i++) {
       await this.sendCardAnimation(count, i);
       count++;
     }
-    for (let i = 0; i < Number(hiddenCardNumber._text); i++) {
+    for (let i = 0; i < this.randomChangeOrder; i++) {
       await this.sendCardAnimation(count, i);
       count++;
     }

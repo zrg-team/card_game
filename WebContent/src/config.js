@@ -27,12 +27,6 @@ export const RESOURCES = {
       load: ['button', 'assets/images/button.png']
     },
     {
-      key: 'playnow',
-      width: 470,
-      height: 146,
-      load: ['playnow', 'assets/images/playnow.png']
-    },
-    {
       key: 'main-background',
       width: 1334,
       height: 750,
@@ -125,12 +119,8 @@ export const RESOURCES = {
       load: ['game-table', 'assets/images/game-table.png']
     },
     {
-      key: 'kenh-bai',
-      load: ['kenh-bai', 'assets/images/kenh-bai.png']
-    },
-    {
-      key: 'start-game-btn',
-      load: ['start-game-btn', 'assets/images/start-game-btn.png']
+      key: 'playnow-button',
+      load: ['playnow-button', 'assets/images/playnow-button.png']
     },
     {
       key: 'gamelist-bg',

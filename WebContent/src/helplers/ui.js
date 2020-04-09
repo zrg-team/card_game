@@ -137,7 +137,7 @@ export function createButton (scene, title, option = {}) {
   const {
     background = true,
     backgroundComponent,
-    backgroundColor = 0x5e92f3,
+    backgroundColor = 0xe0c48f,
     text = {},
     button = {}
   } = option
@@ -171,6 +171,15 @@ export function createButton (scene, title, option = {}) {
     ...button
   }).setInteractive()
     .on('pointerdown', () => {
+      scene.tweens.add({
+        targets: buttonComponent,
+        scaleX: 0.9,
+        scaleY: 0.9,
+        ease: 'Sine.easeInOut',
+        duration: 100,
+        repeat: 0,
+        yoyo: true
+      })
       if (option.onPress) {
         option.onPress(buttonComponent)
       }

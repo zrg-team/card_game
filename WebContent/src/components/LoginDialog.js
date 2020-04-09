@@ -102,7 +102,6 @@ export default function generateLoginDialog (scene, store, option = {}) {
         scene,
         'Submit',
         {
-          backgroundColor: 0xe0c48f,
           button: {
             space: {
               left: 20,
@@ -115,15 +114,6 @@ export default function generateLoginDialog (scene, store, option = {}) {
             if (loading) {
               return
             }
-            scene.tweens.add({
-              targets: button,
-              scaleX: 1.2,
-              scaleY: 1.2,
-              ease: 'Sine.easeInOut',
-              duration: 100,
-              repeat: 0,
-              yoyo: true
-            })
             loading = true
             const loadingComponent = createLoading(scene, 'Login...', store)
             login(email, password)
