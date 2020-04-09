@@ -4,6 +4,7 @@ import store from "../helplers/globalStore";
 import firebase from "../helplers/firebase";
 
 import generateGamePlayDialog from "../components/GamePlayDialog";
+import { createButton } from '../helplers/ui'
 
 import { randomAllCards } from "../services/game";
 
@@ -30,10 +31,13 @@ class Scene1 extends Phaser.Scene {
     this.handleDealCardTo4Players = this.handleDealCardTo4Players.bind(this);
   }
 
+  init(roomData){
+    this.room = roomData.room;
+  }
+
   preload() {}
 
   create() {
-		
     // const world = store.getAll()
     // this.bg = this.add
     //   .image(0, 0, 'main-background')
@@ -57,6 +61,21 @@ class Scene1 extends Phaser.Scene {
       .setInteractive()
       .on("pointerdown", this.handleChooseHiddenCard);
 
+    // centralBtn = createButton(
+    //   this,
+    //   'Submit aa a a',
+    //   {
+    //     backgroundColor: 0xe0c48f,
+    //     button: {
+    //       x: 400,
+    //       y: 225
+    //     },
+    //     onPress: () => {
+    //       this.handleChooseHiddenCard
+    //     }
+    //   }
+    // );
+   
     hiddenCardNumberStyle = this.add.rectangle(400, 270, 50, 50, 0xf2e6e4, 1);
     hiddenCardNumber = this.add.text(390, 250, "0", {
       font: "40px Arial",

@@ -74,3 +74,17 @@ export function randomAllCards () {
       return { errorCode, errorMessage }
     })
 }
+
+export function readyToPlay () {
+  return firebase
+    .functions
+    .httpsCallable('games-randomAllCards')
+    ()
+    .then(result => {
+      return result
+    }).catch(err => {
+      const errorCode = err.code
+      const errorMessage = err.message
+      return { errorCode, errorMessage }
+    })
+}
