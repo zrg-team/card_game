@@ -422,12 +422,8 @@ class Scene1 extends Phaser.Scene {
     const world = store.getAll()
 
     if (roomInfo.result && roomInfo.result.status === 'WAITING_FOR_RANDOM') {
-<<<<<<< HEAD
       this.handleChooseHiddenCard();
       this.waitingText.destroy();
-=======
-      this.createButtonStart(world, this.handleDealCard);
->>>>>>> af41f677540ec8d0cede5199ae0ab2e793881b4e
     }
   }
 }
