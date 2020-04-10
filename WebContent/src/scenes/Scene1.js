@@ -3,18 +3,7 @@ import { delay } from "../utils/index";
 import store from "../helplers/globalStore";
 import firebase from "../helplers/firebase";
 import generateGamePlayDialog from "../components/GamePlayDialog";
-
 import { randomAllCards, readyToPlay, setOnRoomInfoChange, watchRoomInfo } from "../services/game";
-import { createButton } from '../helplers/ui'
-import { deepEqual } from "assert";
-
-var centralBtn;
-var GAME_STATE = {
-  isChoosingHiddenCard: true,
-  chooseHiddenCardDone: false,
-};
-const players = [[], [], [], []];
-var totalPlayer;
 
 class Scene1 extends Phaser.Scene {
   constructor() {
@@ -146,7 +135,6 @@ class Scene1 extends Phaser.Scene {
 
     const result = await randomAllCards();
     if (result.errorCode) {
-      alert("Error");
       return;
     }
     store.set("allCards", result && result.data);
@@ -155,7 +143,7 @@ class Scene1 extends Phaser.Scene {
   createButtonStart(world, callback) {
     if (this.buttonStart) {
       this.buttonStart.setVisible(false)
-      this.buttonStart.destroy()
+      this.buttonStart.setActive(false)
     }
     this.buttonStart = this.add.image(world.width / 2, world.height / 2 - 20, 'playnow-button')
       .setDisplaySize(200, 64)
