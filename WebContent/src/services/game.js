@@ -112,3 +112,20 @@ export function readyToPlay (game, room) {
       return { errorCode, errorMessage }
     })
 }
+
+export function endGame (game, room) {
+  return firebase
+    .functions
+    .httpsCallable('games-endGame')
+    ({
+      id: room.id,
+      game
+    })
+    .then(result => {
+      return result
+    }).catch(err => {
+      const errorCode = err.code
+      const errorMessage = err.message
+      return { errorCode, errorMessage }
+    })
+}

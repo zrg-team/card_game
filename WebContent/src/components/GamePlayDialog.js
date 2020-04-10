@@ -1,5 +1,6 @@
 import { createLoading } from '../helplers/ui'
 import { formatCountdown } from '../utils'
+import { endGame } from '../services/game'
 
 export default function generateGamePlayDialog (scene, store, option = {
     cooldown: 60,
@@ -206,7 +207,8 @@ export default function generateGamePlayDialog (scene, store, option = {
       yoyo: true
     })
     loading = true
-    const loadingComponent = createLoading(scene, 'Submit...', store)
+    // const loadingComponent = createLoading(scene, 'Submit...', store)
+    endGame('maubing', scene.room);
   })
 
   scene.tweens.add({

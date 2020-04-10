@@ -4,7 +4,7 @@ import store from "../helplers/globalStore";
 import firebase from "../helplers/firebase";
 import generateGamePlayDialog from "../components/GamePlayDialog";
 
-import { randomAllCards, readyToPlay, setOnRoomInfoChange } from "../services/game";
+import { randomAllCards, readyToPlay, setOnRoomInfoChange, watchRoomInfo } from "../services/game";
 import { createButton } from '../helplers/ui'
 import { deepEqual } from "assert";
 
@@ -20,14 +20,15 @@ class Scene1 extends Phaser.Scene {
   constructor() {
     super("Scene1");
     this.handleChooseHiddenCard = this.handleChooseHiddenCard.bind(this);
-    this.handleDealCard = this.handleDealCard.bind(this);
-    this.sendCardAnimation = this.sendCardAnimation.bind(this);
     this.handleReadyToPlay = this.handleReadyToPlay.bind(this);
     this.handleChangeRoomInfo = this.handleChangeRoomInfo.bind(this);
+
+    this.randomChangeOrder = 0;
   }
 
   init(roomData){
     this.room = roomData.room;
+    watchRoomInfo (this.room.id);
   }
     
   preload() {
@@ -137,12 +138,6 @@ class Scene1 extends Phaser.Scene {
   async _create(world) {
     this.add.image(400.0, 225.0, "game-table").setScale(1.4, 1.4);
 
-    centralBtn = this.add
-      .image(400.0, 225.0, "kenh-bai")
-      .setScale(0.2, 0.2)
-      .setInteractive()
-      .on("pointerdown", this.handleChooseHiddenCard);
-
     this.gameTable = this.add.image(0, 0, "game-table")
       .setDisplaySize(world.width, world.height)
       .setOrigin(0, 0);
@@ -173,11 +168,8 @@ class Scene1 extends Phaser.Scene {
           repeat: 0,
           yoyo: true
         })
-        const loading = this.handleShufflingCard()
-        await delay(2000)
-        await loading()
-        // this.handleChooseHiddenCard()
         callback()
+        // this.handleChooseHiddenCard()
       })
 
   this.tweens.add({
@@ -191,13 +183,13 @@ class Scene1 extends Phaser.Scene {
   }
 
   createCommonUI (world) {
-    createButtonStart(world, this.handleReadyToPlay);
+    this.createButtonStart(world, this.handleReadyToPlay);
 
     this.hiddenCardNumberStyle = this.add.image(world.width / 2, 40, 'time-bg')
       .setDisplaySize(200, 50)
       .setOrigin(0.5, 0.5)
       .setDepth(0)
-    this.hiddenCardNumber = this.add.text(world.width / 2 - 5, 40, "0", {
+    this.hiddenCardNumber = this.add.text(world.width / 2 - 5, 40, `${this.randomChangeOrder}`, {
       font: "30px Arial",
       fill: "#FFFFFF",
     }).setOrigin(0.5, 0.5)
@@ -235,10 +227,19 @@ class Scene1 extends Phaser.Scene {
   async handleChooseHiddenCard() {
     this.buttonStart.disableInteractive()
     this.buttonStart.setVisible(false)
+
+    // xoc bai
+    const loading = this.handleShufflingCard()
+    await delay(2000)
+    await loading()
+
+    let randomInterval = setInterval(() => {
+      this.randomChangeOrder = Math.floor(Math.random() * 10);
+      this.hiddenCardNumber.setText(`${this.randomChangeOrder}`);
+		}, 50);
+		await delay(1500);
+    window.clearInterval(randomInterval);
   
-    const random = Math.floor(Math.random() * 10)
-    await delay(200)
-    // clear tint
     const cardNumber = 51
     if (this.randomChangeOrder) {
       for (let i = 0; i < this.randomChangeOrder; i++) {
@@ -246,16 +247,16 @@ class Scene1 extends Phaser.Scene {
       }
     }
   
-    for (let i = 0; i < random; i++) {
+    for (let i = 0; i < this.randomChangeOrder; i++) {
       this.unvisibleCard[cardNumber - i].y -= 10
     }
-    this.randomChangeOrder = random
+  
     await delay(400)
     this.handleDealCard()
   }
 
-  async sendCardAnimation(count, i) {
-    const position = this.UISizes.users[(count % 4) + 1].card
+  async sendCardAnimation(count, i, totalPlayer) {
+    const position = this.UISizes.users[(count % totalPlayer) + 1].card
     this.tweens.add({
       targets: this.unvisibleCard[i],
       repeat: 0,
@@ -333,6 +334,7 @@ class Scene1 extends Phaser.Scene {
 
   async handleDealCard() {
     const world = store.getAll()
+
     const cardNumber = 51
     for (let i = 0; i < this.randomChangeOrder; i++) {
       // this.unvisibleCard[cardNumber - i].setDepth(countAnimation)
@@ -346,12 +348,15 @@ class Scene1 extends Phaser.Scene {
         },
       })
     }
+
     await delay(1000)
+
     let countAnimation = 0
     for (let i = 0; i < this.randomChangeOrder; i++) {
       this.unvisibleCard[cardNumber - i].setDepth(countAnimation)
       countAnimation++
     }
+
     for (let i = this.randomChangeOrder; i < (cardNumber + 1); i++) {
       this.unvisibleCard[cardNumber - i].setDepth(countAnimation)
       this.tweens.add({
@@ -366,9 +371,16 @@ class Scene1 extends Phaser.Scene {
       countAnimation++
     }
     await delay(1000)
+
+    const totalPlayer = this.room.players.length;
+    let max = cardNumber + 1;
+
+    if (totalPlayer === 2) { max = this.randomChangeOrder + 26 }
+    if (totalPlayer === 3) { max = this.randomChangeOrder + 39 }
+
     let count = 1
-    for (let i = 0; i < (cardNumber + 1); i++) {
-      await this.sendCardAnimation(count, i);
+    for (let i = 0; i < max; i++) {
+      await this.sendCardAnimation(count, i, totalPlayer); // hard code 4 here for 4 players
       count++;
     
       if (i === 51) {
@@ -381,13 +393,14 @@ class Scene1 extends Phaser.Scene {
   }
 
   createWaitingForPlayText() {
-    debugger;
-    this.hiddenCardNumber = this.add.text(world.width / 2 - 5, 200, "Waiting for others...", {
+    const world = store.getAll();
+
+    this.waitingText = this.add.text(world.width / 2 - 5, 200, "Waiting for others...", {
       font: "30px Arial",
       fill: "#FFFFFF",
     }).setOrigin(0.5, 0.5)
     this.tweens.add({
-      targets: this.hiddenCardNumber,
+      targets: this.waitingText,
       scale: 1.3,
       ease: 'Sine.easeInOut',
       duration: 800,
@@ -398,12 +411,17 @@ class Scene1 extends Phaser.Scene {
 
   handleReadyToPlay() {
     readyToPlay('maubing', this.room);
+
     this.buttonStart.destroy();
+    this.createWaitingForPlayText();
   }
 
   handleChangeRoomInfo(roomInfo) {
+    const world = store.getAll()
+
     if (roomInfo.result && roomInfo.result.status === 'WAITING_FOR_RANDOM') {
-      createButtonStart(world, this.handleDealCard);
+      this.handleChooseHiddenCard();
+      this.waitingText.destroy();
     }
   }
 }

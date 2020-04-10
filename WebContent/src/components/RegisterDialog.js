@@ -1,4 +1,4 @@
-import { createLabel, createTextBox, createToast, createButton } from '../helplers/ui'
+import { createLabel, createTextBox, createToast, createButton, createLoading } from '../helplers/ui'
 import { register } from '../services/auth'
 
 export default function generateRegisterDialog (scene, store) {
