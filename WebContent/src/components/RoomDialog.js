@@ -168,8 +168,6 @@ export default function generateRoomDialog (scene, store, option = {}) {
               const loadingComponent = createLoading(scene, 'Joining...', store)
               joinRoom('maubing', room.id)
               .then((result) => {
-                loadingComponent.setVisible(false)
-                loadingComponent.destroy()
                 if (result.errorCode) {
                   createToast(scene, store.width / 2, store.height - 40)
                     .setOrigin(0.5, 0.5)
@@ -178,8 +176,11 @@ export default function generateRoomDialog (scene, store, option = {}) {
                   createToast(scene, store.width / 2, store.height - 40)
                     .setOrigin(0.5, 0.5)
                     .show(`Joined to room ${room.title}.`)
+                  destroyAll()
                   option.onJoinRoom(room)
                 }
+                loadingComponent.setVisible(false)
+                loadingComponent.destroy()
               })
             })
           )
