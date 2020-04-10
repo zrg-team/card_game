@@ -3,7 +3,16 @@ import { getRooms, createRoom, joinRoom } from '../services/game'
 
 export default function generateRoomDialog (scene, store, option = {}) {
   let loading = false
-  let panel = scene.rexUI.add.scrollablePanel({
+  let panel = null
+
+  const destroyAll = () => {
+    if (panel) {
+      panel.setVisible(false)
+      panel.destroy()
+      panel = null
+    }
+  }
+  panel = scene.rexUI.add.scrollablePanel({
     x: 400,
     y: 220,
     width: 600,
@@ -79,9 +88,7 @@ export default function generateRoomDialog (scene, store, option = {}) {
                   .setOrigin(0.5, 0.5)
                   .show(result.errorMessage)
               } else {
-                panel.setVisible(false)
-                panel.destroy()
-                panel = null
+                destroyAll()
                 createToast(scene, store.width / 2, store.height - 40)
                   .setOrigin(0.5, 0.5)
                   .show('Room create.')
