@@ -136,8 +136,6 @@ class Scene1 extends Phaser.Scene {
   update() {}
 
   async _create(world) {
-    this.add.image(400.0, 225.0, "game-table").setScale(1.4, 1.4);
-
     this.gameTable = this.add.image(0, 0, "game-table")
       .setDisplaySize(world.width, world.height)
       .setOrigin(0, 0);
@@ -155,6 +153,10 @@ class Scene1 extends Phaser.Scene {
   }
 
   createButtonStart(world, callback) {
+    if (this.buttonStart) {
+      this.buttonStart.setVisible(false)
+      this.buttonStart.destroy()
+    }
     this.buttonStart = this.add.image(world.width / 2, world.height / 2 - 20, 'playnow-button')
       .setDisplaySize(200, 64)
       .setOrigin(0.5, 0.5)
@@ -420,8 +422,12 @@ class Scene1 extends Phaser.Scene {
     const world = store.getAll()
 
     if (roomInfo.result && roomInfo.result.status === 'WAITING_FOR_RANDOM') {
+<<<<<<< HEAD
       this.handleChooseHiddenCard();
       this.waitingText.destroy();
+=======
+      this.createButtonStart(world, this.handleDealCard);
+>>>>>>> af41f677540ec8d0cede5199ae0ab2e793881b4e
     }
   }
 }
