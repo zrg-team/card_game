@@ -129,3 +129,17 @@ export function endGame (game, room) {
       return { errorCode, errorMessage }
     })
 }
+
+export function getUserCards (game, roomId, user) {
+  firebase.db.collection('rooms').doc(roomId)
+    .collection('users')
+    .doc(user)
+    .get()
+    .then(result => {
+      return result.data()
+    }).catch(err => {
+      const errorCode = err.code
+      const errorMessage = err.message
+      return { errorCode, errorMessage }
+    })
+}

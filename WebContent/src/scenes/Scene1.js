@@ -17,7 +17,9 @@ class Scene1 extends Phaser.Scene {
 
   init(roomData){
     this.room = roomData.room;
-    watchRoomInfo (this.room.id);
+    watchRoomInfo(this.room.id);
+    this.loadingShufflingCard = null
+    this.players = ['Player1', 'Player2', 'Player 3', 'Player 4']
   }
     
   preload() {
@@ -105,7 +107,6 @@ class Scene1 extends Phaser.Scene {
         }
       }
     }
-    this.players = ['Player1', 'Player2', 'Player 3', 'Player 4']
   }
 
   create() {
@@ -214,35 +215,34 @@ class Scene1 extends Phaser.Scene {
     }
   }
 
+  createWaitingForPlayText() {
+    const world = store.getAll();
+
+    this.waitingText = this.add.text(world.width / 2 - 5, 200, "Waiting for others...", {
+      font: "30px Arial",
+      fill: "#FFFFFF",
+    }).setOrigin(0.5, 0.5)
+    this.tweens.add({
+      targets: this.waitingText,
+      scale: 1.3,
+      ease: 'Sine.easeInOut',
+      duration: 800,
+      repeat: -1,
+      yoyo: true
+    })
+  }
+
   async handleChooseHiddenCard() {
     this.buttonStart.disableInteractive()
     this.buttonStart.setVisible(false)
 
     // xoc bai
-    const loading = this.handleShufflingCard()
-    await delay(2000)
-    await loading()
+    this.loadingShufflingCard = this.handleShufflingCard()
 
-    let randomInterval = setInterval(() => {
+    this.randomInterval = setInterval(() => {
       this.randomChangeOrder = Math.floor(Math.random() * 10);
       this.hiddenCardNumber.setText(`${this.randomChangeOrder}`);
-		}, 50);
-		await delay(1500);
-    window.clearInterval(randomInterval);
-  
-    const cardNumber = 51
-    if (this.randomChangeOrder) {
-      for (let i = 0; i < this.randomChangeOrder; i++) {
-        this.unvisibleCard[cardNumber - i].y += 10
-      }
-    }
-  
-    for (let i = 0; i < this.randomChangeOrder; i++) {
-      this.unvisibleCard[cardNumber - i].y -= 10
-    }
-  
-    await delay(400)
-    this.handleDealCard()
+		}, 200);
   }
 
   async sendCardAnimation(count, i, totalPlayer) {
@@ -258,7 +258,6 @@ class Scene1 extends Phaser.Scene {
       },
     });
     await delay(100);
-    // this.unvisibleCard[0].destroy();
   }
 
   handleShufflingCard () {
@@ -379,31 +378,41 @@ class Scene1 extends Phaser.Scene {
       }
     }
 
-    generateGamePlayDialog(this, world)
+    generateGamePlayDialog(this, world, this.room.id)
   }
 
-  createWaitingForPlayText() {
-    const world = store.getAll();
+  async handleBeforePlaying () {
+    if (this.loadingShufflingCard) {
+      await this.loadingShufflingCard()
+    }
+    this.loadingShufflingCard = null
+    if (this.randomInterval) {
+      window.clearInterval(this.randomInterval);
+    }
+    this.randomInterval = null
 
-    this.waitingText = this.add.text(world.width / 2 - 5, 200, "Waiting for others...", {
-      font: "30px Arial",
-      fill: "#FFFFFF",
-    }).setOrigin(0.5, 0.5)
-    this.tweens.add({
-      targets: this.waitingText,
-      scale: 1.3,
-      ease: 'Sine.easeInOut',
-      duration: 800,
-      repeat: -1,
-      yoyo: true
-    })
+    const cardNumber = 51
+    if (this.randomChangeOrder) {
+      for (let i = 0; i < this.randomChangeOrder; i++) {
+        this.unvisibleCard[cardNumber - i].y += 10
+      }
+    }
+  
+    for (let i = 0; i < this.randomChangeOrder; i++) {
+      this.unvisibleCard[cardNumber - i].y -= 10
+    }
+  
+    await delay(400)
+    this.handleDealCard()
   }
 
   handleReadyToPlay() {
     readyToPlay('maubing', this.room);
 
-    this.buttonStart.destroy();
-    this.createWaitingForPlayText();
+    this.buttonStart.setVisible(false)
+    this.buttonStart.setActive(false)
+
+    this.createWaitingForPlayText()
   }
 
   handleChangeRoomInfo(roomInfo) {
@@ -411,7 +420,10 @@ class Scene1 extends Phaser.Scene {
 
     if (roomInfo.result && roomInfo.result.status === 'WAITING_FOR_RANDOM') {
       this.handleChooseHiddenCard();
-      this.waitingText.destroy();
+      this.waitingText && this.waitingText.destroy();
+    }
+    if (roomInfo.result && roomInfo.result.status === 'PLAYING') {
+      this.handleBeforePlaying()
     }
   }
 }
