@@ -1,12 +1,15 @@
 import { createLoading } from '../helplers/ui'
 import { formatCountdown } from '../utils'
-import { endGame } from '../services/game'
+import { endGame, getUserCards } from '../services/game'
 
-export default function generateGamePlayDialog (scene, store, option = {
-    cooldown: 60,
-    cards: ['10C', '10D', '2D', '4C', '6D', 'QD', 'KH', 'AH', 'AC', '3D', '4S', '9D', '8C']
+export default async function generateGamePlayDialog (scene, store, roomId, option = {
+    cooldown: 60
 }) {
+  const userCard = await getUserCards('maubing', store.user, roomId)
+  const cards = userCard.cards || ['10C', '10D', '2D', '4C', '6D', 'QD', 'KH', 'AH', 'AC', '3D', '4S', '9D', '8C']
+  
   let loading = false
+  let locked = false
   const results = [...option.cards]
   let selectedInstance = null
   let selectedIndex = null
@@ -76,6 +79,7 @@ export default function generateGamePlayDialog (scene, store, option = {
         timeText.text = time
       }
       if (cooldown <= 0) {
+        locked = true
         clearInterval(timeInstance)
         return destroyAll()
       }  
@@ -101,7 +105,7 @@ export default function generateGamePlayDialog (scene, store, option = {
 
   let row = 0
   let column = 0
-  option.cards.forEach((item, i) => {
+  cards.forEach((item, i) => {
     pages.add(
       scene.add
         .image(0, 0, item)
@@ -110,6 +114,9 @@ export default function generateGamePlayDialog (scene, store, option = {
         .setDepth(99)
         .setInteractive()
         .on('pointerdown', function () {
+          if (locked) {
+            return
+          }
           if (!selectedInstance) {
             selectedInstance = this
             selectedIndex = i
@@ -193,7 +200,7 @@ export default function generateGamePlayDialog (scene, store, option = {
   .setOrigin(0.5, 0.5)
   .setDepth(1000)
   .setInteractive()
-  .on('pointerdown', () => {
+  .on('pointerdown', async () => {
     if (loading) {
       return
     }
@@ -208,7 +215,8 @@ export default function generateGamePlayDialog (scene, store, option = {
     })
     loading = true
     // const loadingComponent = createLoading(scene, 'Submit...', store)
-    endGame('maubing', scene.room);
+    await endGame('maubing', scene.room);
+    destroyAll()
   })
 
   scene.tweens.add({
@@ -225,5 +233,5 @@ export default function generateGamePlayDialog (scene, store, option = {
     .layout()
     .setDepth(998)
   createCooldown()
-  return pages
+  return destroyAll
 }
