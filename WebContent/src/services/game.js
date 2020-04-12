@@ -78,7 +78,7 @@ export function watchRoomInfo (roomId) {
     })
 }
 
-export function randomAllCards () {
+export function randomAllCards (roomInfo) {
   const user = store.get('user')
   if (!user || !user.uid) {
     return
@@ -86,7 +86,9 @@ export function randomAllCards () {
   return firebase
     .functions
     .httpsCallable('games-randomAllCards')
-    ()
+    ({
+      ...roomInfo
+    })
     .then(result => {
       return result
     }).catch(err => {
