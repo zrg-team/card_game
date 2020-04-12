@@ -142,6 +142,10 @@ export const RESOURCES = {
       key: 'done-button',
       load: ['done-button', 'assets/images/done-button.png']
     },
+    {
+      key: 'exit-button',
+      load: ['exit-button', 'assets/images/exit-button.png']
+    },
   ],
   spritesheet: [
     {
