@@ -133,12 +133,6 @@ class Scene1 extends Phaser.Scene {
     this.createCommonUI(world)
     this.createUserIcons(world)
     this.createUnvisibleCards(world)
-
-    const result = await randomAllCards();
-    if (result.errorCode) {
-      return;
-    }
-    store.set("allCards", result && result.data);
   }
 
   createButtonStart(world, callback) {
@@ -163,14 +157,14 @@ class Scene1 extends Phaser.Scene {
         // this.handleChooseHiddenCard()
       })
 
-  this.tweens.add({
-    targets: this.buttonStart,
-    scale: 1.3,
-    ease: 'Sine.easeInOut',
-    duration: 800,
-    repeat: -1,
-    yoyo: true
-  })
+    this.tweens.add({
+      targets: this.buttonStart,
+      scale: 1.3,
+      ease: 'Sine.easeInOut',
+      duration: 800,
+      repeat: -1,
+      yoyo: true
+    })
   }
 
   createCommonUI (world) {
@@ -232,7 +226,7 @@ class Scene1 extends Phaser.Scene {
     })
   }
 
-  async handleChooseHiddenCard() {
+  async handleChooseHiddenCard(players) {
     this.buttonStart.disableInteractive()
     this.buttonStart.setVisible(false)
 
@@ -242,7 +236,14 @@ class Scene1 extends Phaser.Scene {
     this.randomInterval = setInterval(() => {
       this.randomChangeOrder = Math.floor(Math.random() * 10);
       this.hiddenCardNumber.setText(`${this.randomChangeOrder}`);
-		}, 200);
+    }, 200);
+    
+    // only user 1 call random function
+    const user = store.get('user')
+    if (players[0] === user.uid)
+      randomAllCards(this.room);
+    // TODO 
+    // check error here
   }
 
   async sendCardAnimation(count, i, totalPlayer) {
@@ -381,15 +382,16 @@ class Scene1 extends Phaser.Scene {
     generateGamePlayDialog(this, world, this.room.id)
   }
 
-  async handleBeforePlaying () {
+  async handleBeforePlaying (randomNumber) {
     if (this.loadingShufflingCard) {
       await this.loadingShufflingCard()
     }
     this.loadingShufflingCard = null
     if (this.randomInterval) {
       window.clearInterval(this.randomInterval);
+      this.randomChangeOrder = randomNumber;
+      this.hiddenCardNumber.setText(`${randomNumber}`);
     }
-    this.randomInterval = null
 
     const cardNumber = 51
     if (this.randomChangeOrder) {
@@ -416,14 +418,15 @@ class Scene1 extends Phaser.Scene {
   }
 
   handleChangeRoomInfo(roomInfo) {
-    const world = store.getAll()
-
     if (roomInfo.result && roomInfo.result.status === 'WAITING_FOR_RANDOM') {
-      this.handleChooseHiddenCard();
+      this.room = roomInfo;
+      this.handleChooseHiddenCard(roomInfo.players);
       this.waitingText && this.waitingText.destroy();
     }
+
     if (roomInfo.result && roomInfo.result.status === 'PLAYING') {
-      this.handleBeforePlaying()
+      this.room = roomInfo;
+      this.handleBeforePlaying(roomInfo.randomNumber);
     }
   }
 }

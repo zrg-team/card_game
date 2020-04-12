@@ -5,6 +5,7 @@ import { endGame, getUserCards } from '../services/game'
 export default async function generateGamePlayDialog (scene, store, roomId, option = {
     cooldown: 60
 }) {
+  debugger;
   const userCard = await getUserCards('maubing', store.user, roomId)
   const cards = userCard.cards || ['10C', '10D', '2D', '4C', '6D', 'QD', 'KH', 'AH', 'AC', '3D', '4S', '9D', '8C']
   

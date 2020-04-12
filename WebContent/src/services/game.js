@@ -70,15 +70,16 @@ export function watchRoomInfo (roomId) {
   }
   unsubscribeRoom = firebase.db.collection('rooms').doc(roomId)
     .onSnapshot(function (doc) {
-      store.set('rooms', doc.data())
-      store.localStorageSet('rooms', JSON.stringify(doc.data()))
+      const roomInfo = doc.data();
+      roomInfo.id = roomId;
+
       if (onRoomInfoChange) {
-        onRoomInfoChange(doc.data())
+        onRoomInfoChange(roomInfo)
       }
     })
 }
 
-export function randomAllCards () {
+export function randomAllCards (roomInfo) {
   const user = store.get('user')
   if (!user || !user.uid) {
     return
@@ -86,7 +87,9 @@ export function randomAllCards () {
   return firebase
     .functions
     .httpsCallable('games-randomAllCards')
-    ()
+    ({
+      ...roomInfo
+    })
     .then(result => {
       return result
     }).catch(err => {
