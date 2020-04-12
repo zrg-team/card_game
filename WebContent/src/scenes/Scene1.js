@@ -225,8 +225,9 @@ class Scene1 extends Phaser.Scene {
     }
   }
 
-  createUserIcons (world) {
+  createUserIcons () {
     for (let i = 0; i < this.players.length; i++) {
+      debugger;
       const user = this.UISizes.users[i + 1]
       this.add.image(user.icon.x, user.icon.y, "user-icon")
         .setOrigin(0.5, 0.5)
@@ -453,7 +454,12 @@ class Scene1 extends Phaser.Scene {
     this.createWaitingForPlayText()
   }
 
-  handleChangeRoomInfo(roomInfo) {
+  async handleChangeRoomInfo(roomInfo) {
+    if (this.room.players.length !== roomInfo.players.length) {
+      this.players = await getPlayersInfo('maubing', roomInfo);
+      this.createUserIcons();
+    }
+
     if (roomInfo.result && roomInfo.result.status === 'WAITING_FOR_RANDOM') {
       this.room = roomInfo;
       this.handleChooseHiddenCard(roomInfo.players);
