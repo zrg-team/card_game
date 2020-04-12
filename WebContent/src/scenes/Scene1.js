@@ -4,6 +4,7 @@ import store from "../helplers/globalStore";
 import firebase from "../helplers/firebase";
 import generateGamePlayDialog from "../components/GamePlayDialog";
 import { randomAllCards, readyToPlay, setOnRoomInfoChange, watchRoomInfo } from "../services/game";
+import { getPlayersInfo } from "../services/players";
 
 class Scene1 extends Phaser.Scene {
   constructor() {
@@ -15,15 +16,15 @@ class Scene1 extends Phaser.Scene {
     this.randomChangeOrder = 0;
   }
 
-  init(roomData){
+  async init(roomData){
     this.room = roomData.room;
     watchRoomInfo(this.room.id);
     this.loadingShufflingCard = null
-    this.players = ['Player1', 'Player2', 'Player 3', 'Player 4']
   }
     
   preload() {
-    this.playerTexts = []
+    this.playersName = []
+    this.playersScore = []
     const world = store.getAll()
     this.UISizes = {
       card: {
@@ -48,6 +49,14 @@ class Scene1 extends Phaser.Scene {
               wordWrap: { width: 120, useAdvancedWrap: true }
             },
             origin: [0.5, 0]
+          },
+          score: {
+            x: 40,
+            y: world.height - 200 + 30 + 20,
+            style: {
+              wordWrap: { width: 120, useAdvancedWrap: true }
+            },
+            origin: [0.5, 0]
           }
         },
         2: {
@@ -62,6 +71,14 @@ class Scene1 extends Phaser.Scene {
           text: {
             x: world.width - 40,
             y: world.height - 200 + 30,
+            style: {
+              wordWrap: { width: 120, useAdvancedWrap: true }
+            },
+            origin: [0.5, 0]
+          },
+          score: {
+            x: world.width - 40,
+            y: world.height - 200 + 30 + 20,
             style: {
               wordWrap: { width: 120, useAdvancedWrap: true }
             },
@@ -85,6 +102,14 @@ class Scene1 extends Phaser.Scene {
               wordWrap: { width: 120, useAdvancedWrap: true }
             },
             origin: [0.5, 0]
+          },
+          score: {
+            x: world.width - 80,
+            y: 130,
+            style: {
+              wordWrap: { width: 120, useAdvancedWrap: true }
+            },
+            origin: [0.5, 0]
           }
         },
         4: {
@@ -103,14 +128,23 @@ class Scene1 extends Phaser.Scene {
               wordWrap: { width: 120, useAdvancedWrap: true }
             },
             origin: [0.5, 0]
+          },
+          score: {
+            x: 80,
+            y: 130,
+            style: {
+              wordWrap: { width: 120, useAdvancedWrap: true }
+            },
+            origin: [0.5, 0]
           }
         }
       }
     }
   }
 
-  create() {
-		
+  async create() {
+    this.players = await getPlayersInfo('maubing', this.room);
+  
     const world = store.getAll()
     this.bg = this.add
       .image(0, 0, 'main-background')
@@ -118,22 +152,18 @@ class Scene1 extends Phaser.Scene {
       .setDisplaySize(world.width, world.height)
     	.setDepth(0)
 
-    this._create(world);
-
-    setOnRoomInfoChange(this.handleChangeRoomInfo);
-  }
-
-  update() {}
-
-  async _create(world) {
-    this.gameTable = this.add.image(0, 0, "game-table")
+      this.gameTable = this.add.image(0, 0, "game-table")
       .setDisplaySize(world.width, world.height)
       .setOrigin(0, 0);
 
     this.createCommonUI(world)
     this.createUserIcons(world)
     this.createUnvisibleCards(world)
+
+    setOnRoomInfoChange(this.handleChangeRoomInfo);
   }
+
+  update() {}
 
   createButtonStart(world, callback) {
     if (this.buttonStart) {
@@ -201,11 +231,17 @@ class Scene1 extends Phaser.Scene {
       this.add.image(user.icon.x, user.icon.y, "user-icon")
         .setOrigin(0.5, 0.5)
         .setDisplaySize(80, 80)
-      this.playerTexts[i] = this.add.text(user.text.x, user.text.y, this.players[i], {
+      this.playersName[i] = this.add.text(user.text.x, user.text.y, this.players[i].name, {
         fontFamily: '"Arial Black"',
         fontSize: 15,
         ...user.text.style || {}
       }).setOrigin(...user.text.origin || [0.5, 0.5])
+
+      this.playersScore[i] = this.add.text(user.score.x, user.score.y, `Score: ${this.players[i].balance}`, {
+        fontFamily: '"Arial Black"',
+        fontSize: 15,
+        ...user.score.style || {}
+      }).setOrigin(...user.score.origin || [0.5, 0.5])
     }
   }
 
