@@ -222,8 +222,8 @@ class MenuScene extends Phaser.Scene {
         true // expand
       )
     }
-    panel.layout();
-    return panel;
+    panel.layout()
+    return panel
   }
 
   createGameItem (panel, item) {
@@ -231,7 +231,6 @@ class MenuScene extends Phaser.Scene {
 
     const contentHeight = panel.displayHeight - 10
     const contentWidth = 250
-
 
     const sizer = scene.rexUI.add.sizer({
       orientation: 'v',
@@ -244,7 +243,7 @@ class MenuScene extends Phaser.Scene {
           .setDisplaySize(contentWidth, contentHeight)
           .setOrigin(0, 0)
       ).add(
-        scene.add.text(-contentWidth /2 + 20, -contentHeight / 2 + 36, item.title), // child
+        scene.add.text(-contentWidth / 2 + 20, -contentHeight / 2 + 36, item.title), // child
         null, // proportion
         'center', // align
         {
@@ -278,7 +277,7 @@ class MenuScene extends Phaser.Scene {
         null, // proportion
         'left', // align
         0, // paddingConfig
-        true, // expand
+        true // expand
       )
 
     return sizer
@@ -347,7 +346,7 @@ class MenuScene extends Phaser.Scene {
 
   createZoomButton () {
     const world = store.getAll()
-    if(this.scale.isFullscreen) {
+    if (this.scale.isFullscreen) {
       this.userSetting = this.add
         .image(world.width - 35, 30, 'zoomout-button')
         .setOrigin(0.5, 0.5)

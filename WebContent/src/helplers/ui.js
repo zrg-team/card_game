@@ -158,6 +158,14 @@ export function createButton (scene, title, option = {}) {
       title,
       {
         fontSize: '20px',
+        shadow: {
+          offsetX: 2,
+          offsetY: 2,
+          color: '#000',
+          blur: 2,
+          stroke: true,
+          fill: true
+        },
         ...(text.style || {})
       }
     ),
@@ -169,7 +177,8 @@ export function createButton (scene, title, option = {}) {
       bottom: 10
     },
     ...button
-  }).setInteractive()
+  })
+    .setInteractive()
     .on('pointerdown', () => {
       scene.tweens.add({
         targets: buttonComponent,

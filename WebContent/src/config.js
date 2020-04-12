@@ -145,7 +145,7 @@ export const RESOURCES = {
     {
       key: 'exit-button',
       load: ['exit-button', 'assets/images/exit-button.png']
-    },
+    }
   ],
   spritesheet: [
     {

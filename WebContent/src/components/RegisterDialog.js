@@ -9,7 +9,7 @@ export default function generateRegisterDialog (scene, store) {
 
   let nameEditor = null
   let emailEditor = null
-  let passwordEditor = null
+  const passwordEditor = null
 
   const destroyAll = () => {
     if (emailEditor) {

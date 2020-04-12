@@ -1,5 +1,5 @@
 export const delay = async (ms) => {
-  return await new Promise(resolve => setTimeout(resolve, ms))
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 export function formatCountdown (time) {

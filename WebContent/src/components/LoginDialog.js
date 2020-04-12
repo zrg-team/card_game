@@ -129,7 +129,7 @@ export default function generateLoginDialog (scene, store, option = {}) {
                 createToast(scene, store.width / 2, store.height - 40)
                   .setOrigin(0.5, 0.5)
                   .show('Login success.')
-                  destroyAll()
+                destroyAll()
                 if (option.loginSuccess) {
                   option.loginSuccess(result)
                 }

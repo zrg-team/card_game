@@ -4,8 +4,16 @@ import { getRooms, createRoom, joinRoom } from '../services/game'
 export default function generateRoomDialog (scene, store, option = {}) {
   let loading = false
   let panel = null
+  const roomList = []
 
   const destroyAll = () => {
+    roomList.forEach(item => {
+      if (item) {
+        item.setVisible(false)
+        item.destroy()
+        item = null
+      }
+    })
     if (panel) {
       panel.setVisible(false)
       panel.destroy()
@@ -23,21 +31,21 @@ export default function generateRoomDialog (scene, store, option = {}) {
     background: scene.add.image(0, 0, 'gamelist-bg'),
 
     panel: {
-        child: scene.rexUI.add.fixWidthSizer({
-          space: {
-              left: 3,
-              right: 3,
-              top: 3,
-              bottom: 3,
-              item: 8,
-              line: 8,
-          },
-          rtl: true
-        }),
-
-        mask: {
-            padding: 1
+      child: scene.rexUI.add.fixWidthSizer({
+        space: {
+          left: 3,
+          right: 3,
+          top: 3,
+          bottom: 3,
+          item: 8,
+          line: 8
         },
+        rtl: true
+      }),
+
+      mask: {
+        padding: 1
+      }
     },
     footer: scene.rexUI.add
       .sizer({
@@ -56,11 +64,7 @@ export default function generateRoomDialog (scene, store, option = {}) {
               bottom: 20
             }
           },
-          onPress: (button) => {
-            panel.setVisible(false)
-            panel.destroy()
-            panel = null
-          }
+          onPress: destroyAll
         }
       ), 1)
       .add(createButton(
@@ -101,22 +105,21 @@ export default function generateRoomDialog (scene, store, option = {}) {
             })
           }
         }
-      ), 1)
-    ,
+      ), 1),
 
     slider: {
-        track: scene.rexUI.add.roundRectangle(0, 0, 20, 10, 10, 0xe0c48f),
-        thumb: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 13, 0xFFFFFF),
+      track: scene.rexUI.add.roundRectangle(0, 0, 20, 10, 10, 0xe0c48f),
+      thumb: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 13, 0xFFFFFF)
     },
 
     space: {
-        left: 15,
-        right: 15,
-        top: 20,
-        bottom: 20,
+      left: 15,
+      right: 15,
+      top: 20,
+      bottom: 20,
 
-        panel: 10,
-        footer: 10
+      panel: 10,
+      footer: 10
     }
   }).layout().setDepth(999)
 
@@ -134,11 +137,10 @@ export default function generateRoomDialog (scene, store, option = {}) {
             : room.players.includes(store.user.uid)
               ? '(joined)'
               : ''
-          sizerList.add(
-            createLabel(
-              panel.scene,
-              `${room.title} - ${room.players.length}/${room.player} ${status}`,
-              {
+          const item = createLabel(
+            panel.scene,
+            `${room.title} - ${room.players.length}/${room.playerCount} ${status}`,
+            {
               label: {
                 x: 0,
                 y: 0,
@@ -167,27 +169,27 @@ export default function generateRoomDialog (scene, store, option = {}) {
               })
               const loadingComponent = createLoading(scene, 'Joining...', store)
               joinRoom('maubing', room.id)
-              .then((result) => {
-                if (result.errorCode) {
-                  createToast(scene, store.width / 2, store.height - 40)
-                    .setOrigin(0.5, 0.5)
-                    .show(result.errorMessage)
-                } else {
-                  createToast(scene, store.width / 2, store.height - 40)
-                    .setOrigin(0.5, 0.5)
-                    .show(`Joined to room ${room.title}.`)
-                  destroyAll()
-                  option.onJoinRoom(room)
-                }
-                loadingComponent.setVisible(false)
-                loadingComponent.destroy()
-              })
+                .then((result) => {
+                  if (result.errorCode) {
+                    createToast(scene, store.width / 2, store.height - 40)
+                      .setOrigin(0.5, 0.5)
+                      .show(result.errorMessage)
+                  } else {
+                    destroyAll()
+                    createToast(scene, store.width / 2, store.height - 40)
+                      .setOrigin(0.5, 0.5)
+                      .show(`Joined to room ${room.title}.`)
+                    option.onJoinRoom(room)
+                  }
+                  loadingComponent.setVisible(false)
+                  loadingComponent.destroy()
+                })
             })
-          )
+          roomList.push(item)
+          sizerList.add(item)
         })
-      }  
+      }
       panel.layout().setDepth(999)
       return panel
     })
-
 }

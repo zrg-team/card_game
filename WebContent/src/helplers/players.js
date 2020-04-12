@@ -1,4 +1,4 @@
 export const getPlayersInfo = roomInfo => {
-  debugger;
+  debugger
   return players
-} 
+}

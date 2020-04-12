@@ -3,15 +3,15 @@ import { formatCountdown } from '../utils'
 import { endGame, getUserCards } from '../services/game'
 
 export default async function generateGamePlayDialog (scene, store, roomId, option = {
-    cooldown: 60
+  countdown: 60,
+  onSuccess
 }) {
-  debugger;
-  const userCard = await getUserCards('maubing', store.user, roomId)
+  const userCard = await getUserCards('maubing', roomId)
   const cards = userCard.cards || ['10C', '10D', '2D', '4C', '6D', 'QD', 'KH', 'AH', 'AC', '3D', '4S', '9D', '8C']
-  
+
   let loading = false
   let locked = false
-  const results = [...option.cards]
+  const results = [...cards]
   let selectedInstance = null
   let selectedIndex = null
   const cardHeight = ((store.height / 3)) - 28
@@ -20,7 +20,7 @@ export default async function generateGamePlayDialog (scene, store, roomId, opti
   const cardScaleWidth = cardWidth / 691 + 0.02
 
   // Dialog components
-  let cooldown = option.cooldown
+  let countdown = option.countdown
   let pages = null
   let bottomPanel = null
   let timePanel = null
@@ -69,21 +69,34 @@ export default async function generateGamePlayDialog (scene, store, roomId, opti
     }
   }
 
-  const createCooldown = () => {
+  const handleSubmitCard = async () => {
+    loading = true
+    clearInterval(timeInstance)
+    const loadingComponent = createLoading(scene, 'Submit...', store)
+    await endGame('maubing', scene.room)
+    loadingComponent.setVisible(false)
+    loadingComponent.destroy()
+    destroyAll()
+    if (option.onSuccess) {
+      option.onSuccess()
+    }
+  }
+
+  const createCountdown = () => {
     if (timeText) {
-      timeText.text = formatCountdown(cooldown)
+      timeText.text = formatCountdown(countdown)
     }
     timeInstance = setInterval(() => {
-      cooldown--
-      const time = formatCountdown(cooldown)
+      countdown--
+      const time = formatCountdown(countdown)
       if (timeText) {
         timeText.text = time
       }
-      if (cooldown <= 0) {
+      if (countdown <= 0) {
         locked = true
         clearInterval(timeInstance)
-        return destroyAll()
-      }  
+        return handleSubmitCard()
+      }
     }, 1000)
   }
 
@@ -148,7 +161,7 @@ export default async function generateGamePlayDialog (scene, store, roomId, opti
             selectedIndex = null
             selectedInstance = null
           }
-       }),
+        }),
       column,
       row,
       'center',
@@ -178,7 +191,7 @@ export default async function generateGamePlayDialog (scene, store, roomId, opti
     .setOrigin(0.5, 0.5)
     .setDepth(999)
   timeText = scene.add.text(store.width - 110, 25, '00:00', {
-    fontSize: '24px',
+    fontSize: '24px'
   })
     .setOrigin(0.5, 0.5)
     .setDepth(1000)
@@ -188,37 +201,34 @@ export default async function generateGamePlayDialog (scene, store, roomId, opti
     .setDisplaySize(56, 56)
     .setDepth(1000)
   userBalance = scene.add.text(
-      86,
-      store.height - 44,
+    86,
+    store.height - 44,
       `${store.information.balance || 0} 💎`,
       {
         fontSize: '24px'
       }
-    )
+  )
     .setDepth(1000)
   buttonSubmit = scene.add.image(store.width - 80, store.height - 30, 'done-button')
-  .setDisplaySize(140, 40)
-  .setOrigin(0.5, 0.5)
-  .setDepth(1000)
-  .setInteractive()
-  .on('pointerdown', async () => {
-    if (loading) {
-      return
-    }
-    scene.tweens.add({
-      targets: buttonSubmit,
-      scaleX: 1.2,
-      scaleY: 1.2,
-      ease: 'Sine.easeInOut',
-      duration: 100,
-      repeat: 0,
-      yoyo: true
+    .setDisplaySize(140, 40)
+    .setOrigin(0.5, 0.5)
+    .setDepth(1000)
+    .setInteractive()
+    .on('pointerdown', async () => {
+      if (loading) {
+        return
+      }
+      scene.tweens.add({
+        targets: buttonSubmit,
+        scaleX: 1.2,
+        scaleY: 1.2,
+        ease: 'Sine.easeInOut',
+        duration: 100,
+        repeat: 0,
+        yoyo: true
+      })
+      handleSubmitCard()
     })
-    loading = true
-    // const loadingComponent = createLoading(scene, 'Submit...', store)
-    await endGame('maubing', scene.room);
-    destroyAll()
-  })
 
   scene.tweens.add({
     targets: buttonSubmit,
@@ -233,6 +243,6 @@ export default async function generateGamePlayDialog (scene, store, roomId, opti
   pages
     .layout()
     .setDepth(998)
-  createCooldown()
+  createCountdown()
   return destroyAll
 }

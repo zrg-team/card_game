@@ -57,7 +57,7 @@ export function getRooms (game) {
     })
 }
 
-let unsubscribeRoom = null;
+let unsubscribeRoom = null
 let onRoomInfoChange = null
 
 export function setOnRoomInfoChange (func) {
@@ -70,8 +70,8 @@ export function watchRoomInfo (roomId) {
   }
   unsubscribeRoom = firebase.db.collection('rooms').doc(roomId)
     .onSnapshot(function (doc) {
-      const roomInfo = doc.data();
-      roomInfo.id = roomId;
+      const roomInfo = doc.data()
+      roomInfo.id = roomId
 
       if (onRoomInfoChange) {
         onRoomInfoChange(roomInfo)
@@ -133,10 +133,11 @@ export function endGame (game, room) {
     })
 }
 
-export function getUserCards (game, roomId, user) {
-  firebase.db.collection('rooms').doc(roomId)
+export function getUserCards (game, roomId) {
+  const user = store.get('user')
+  return firebase.db.collection('rooms').doc(`${roomId}`)
     .collection('users')
-    .doc(user)
+    .doc(user.uid)
     .get()
     .then(result => {
       return result.data()
@@ -148,22 +149,22 @@ export function getUserCards (game, roomId, user) {
 }
 
 export const deletePlayerFromRoom = (game, room, user) => {
-  firebase.db.collection("rooms").doc(room.id).collection('users').doc(user.uid).delete().then(function(result) {
+  firebase.db.collection('rooms').doc(room.id).collection('users').doc(user.uid).delete().then(function (result) {
     return result.data()
-  }).catch(function(err) {
+  }).catch(function (err) {
     const errorCode = err.code
     const errorMessage = err.message
     return { errorCode, errorMessage }
-  });
+  })
 
-  const newPlayers = room.players.filter(player => player !== user.uid);
-  firebase.db.collection("rooms").doc(room.id).update({
+  const newPlayers = room.players.filter(player => player !== user.uid)
+  firebase.db.collection('rooms').doc(room.id).update({
     players: newPlayers
-  }).then(function(result) {
+  }).then(function (result) {
     return result.data()
-  }).catch(function(err) {
+  }).catch(function (err) {
     const errorCode = err.code
     const errorMessage = err.message
     return { errorCode, errorMessage }
-  });
+  })
 }

@@ -14,5 +14,5 @@ db.settings({
 export default {
   auth: firebaseApp.auth(),
   functions,
-  db,
+  db
 }

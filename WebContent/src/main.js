@@ -48,7 +48,7 @@ const config = {
     PreloaderScene,
     MenuScene,
     Scene1,
-    Scene2,
+    Scene2
   ]
 }
 window.addEventListener('load', function () {
