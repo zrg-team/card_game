@@ -1,30 +1,30 @@
 [
   {
-    "key": "10C",
+    "key": "XC",
     "load": [
-      "10C",
-      "assets/images/cards/10C.png"
+      "XC",
+      "assets/images/cards/XC.png"
     ]
   },
   {
-    "key": "10D",
+    "key": "XD",
     "load": [
-      "10D",
-      "assets/images/cards/10D.png"
+      "XD",
+      "assets/images/cards/XD.png"
     ]
   },
   {
-    "key": "10H",
+    "key": "XH",
     "load": [
-      "10H",
-      "assets/images/cards/10H.png"
+      "XH",
+      "assets/images/cards/XH.png"
     ]
   },
   {
-    "key": "10S",
+    "key": "XS",
     "load": [
-      "10S",
-      "assets/images/cards/10S.png"
+      "XS",
+      "assets/images/cards/XS.png"
     ]
   },
   {

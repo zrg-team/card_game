@@ -8,7 +8,8 @@ import {
   readyToPlay,
   setOnRoomInfoChange,
   watchRoomInfo,
-  deletePlayerFromRoom
+  deletePlayerFromRoom,
+  getResult,
 } from '../services/game'
 import { getPlayersInfo } from '../services/players'
 
@@ -34,16 +35,24 @@ class Scene1 extends Phaser.Scene {
     this.playersScore = []
     const world = store.getAll()
     this.UISizes = {
-      card: {
+      hiddenCard: {
         width: 80,
         height: 120
+      },
+      openedCard: {
+        width: 60,
+        height: 90
       },
       users: {
         // BOTTOM
         1: {
-          card: {
+          hiddenCard: {
             x: 130,
             y: world.height - 200
+          },
+          openedCard: {
+            x: 170,
+            y: 270,
           },
           icon: {
             x: 40,
@@ -66,12 +75,20 @@ class Scene1 extends Phaser.Scene {
               wordWrap: { width: 120, useAdvancedWrap: true }
             },
             origin: [0.5, 0]
+          },
+          drawText: {
+            x: 190,
+            y: 390,
           }
         },
         2: {
-          card: {
+          hiddenCard: {
             x: world.width - 130,
             y: world.height - 200
+          },
+          openedCard: {
+            x: 540,
+            y: 270,
           },
           icon: {
             x: world.width - 40,
@@ -94,14 +111,22 @@ class Scene1 extends Phaser.Scene {
               wordWrap: { width: 120, useAdvancedWrap: true }
             },
             origin: [0.5, 0]
+          },
+          drawText: {
+            x: 560,
+            y: 390,
           }
         },
         // TOP
         3: {
-          card: {
+          hiddenCard: {
             x: world.width - 170,
             y: 80
           },
+          openedCard: {
+            x: 540,
+            y: 60,
+          },
           icon: {
             x: world.width - 80,
             y: 80
@@ -121,12 +146,20 @@ class Scene1 extends Phaser.Scene {
               wordWrap: { width: 120, useAdvancedWrap: true }
             },
             origin: [0.5, 0]
+          },
+          drawText: {
+            x: 560,
+            y: 180,
           }
         },
         4: {
-          card: {
+          hiddenCard: {
             x: 170,
             y: 80
+          },
+          openedCard: {
+            x: 170,
+            y: 60,
           },
           icon: {
             x: 80,
@@ -147,6 +180,10 @@ class Scene1 extends Phaser.Scene {
               wordWrap: { width: 120, useAdvancedWrap: true }
             },
             origin: [0.5, 0]
+          },
+          drawText: {
+            x: 190,
+            y: 180,
           }
         }
       }
@@ -167,12 +204,10 @@ class Scene1 extends Phaser.Scene {
       .image(0, 0, 'game-table')
       .setDisplaySize(world.width, world.height)
       .setOrigin(0, 0)
-
     this.createCommonUI(world)
     this.createExitRoomButton(world)
     this.createUserIcons(world)
     this.createUnvisibleCards(world)
-
     setOnRoomInfoChange(this.handleChangeRoomInfo)
   }
 
@@ -258,8 +293,8 @@ class Scene1 extends Phaser.Scene {
 
   createUnvisibleCards (world) {
     this.unvisibleCard = []
-    const cardWidth = this.UISizes.card.width
-    const cardHeight = this.UISizes.card.height
+    const cardWidth = this.UISizes.hiddenCard.width
+    const cardHeight = this.UISizes.hiddenCard.height
     const bottom = world.height - cardHeight / 2 - 2
     const spaceBetweenCard = 0.25
     let startWidth = (world.width - 51 * spaceBetweenCard) / 2
@@ -269,6 +304,52 @@ class Scene1 extends Phaser.Scene {
         .setDisplaySize(cardWidth, cardHeight)
         .setOrigin(0.5, 0.5)
       startWidth += spaceBetweenCard
+    }
+  }
+
+  createUserOpenedCards (cards) {
+    for (let i = 1; i <= this.players.length; i++) {
+      let x = this.UISizes.users[i].openedCard.x;
+      let y = this.UISizes.users[i].openedCard.y;
+
+      for (let j = 0; j < cards[i-1].length; j++) {
+        this.openedCards = this.add.image(x, y, cards[i-1][j])
+        .setDisplaySize(this.UISizes.openedCard.width, this.UISizes.openedCard.height)
+        .setOrigin(0.5, 0.5)
+  
+        x = x + 20;
+        if( j === 2 || j === 7) {
+          x = this.UISizes.users[i].openedCard.x;
+          y = y + 30;
+        }
+      }
+    }
+  }
+
+  createDrawText (draw) {
+    for (let i = 1; i <= this.players.length; i++) {
+      let x = this.UISizes.users[i].drawText.x;
+      let y = this.UISizes.users[i].drawText.y;
+      
+      const { back, foul, front, maubinh, mid, winACE } = draw[i-1]
+
+      const number = back + foul + front + maubinh + mid + winACE;
+
+      if (number > 0) {
+        this.drawText = this.add
+        .text(x, y, `Thắng ${Math.abs(Number(number))} chi`, {
+          fontFamily: '"Arial Black"',
+          fontSize: 15,
+        })
+        .setOrigin(0.5, 0.5)
+      } else {
+        this.drawText = this.add
+        .text(x, y, `Thua ${Math.abs(Number(number))} chi`, {
+          fontFamily: '"Arial Black"',
+          fontSize: 15,
+        })
+        .setOrigin(0.5, 0.5)
+      }
     }
   }
 
@@ -353,12 +434,10 @@ class Scene1 extends Phaser.Scene {
       this.randomChangeOrder = Math.floor(Math.random() * 10)
       this.hiddenCardNumber.setText(`${this.randomChangeOrder}`)
     }, 200)
-    // TODO
-    // check error here
   }
 
   async sendCardAnimation (count, i, totalPlayer) {
-    const position = this.UISizes.users[(count % totalPlayer) + 1].card
+    const position = this.UISizes.users[(count % totalPlayer) + 1].hiddenCard
     this.tweens.add({
       targets: this.unvisibleCard[i],
       repeat: 0,
@@ -537,18 +616,24 @@ class Scene1 extends Phaser.Scene {
     })
   }
 
-  handleEndGame () {
+  handleEndGame (result) {
     const world = store.getAll()
+  
     if (this.waitingText) {
       this.waitingText.setVisible(true)
       this.waitingText.setActive(true)
     }
     if (this.waitingTextEnd) {
-      this.waitingTextEnd.setVisible(true)
-      this.waitingTextEnd.setActive(true)
+      debugger;
+
+      this.waitingTextEnd.destroy()
+      // this.waitingTextEnd.setActive(true)
     }
-    this.buttonStart.setVisible(true)
-    this.buttonStart.setActive(true)
+
+    this.createUserOpenedCards(result.cards)
+    this.createDrawText(result.draw)
+
+    this.createButtonStart(world, this.handleReadyToPlay)
     this.createUnvisibleCards(world)
   }
 
@@ -581,6 +666,15 @@ class Scene1 extends Phaser.Scene {
   handleReadyToPlay () {
     readyToPlay('maubing', this.room)
 
+    if (this.openedCards) {
+      debugger;
+      this.openedCards.destroy()
+    }
+    if (this.drawText) {
+      debugger;
+      this.drawText.destroy()
+    }
+
     this.buttonStart.setVisible(false)
     this.buttonStart.setActive(false)
 
@@ -594,7 +688,9 @@ class Scene1 extends Phaser.Scene {
     }
 
     if (this.playerDone && roomInfo.result.status === 'DONE') {
-      this.handleEndGame()
+      this.result = await getResult('maubing', roomInfo)
+
+      this.handleEndGame(this.result)
     }
 
     if (roomInfo.result && roomInfo.result.status === 'WAITING_FOR_RANDOM') {

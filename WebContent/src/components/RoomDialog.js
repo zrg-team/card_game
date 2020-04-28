@@ -132,9 +132,7 @@ export default function generateRoomDialog (scene, store, option = {}) {
             id: doc.id,
             ...doc.data()
           }
-          const status = room.host === store.user.uid
-            ? '(host)'
-            : room.players.includes(store.user.uid)
+          const status = room.players.includes(store.user.uid)
               ? '(joined)'
               : ''
           const item = createLabel(

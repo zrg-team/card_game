@@ -116,13 +116,14 @@ export function readyToPlay (game, room) {
     })
 }
 
-export function endGame (game, room) {
+export function submitCards (game, room, cards) {
   return firebase
     .functions
-    .httpsCallable('games-endGame')
+    .httpsCallable('games-submitCards')
     ({
       id: room.id,
-      game
+      game,
+      cards,
     })
     .then(result => {
       return result
@@ -167,4 +168,31 @@ export const deletePlayerFromRoom = (game, room, user) => {
     const errorMessage = err.message
     return { errorCode, errorMessage }
   })
+}
+
+export const getResult = async (game, room) => {
+  return firebase.db.collection('rooms').doc(room.id)
+    .collection('users')
+    .get()
+    .then(function (data) {
+      const result = {
+        cards: [],
+        draw: [],
+      }
+
+      data.forEach(function (doc) {
+        const obj = {
+          name: doc.data().name,
+          balance: doc.data().balance
+        }
+        result.cards.push(doc.data().cards)
+        result.draw.push(doc.data().draw)
+      })
+
+      return result
+    })
+    .catch(err => {
+      console.log('can not get players info', err)
+      return []
+    })
 }

@@ -1,13 +1,13 @@
 import { createLoading } from '../helplers/ui'
 import { formatCountdown } from '../utils'
-import { endGame, getUserCards } from '../services/game'
+import { submitCards, getUserCards } from '../services/game'
 
 export default async function generateGamePlayDialog (scene, store, roomId, option = {
   countdown: 60,
   onSuccess
 }) {
   const userCard = await getUserCards('maubing', roomId)
-  const cards = userCard.cards || ['10C', '10D', '2D', '4C', '6D', 'QD', 'KH', 'AH', 'AC', '3D', '4S', '9D', '8C']
+  const cards = userCard.cards || ['XC', 'XD', '2D', '4C', '6D', 'QD', 'KH', 'AH', 'AC', '3D', '4S', '9D', '8C']
 
   let loading = false
   let locked = false
@@ -73,7 +73,7 @@ export default async function generateGamePlayDialog (scene, store, roomId, opti
     loading = true
     clearInterval(timeInstance)
     const loadingComponent = createLoading(scene, 'Submit...', store)
-    await endGame('maubing', scene.room)
+    await submitCards('maubing', scene.room, results)
     loadingComponent.setVisible(false)
     loadingComponent.destroy()
     destroyAll()
