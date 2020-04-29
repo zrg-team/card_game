@@ -308,12 +308,14 @@ class Scene1 extends Phaser.Scene {
   }
 
   createUserOpenedCards (cards) {
+    this.openedCards = [[],[],[],[]]
+
     for (let i = 1; i <= this.players.length; i++) {
       let x = this.UISizes.users[i].openedCard.x;
       let y = this.UISizes.users[i].openedCard.y;
 
       for (let j = 0; j < cards[i-1].length; j++) {
-        this.openedCards = this.add.image(x, y, cards[i-1][j])
+        this.openedCards[i][j] = this.add.image(x, y, cards[i-1][j])
         .setDisplaySize(this.UISizes.openedCard.width, this.UISizes.openedCard.height)
         .setOrigin(0.5, 0.5)
   
@@ -327,6 +329,8 @@ class Scene1 extends Phaser.Scene {
   }
 
   createDrawText (draw) {
+    this.drawText = []
+  
     for (let i = 1; i <= this.players.length; i++) {
       let x = this.UISizes.users[i].drawText.x;
       let y = this.UISizes.users[i].drawText.y;
@@ -336,14 +340,14 @@ class Scene1 extends Phaser.Scene {
       const number = back + foul + front + maubinh + mid + winACE;
 
       if (number > 0) {
-        this.drawText = this.add
+        this.drawText[i] = this.add
         .text(x, y, `Thắng ${Math.abs(Number(number))} chi`, {
           fontFamily: '"Arial Black"',
           fontSize: 15,
         })
         .setOrigin(0.5, 0.5)
       } else {
-        this.drawText = this.add
+        this.drawText[i] = this.add
         .text(x, y, `Thua ${Math.abs(Number(number))} chi`, {
           fontFamily: '"Arial Black"',
           fontSize: 15,
@@ -608,6 +612,7 @@ class Scene1 extends Phaser.Scene {
             this.unvisibleCard[i].setVisible(false)
             this.unvisibleCard[i].destroy()
             delete this.unvisibleCard[i]
+            this.unvisibleCard = null
           }
         }
         this.createWaitingEndGameText()
@@ -624,17 +629,21 @@ class Scene1 extends Phaser.Scene {
       this.waitingText.setActive(true)
     }
     if (this.waitingTextEnd) {
-      debugger;
-
       this.waitingTextEnd.destroy()
-      // this.waitingTextEnd.setActive(true)
     }
 
-    this.createUserOpenedCards(result.cards)
-    this.createDrawText(result.draw)
+    if (!this.openedCards && !this.drawText) {
+      this.createUserOpenedCards(result.cards)
+      this.createDrawText(result.draw)
+    }
 
-    this.createButtonStart(world, this.handleReadyToPlay)
-    this.createUnvisibleCards(world)
+    this.buttonStart.setVisible(true)
+    this.buttonStart.setActive(true)
+    this.buttonStart.setInteractive(true)
+
+    if (!this.unvisibleCard) {
+      this.createUnvisibleCards(world)
+    }
   }
 
   async handleBeforePlaying (randomNumber) {
@@ -667,12 +676,20 @@ class Scene1 extends Phaser.Scene {
     readyToPlay('maubing', this.room)
 
     if (this.openedCards) {
-      debugger;
-      this.openedCards.destroy()
+      for (let i = 1; i <= this.players.length; i++) {
+        for (let k = 0; k < 13; k++) {
+          this.openedCards[i][k].destroy()
+          delete this.openedCards[i][k]
+          this.openedCards = null
+        }
+      }
     }
     if (this.drawText) {
-      debugger;
-      this.drawText.destroy()
+      for (let i = 1; i <= this.players.length; i++) {
+        this.drawText[i].destroy()
+        delete this.drawText[i]
+        this.drawText = null
+      }
     }
 
     this.buttonStart.setVisible(false)
@@ -682,14 +699,16 @@ class Scene1 extends Phaser.Scene {
   }
 
   async handleChangeRoomInfo (roomInfo) {
+    const user = store.get('user')
+
     if (this.room.players.length !== roomInfo.players.length) {
       this.players = await getPlayersInfo('maubing', roomInfo)
       this.createUserIcons()
     }
 
-    if (this.playerDone && roomInfo.result.status === 'DONE') {
+    if (this.playerDone && roomInfo.result.status === 'DONE' && !roomInfo.readyPlayers.includes(user.uid)) {
       this.result = await getResult('maubing', roomInfo)
-
+      console.log('into done')
       this.handleEndGame(this.result)
     }
 
