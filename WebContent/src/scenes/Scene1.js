@@ -25,135 +25,136 @@ class Scene1 extends Phaser.Scene {
   }
 
   async init (roomData) {
-    this.room = roomData.room
+    this.room = roomData.room || {
+      id: '1587274686115'
+    }
     watchRoomInfo(this.room.id)
     this.loadingShufflingCard = null
-  }
 
-  preload () {
     this.playersName = []
     this.playersScore = []
+    this.cardAnimates = []
+
     const world = store.getAll()
     this.UISizes = {
-      hiddenCard: {
-        width: 80,
-        height: 120
+      card: {
+        width: world.width * 0.09,
+        height: world.width * 0.09 * 120 / 80
       },
       openedCard: {
-        width: 60,
-        height: 90
+        width: world.width * 0.09,
+        height: world.width * 0.09 * 90 / 60
       },
       users: {
+        width: world.width * 0.12,
+        height: world.width * 0.12,
         // BOTTOM
         1: {
-          hiddenCard: {
+          card: {
             x: 130,
             y: world.height - 200
           },
           openedCard: {
             x: 170,
-            y: 270,
-          },
-          icon: {
-            x: 40,
             y: world.height - 200
           },
+          icon: {
+            x: 20,
+            y: world.height - 200,
+            origin: [0, 0.5]
+          },
           text: {
-            x: 5,
-            y: world.height - 200 + 30,
+            x: 20,
+            y: world.height - world.width * 0.12 + 40,
             style: {
-              wordWrap: { width: 120, useAdvancedWrap: true },
+              fontSize: '26px',
+              wordWrap: { width: world.width * 0.14, useAdvancedWrap: true },
               align: 'left',
-              fixedWidth: 120
+              fixedWidth: world.width * 0.14
             },
             origin: [0, 0]
           },
           score: {
-            x: 40,
-            y: world.height - 200 + 30 + 20,
+            x: 20,
+            y: world.height - world.width * 0.12 + 20,
             style: {
-              wordWrap: { width: 120, useAdvancedWrap: true }
+              fontSize: '18px',
+              wordWrap: { width: world.width * 0.14, useAdvancedWrap: true }
             },
-            origin: [0.5, 0]
-          },
-          drawText: {
-            x: 190,
-            y: 390,
+            origin: [0, 0]
           }
         },
         2: {
-          hiddenCard: {
+          card: {
             x: world.width - 130,
             y: world.height - 200
           },
           openedCard: {
-            x: 540,
-            y: 270,
-          },
-          icon: {
-            x: world.width - 40,
+            x: world.width - 130,
             y: world.height - 200
           },
+          icon: {
+            x: world.width - 20,
+            y: world.height - 200,
+            origin: [1, 0.5]
+          },
           text: {
-            x: world.width - 125,
-            y: world.height - 200 + 30,
+            x: world.width - 20,
+            y: world.height - world.width * 0.12 + 40,
             style: {
-              wordWrap: { width: 120, useAdvancedWrap: false },
+              fontSize: '26px',
+              wordWrap: { width: world.width * 0.14, useAdvancedWrap: false },
               align: 'right',
-              fixedWidth: 120
+              fixedWidth: world.width * 0.14
             },
-            origin: [0, 0]
+            origin: [1, 0]
           },
           score: {
-            x: world.width - 40,
-            y: world.height - 200 + 30 + 20,
+            x: world.width - 20,
+            y: world.height - world.width * 0.12 + 20,
             style: {
-              wordWrap: { width: 120, useAdvancedWrap: true }
+              fontSize: '18px',
+              wordWrap: { width: world.width * 0.14, useAdvancedWrap: true }
             },
-            origin: [0.5, 0]
-          },
-          drawText: {
-            x: 560,
-            y: 390,
+            origin: [1, 0]
           }
         },
         // TOP
         3: {
-          hiddenCard: {
+          card: {
             x: world.width - 170,
             y: 80
           },
           openedCard: {
-            x: 540,
-            y: 60,
-          },
-          icon: {
-            x: world.width - 80,
+            x: world.width - 170,
             y: 80
           },
+          icon: {
+            x: world.width - 20,
+            y: world.width * 0.12 + 40,
+            origin: [1, 0.5]
+          },
           text: {
-            x: world.width - 80,
-            y: 110,
+            x: world.width - 20,
+            y: 60,
             style: {
-              wordWrap: { width: 120, useAdvancedWrap: true }
+              fontSize: '26px',
+              wordWrap: { width: world.width * 0.18, useAdvancedWrap: true }
             },
-            origin: [0.5, 0]
+            origin: [1, 0]
           },
           score: {
-            x: world.width - 80,
-            y: 130,
+            x: world.width - 20,
+            y: 90,
             style: {
-              wordWrap: { width: 120, useAdvancedWrap: true }
+              fontSize: '18px',
+              wordWrap: { width: world.width * 0.14, useAdvancedWrap: true }
             },
-            origin: [0.5, 0]
-          },
-          drawText: {
-            x: 560,
-            y: 180,
+            origin: [1, 0]
           }
         },
         4: {
-          hiddenCard: {
+          card: {
             x: 170,
             y: 80
           },
@@ -162,28 +163,27 @@ class Scene1 extends Phaser.Scene {
             y: 60,
           },
           icon: {
-            x: 80,
-            y: 80
+            x: 20,
+            y: world.width * 0.12 + 40,
+            origin: [0, 0.5]
           },
           text: {
-            x: 80,
-            y: 110,
+            x: 20,
+            y: 60,
             style: {
-              wordWrap: { width: 120, useAdvancedWrap: true }
+              fontSize: '26px',
+              wordWrap: { width: world.width * 0.18, useAdvancedWrap: true }
             },
-            origin: [0.5, 0]
+            origin: [0, 0]
           },
           score: {
-            x: 80,
-            y: 130,
+            x: 20,
+            y: 90,
             style: {
-              wordWrap: { width: 120, useAdvancedWrap: true }
+              fontSize: '18px',
+              wordWrap: { width: world.width * 0.14, useAdvancedWrap: true }
             },
-            origin: [0.5, 0]
-          },
-          drawText: {
-            x: 190,
-            y: 180,
+            origin: [0, 0]
           }
         }
       }
@@ -204,10 +204,12 @@ class Scene1 extends Phaser.Scene {
       .image(0, 0, 'game-table')
       .setDisplaySize(world.width, world.height)
       .setOrigin(0, 0)
+
     this.createCommonUI(world)
     this.createExitRoomButton(world)
     this.createUserIcons(world)
     this.createUnvisibleCards(world)
+
     setOnRoomInfoChange(this.handleChangeRoomInfo)
   }
 
@@ -244,8 +246,9 @@ class Scene1 extends Phaser.Scene {
 
   createButtonStart (world, callback) {
     if (this.buttonStart) {
-      this.buttonStart.setVisible(false)
-      this.buttonStart.setActive(false)
+      this.buttonStart.setVisible(true)
+      this.buttonStart.setActive(true)
+      return
     }
     this.buttonStart = this.add
       .image(world.width / 2, world.height / 2 - 20, 'playnow-button')
@@ -262,7 +265,6 @@ class Scene1 extends Phaser.Scene {
           yoyo: true
         })
         callback()
-        // this.handleChooseHiddenCard()
       })
 
     this.tweens.add({
@@ -291,18 +293,26 @@ class Scene1 extends Phaser.Scene {
       .setOrigin(0.5, 0.5)
   }
 
-  createUnvisibleCards (world) {
-    this.unvisibleCard = []
-    const cardWidth = this.UISizes.hiddenCard.width
-    const cardHeight = this.UISizes.hiddenCard.height
+  createUnvisibleCards (world, offset = 0.25, removeAll = true) {
+    if (removeAll) {
+      this.unvisibleCard = []
+    }
+    const cardWidth = this.UISizes.card.width
+    const cardHeight = this.UISizes.card.height
     const bottom = world.height - cardHeight / 2 - 2
-    const spaceBetweenCard = 0.25
+    const spaceBetweenCard = offset
     let startWidth = (world.width - 51 * spaceBetweenCard) / 2
     for (let i = 0; i < 52; i++) {
-      this.unvisibleCard[i] = this.add
-        .image(startWidth, bottom, 'green_back')
-        .setDisplaySize(cardWidth, cardHeight)
-        .setOrigin(0.5, 0.5)
+      if (this.unvisibleCard[i]) {
+        this.tweens.killTweensOf(this.unvisibleCard[i])
+        this.unvisibleCard[i].setPosition(startWidth, bottom)
+      } else {
+        this.unvisibleCard[i] = this.add
+          .image(startWidth, bottom, 'green_back')
+          .setDisplaySize(cardWidth, cardHeight)
+          .setOrigin(0.5, 0.5)
+      }
+      
       startWidth += spaceBetweenCard
     }
   }
@@ -362,8 +372,8 @@ class Scene1 extends Phaser.Scene {
       const user = this.UISizes.users[i + 1]
       this.add
         .image(user.icon.x, user.icon.y, 'user-icon')
-        .setOrigin(0.5, 0.5)
-        .setDisplaySize(80, 80)
+        .setOrigin(...(user.icon.origin || [0.5, 0.5]))
+        .setDisplaySize(this.UISizes.users.width, this.UISizes.users.height)
       this.playersName[i] = this.add
         .text(user.text.x, user.text.y, this.players[i].name, {
           fontFamily: '"Arial Black"',
@@ -387,8 +397,8 @@ class Scene1 extends Phaser.Scene {
     const world = store.getAll()
 
     this.waitingText = this.add
-      .text(world.width / 2 - 5, 200, 'Waiting for others...', {
-        font: '30px Arial',
+      .text(world.width / 2, world.height / 2, 'Waiting for others...', {
+        font: '34px Arial',
         fill: '#FFFFFF'
       })
       .setOrigin(0.5, 0.5)
@@ -441,7 +451,8 @@ class Scene1 extends Phaser.Scene {
   }
 
   async sendCardAnimation (count, i, totalPlayer) {
-    const position = this.UISizes.users[(count % totalPlayer) + 1].hiddenCard
+    console.log('>>>>>>>>>', (count % totalPlayer) + 1)
+    const position = this.UISizes.users[(count % totalPlayer) + 1].card
     this.tweens.add({
       targets: this.unvisibleCard[i],
       repeat: 0,
@@ -457,6 +468,7 @@ class Scene1 extends Phaser.Scene {
 
   handleShufflingCard () {
     const world = store.getAll()
+    const leftX = world.width / 2 - this.UISizes.card.width / 1.5
     for (let i = 0; i < 25; i++) {
       this.tweens.add({
         targets: this.unvisibleCard[i],
@@ -464,13 +476,14 @@ class Scene1 extends Phaser.Scene {
         yoyo: false,
         props: {
           x: {
-            value: world.width / 2 - 50,
+            value: leftX,
             duration: 300,
             ease: 'Sine.easeInOut'
           }
         }
       })
     }
+    const rightX = world.width / 2 + this.UISizes.card.width / 1.5
     for (let i = 25; i < 52; i++) {
       this.tweens.add({
         targets: this.unvisibleCard[i],
@@ -478,7 +491,7 @@ class Scene1 extends Phaser.Scene {
         yoyo: false,
         props: {
           x: {
-            value: world.width / 2 + 50,
+            value: rightX,
             duration: 300,
             ease: 'Sine.easeInOut'
           }
@@ -489,11 +502,12 @@ class Scene1 extends Phaser.Scene {
       await delay(400)
 
       const centerX = world.width / 2
+      const positionX = this.UISizes.card.width / 1.5
 
       this.intervalShuffling = setInterval(() => {
         const random = Math.floor(Math.random() * 52)
         const newX =
-          this.unvisibleCard[random].x < centerX ? centerX + 50 : centerX - 50
+          this.unvisibleCard[random].x < centerX ? centerX + positionX : centerX - positionX
         this.tweens.add({
           targets: this.unvisibleCard[random],
           repeat: 0,
@@ -510,20 +524,9 @@ class Scene1 extends Phaser.Scene {
       const spaceBetweenCard = 0.25
       const startWidth = (world.width - 51 * spaceBetweenCard) / 2
       for (let i = 0; i < 52; i++) {
-        this.tweens.add({
-          targets: this.unvisibleCard[i],
-          repeat: 0,
-          yoyo: false,
-          props: {
-            x: {
-              value: startWidth + spaceBetweenCard * i,
-              duration: 100,
-              ease: 'Sine.easeInOut'
-            }
-          }
-        })
+        this.unvisibleCard[i].setX(startWidth + spaceBetweenCard * i)
       }
-      await delay(100)
+      await delay(0)
     }
   }
 

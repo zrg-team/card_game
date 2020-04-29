@@ -30,10 +30,10 @@ export default function generateRegisterDialog (scene, store) {
   }
 
   let dialog = scene.rexUI.add.dialog({
-    x: 400,
-    y: 230,
-    width: 640,
-    height: 450,
+    x: store.width / 2,
+    y: store.height / 2,
+    width: store.width * 0.8,
+    height: store.height * 0.94,
     background: scene.add.image(0, 0, 'dialog-bg'),
     title: createLabel(
       scene,
@@ -50,12 +50,18 @@ export default function generateRegisterDialog (scene, store) {
             top: 65,
             bottom: 10
           }
+        },
+        text: {
+          style: {
+            fontSize: '34px'
+          }
         }
       }
     ),
     toolbar: [
       scene.add
-        .image(0, 0, 'dialog-close')
+        .image(-10, 0, 'dialog-close')
+        .setDisplaySize(store.width * 0.07, store.width * 0.07)
         .setInteractive()
         .on('pointerdown', () => {
           destroyAll()
@@ -64,11 +70,16 @@ export default function generateRegisterDialog (scene, store) {
     leftToolbar: [],
     choices: [
       createLabel(scene, 'Display Name', {
-        backgroundColor: null
+        backgroundColor: null,
+        text: {
+          style: {
+            fontSize: '34px'
+          }
+        }
       }),
       createTextBox(scene, 0, 0, {
-        fixedWidth: 440,
-        fixedHeight: 45,
+        fixedWidth: store.width * 0.6,
+        fixedHeight: (store.width * 0.6) * 0.1,
         styles: {
           padding: {
             left: 10
@@ -82,11 +93,16 @@ export default function generateRegisterDialog (scene, store) {
         }
       }),
       createLabel(scene, 'Email', {
-        backgroundColor: null
+        backgroundColor: null,
+        text: {
+          style: {
+            fontSize: '34px'
+          }
+        }
       }),
       createTextBox(scene, 0, 0, {
-        fixedWidth: 440,
-        fixedHeight: 45,
+        fixedWidth: store.width * 0.6,
+        fixedHeight: (store.width * 0.6) * 0.1,
         styles: {
           padding: {
             left: 10
@@ -100,11 +116,16 @@ export default function generateRegisterDialog (scene, store) {
         }
       }),
       createLabel(scene, 'Password', {
-        backgroundColor: null
+        backgroundColor: null,
+        text: {
+          style: {
+            fontSize: '34px'
+          }
+        }
       }),
       createTextBox(scene, 0, 0, {
-        fixedWidth: 440,
-        fixedHeight: 45,
+        fixedWidth: store.width * 0.6,
+        fixedHeight: (store.width * 0.6) * 0.1,
         input: {
           type: 'password'
         },
@@ -161,16 +182,17 @@ export default function generateRegisterDialog (scene, store) {
       )
     ],
     space: {
-      left: 20,
-      right: 20,
-      top: -20,
+      left: 40,
+      right: 40,
+      top: -5,
       bottom: -20,
       content: 25,
       description: 25,
       descriptionLeft: 20,
       descriptionRight: 20,
       choices: 25,
-      title: 10,
+      title: 15,
+      titleLeft: 30,
       toolbarItem: 5,
       choice: 5,
       action: 15

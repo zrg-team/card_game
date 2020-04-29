@@ -24,10 +24,10 @@ export default function generateLoginDialog (scene, store, option = {}) {
   }
 
   let dialog = scene.rexUI.add.dialog({
-    x: 400,
-    y: 210,
-    width: 480,
-    height: 344,
+    x: store.width / 2,
+    y: store.height / 2,
+    width: store.width * 0.6,
+    height: store.height * 0.7,
     background: scene.add.image(0, 0, 'dialog-bg'),
     title: createLabel(
       scene,
@@ -44,12 +44,18 @@ export default function generateLoginDialog (scene, store, option = {}) {
             top: 55,
             bottom: 10
           }
+        },
+        text: {
+          style: {
+            fontSize: '34px'
+          }
         }
       }
     ),
     toolbar: [
       scene.add
         .image(0, 0, 'dialog-close')
+        .setDisplaySize(store.width * 0.07, store.width * 0.07)
         .setInteractive()
         .on('pointerdown', () => {
           destroyAll()
@@ -58,16 +64,16 @@ export default function generateLoginDialog (scene, store, option = {}) {
     leftToolbar: [],
     choices: [
       createLabel(scene, 'Email', {
-        backgroundColor: null
+        backgroundColor: null,
+        text: {
+          style: {
+            fontSize: '34px'
+          }
+        }
       }),
       createTextBox(scene, 0, 0, {
-        fixedWidth: 440,
-        fixedHeight: 45,
-        styles: {
-          padding: {
-            left: 10
-          }
-        },
+        fixedWidth: store.width * 0.6,
+        fixedHeight: (store.width * 0.6) * 0.1,
         onTextChanged: (objTxt, text) => {
           email = text
         },
@@ -76,18 +82,18 @@ export default function generateLoginDialog (scene, store, option = {}) {
         }
       }),
       createLabel(scene, 'Password', {
-        backgroundColor: null
+        backgroundColor: null,
+        text: {
+          style: {
+            fontSize: '34px'
+          }
+        }
       }),
       createTextBox(scene, 0, 0, {
-        fixedWidth: 440,
-        fixedHeight: 45,
+        fixedWidth: store.width * 0.6,
+        fixedHeight: (store.width * 0.6) * 0.1,
         input: {
           type: 'password'
-        },
-        styles: {
-          padding: {
-            left: 10
-          }
         },
         onTextChanged: (objTxt, text) => {
           password = text
@@ -139,9 +145,9 @@ export default function generateLoginDialog (scene, store, option = {}) {
       )
     ],
     space: {
-      left: 20,
-      right: 20,
-      top: -20,
+      left: 40,
+      right: 40,
+      top: -10,
       bottom: -20,
       content: 25,
       description: 25,
@@ -149,6 +155,7 @@ export default function generateLoginDialog (scene, store, option = {}) {
       descriptionRight: 20,
       choices: 25,
       title: 10,
+      titleLeft: 30,
       toolbarItem: 5,
       choice: 5,
       action: 15

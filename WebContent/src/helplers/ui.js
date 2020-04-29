@@ -6,7 +6,7 @@ export function createTextBox (scene, x, y, config) {
   let editor = null
   const printText = getBBcodeText(scene, x, y, '', {
     color: 'white',
-    fontSize: '24px',
+    fontSize: '34px',
     wrapWidth: wrapWidth,
     fixedWidth: fixedWidth,
     fixedHeight: fixedHeight,
@@ -63,7 +63,7 @@ export function createToast (scene, x, y, config = {}) {
       bottom: 20
     },
     text: scene.add.text(0, 0, '', {
-      fontSize: '14px',
+      fontSize: '24px',
       ...config.text
     }),
     ...config.toast
@@ -112,14 +112,14 @@ export function createLoading (scene, title, world) {
     x: 0,
     y: 0,
     background: scene.add.image(world.width / 2, world.height / 2, 'overlay')
-      .setSize(world.width, world.height),
+      .setDisplaySize(world.width, world.height),
 
     text: scene.add.text(
       world.width / 2 - 50,
       world.height / 2 - 30,
       title,
       {
-        fontSize: '20px'
+        fontSize: '34px'
       }
     ),
 
@@ -157,7 +157,7 @@ export function createButton (scene, title, option = {}) {
       ...(text.offet || [0, 0]),
       title,
       {
-        fontSize: '20px',
+        fontSize: '34px',
         shadow: {
           offsetX: 2,
           offsetY: 2,
@@ -211,13 +211,10 @@ export function getBBcodeText (scene, x, y, content, option = {}) {
   })
 }
 
-export function createConfirmPopup (scene, option = {}) {
+export function createConfirmPopup (scene, world, option = {}) {
   const titleOption = option.title || {}
   const contentOption = option.content || {}
   const dialog = scene.rexUI.add.dialog({
-    x: 400,
-    y: 300,
-
     background: scene.rexUI.add
       .roundRectangle(0, 0, 100, 100, 20, option.background || 0x222226)
       .setStrokeStyle(2, option.stroke || 0xe1b884),
@@ -227,19 +224,20 @@ export function createConfirmPopup (scene, option = {}) {
         .roundRectangle(0, 0, 100, 40, 20, titleOption.background || 0x0e0d0b)
         .setStrokeStyle(2, titleOption.stroke || 0xe1b884),
       text: scene.add.text(0, 0, titleOption.title, {
-        fontSize: '24px',
+        fontSize: '34px',
         ...titleOption.style || {}
       }),
       space: {
-        left: 15,
-        right: 15,
-        top: 10,
-        bottom: 10
+        left: 20,
+        right: 20,
+        top: 20,
+        bottom: 20
       }
     }),
 
     content: scene.add.text(0, 0, contentOption.title, {
-      fontSize: '24px'
+      fontSize: '34px',
+      ...contentOption.style
     }),
 
     actions: [

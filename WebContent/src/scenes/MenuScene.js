@@ -19,7 +19,19 @@ class MenuScene extends Phaser.Scene {
     this.handleLogin = this.handleLogin.bind(this)
   }
 
-  preload () {
+  init () {
+    const world = store.getAll()
+    this.SIZES = {
+      FONTSIZE: '34px',
+      HEADER_HEIGHT: world.height * 0.125,
+      GAME_LIST_HEIGHT: world.height - world.height * 0.125,
+      USER_ICON_SIZE: world.width * 0.07,
+      USER_LOGOUT_SIZE: world.width * 0.05,
+      USER_PANEL_WIDTH: world.width * 0.34,
+      USER_PANEL_HEIGH: world.height * 0.132,
+      USER_HEADER_BUTTON_HEIGHT: world.height * 0.125,
+      USER_HEADER_BUTTON_WIDTH: world.width * 0.125 - 40 * 4.5 / 3
+    }
   }
 
   create () {
@@ -30,7 +42,7 @@ class MenuScene extends Phaser.Scene {
     this.world = store.getAll()
     // Create UI
     this.bg = this.add
-      .image(0, 0, 'main-background')
+      .image(0, 0, 'menu-bg')
       .setOrigin(0, 0)
       .setDisplaySize(this.world.width, this.world.height)
       .setDepth(0)
@@ -42,9 +54,10 @@ class MenuScene extends Phaser.Scene {
     this.createGamesPanel(
       [
         {
-          id: 'maubinh',
+          id: 'Scene1',
           title: 'MẬU BINH',
-          icon: 'icon-mau-binh',
+          scene: 'Scene1',
+          icon: 'mau-binh',
           // scale: [0.8, 0.8],
           size: [220, 220],
           onClick: () => {
@@ -52,7 +65,7 @@ class MenuScene extends Phaser.Scene {
             if (!user) {
               return
             }
-            this.createRoomDialog()
+            this.createRoomDialog('Scene1')
           }
         },
         {
@@ -66,13 +79,19 @@ class MenuScene extends Phaser.Scene {
       ]
     )
 
-    this.add.text(this.world.width - 100, this.world.height - 16, '© 2020 Zrg-team', { font: '10px' })
+    this.add
+      .text(
+        this.world.width - 10,
+        this.world.height - 5,
+        '© 2020 Zrg-team',
+        { font: '20px' }
+      ).setOrigin(1, 1)
   }
 
-  createRoomDialog () {
+  createRoomDialog (scene) {
     generateRoomDialog(this, store.getAll(), {
-      onCreateRoomSuccess: this.createRoomDialog,
-      onJoinRoom: this.handleJoinRoom
+      onCreateRoomSuccess: () => this.createRoomDialog(scene),
+      onJoinRoom: (room) => this.handleJoinRoom(scene, room)
     })
   }
 
@@ -80,22 +99,22 @@ class MenuScene extends Phaser.Scene {
     this.topPanel = this.add
       .image(-1, 0, 'top-panel')
       .setOrigin(0, 0)
-      .setDisplaySize(801, 60)
+      .setDisplaySize(world.width, this.SIZES.HEADER_HEIGHT)
 
     this.userPanel = this.add
       .image(0, 0, 'user-panel')
       .setOrigin(0, 0)
-      .setDisplaySize(270, 64)
+      .setDisplaySize(this.SIZES.USER_PANEL_WIDTH, this.SIZES.USER_PANEL_HEIGH)
 
     this.userIcon = this.add
-      .image(4, 5, 'user-icon')
+      .image(5, 5, 'user-icon')
       .setOrigin(0, 0)
-      .setDisplaySize(56, 56)
+      .setDisplaySize(this.SIZES.USER_ICON_SIZE, this.SIZES.USER_ICON_SIZE)
 
-    this.createUserPanel()
+    this.createUserPanel(world)
   }
 
-  createUserPanel () {
+  createUserPanel (world) {
     const user = store.get('user')
 
     if (this.userLogin) {
@@ -112,12 +131,15 @@ class MenuScene extends Phaser.Scene {
     }
 
     if (user) {
-      this.createUserInformationPanel()
+      this.createUserInformationPanel(world)
     } else {
       this.userLogin = this.add
-        .image(115, 30, 'login-button')
-        .setOrigin(0.5, 0.5)
-        .setDisplaySize(100, 34)
+        .image(this.SIZES.USER_ICON_SIZE + 10, this.SIZES.HEADER_HEIGHT / 2, 'login-button')
+        .setOrigin(0, 0.5)
+        .setDisplaySize(
+          this.SIZES.USER_HEADER_BUTTON_WIDTH,
+          this.SIZES.USER_HEADER_BUTTON_HEIGHT
+        )
         .setInteractive()
         .on('pointerdown', this.handleLogin)
 
@@ -132,9 +154,16 @@ class MenuScene extends Phaser.Scene {
       })
 
       this.userSignup = this.add
-        .image(196, 30, 'register-button')
-        .setOrigin(0.5, 0.5)
-        .setDisplaySize(100, 34)
+        .image(
+          this.SIZES.USER_ICON_SIZE + 40 + this.SIZES.USER_HEADER_BUTTON_WIDTH,
+          this.SIZES.HEADER_HEIGHT / 2,
+          'register-button'
+        )
+        .setOrigin(0, 0.5)
+        .setDisplaySize(
+          this.SIZES.USER_HEADER_BUTTON_WIDTH,
+          this.SIZES.USER_HEADER_BUTTON_HEIGHT
+        )
         .setInteractive()
         .on('pointerdown', this.handleRegister)
 
@@ -150,19 +179,23 @@ class MenuScene extends Phaser.Scene {
     }
   }
 
-  createUserInformationPanel () {
+  createUserInformationPanel (world) {
     const userStore = store.get('information') || {}
     this.userBalance = this.add.text(
-      100,
-      16,
+      this.SIZES.USER_ICON_SIZE + 25,
+      this.SIZES.HEADER_HEIGHT / 2,
       `${userStore.balance} 💎`,
       {
-        fontSize: '24px'
+        fontSize: this.SIZES.FONTSIZE
       }
-    )
+    ).setOrigin(0, 0.5)
     this.userLogout = this.add
-      .image(240, 30, 'dialog-close')
-      .setScale(0.8, 0.8)
+      .image(
+        this.SIZES.USER_PANEL_WIDTH - this.SIZES.USER_LOGOUT_SIZE / 2,
+        this.SIZES.HEADER_HEIGHT / 2,
+        'dialog-close'
+      )
+      .setDisplaySize(this.SIZES.USER_LOGOUT_SIZE, this.SIZES.USER_LOGOUT_SIZE)
       .setOrigin(0.5, 0.5)
       .setInteractive()
       .on('pointerdown', this.handleLogout)
@@ -174,9 +207,9 @@ class MenuScene extends Phaser.Scene {
     const world = store.getAll()
     this.scrollableGamesPanel = this.rexUI.add.scrollablePanel({
       x: world.width / 2,
-      y: (world.height - 60) / 2 + 60,
+      y: this.SIZES.HEADER_HEIGHT + this.SIZES.GAME_LIST_HEIGHT / 2,
       width: world.width,
-      height: world.height - 60,
+      height: this.SIZES.GAME_LIST_HEIGHT,
       scrollMode: 1,
       // background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, 0x4e342e),
       panel: {
@@ -229,8 +262,10 @@ class MenuScene extends Phaser.Scene {
   createGameItem (panel, item) {
     const scene = panel.scene
 
-    const contentHeight = panel.displayHeight - 10
-    const contentWidth = 250
+    const contentHeight = this.SIZES.GAME_LIST_HEIGHT - 10
+    const contentWidth = contentHeight * 3 / 4.5
+    const contentHeader = contentHeight * 0.125
+    const imageHeight = contentHeight - contentHeader
 
     const sizer = scene.rexUI.add.sizer({
       orientation: 'v',
@@ -239,11 +274,19 @@ class MenuScene extends Phaser.Scene {
     })
       .addBackground(
         scene.add
-          .image(0, 0, 'game-background')
+          .image(0, 0, 'game-bg-1')
           .setDisplaySize(contentWidth, contentHeight)
           .setOrigin(0, 0)
       ).add(
-        scene.add.text(-contentWidth / 2 + 20, -contentHeight / 2 + 36, item.title), // child
+        scene.add
+          .text(
+            -contentWidth / 2 + 20,
+            -contentHeight / 2 + contentHeader / 2,
+            item.title,
+            {
+              fontSize: this.SIZES.FONTSIZE
+            }
+          ), // child
         null, // proportion
         'center', // align
         {
@@ -256,9 +299,13 @@ class MenuScene extends Phaser.Scene {
       )
       .add(
         scene.add
-          .image(0, 22, item.icon)
-          .setDisplaySize(contentWidth - 20, contentHeight - 110)
-          .setOrigin(0.5, 0.5)
+          .image(
+            0,
+            -imageHeight / 2 + contentHeader,
+            item.icon
+          )
+          .setDisplaySize(contentWidth - 20, imageHeight - 70)
+          .setOrigin(0.5, 0)
           .setInteractive()
           .on('pointerdown', function () {
             scene.tweens.add({
@@ -283,9 +330,10 @@ class MenuScene extends Phaser.Scene {
     return sizer
   }
 
-  handleJoinRoom (room) {
+  handleJoinRoom (scene, room) {
     // TODO: Handle join game
-    this.scene.start('Scene1', { room })
+    console.log('scene', scene, room)
+    this.scene.start(scene, { room })
   }
 
   handleFullscreen () {
@@ -318,16 +366,24 @@ class MenuScene extends Phaser.Scene {
       repeat: 0,
       yoyo: true
     })
-    this.confirmLogoutDialog = createConfirmPopup(this, {
+    this.confirmLogoutDialog = createConfirmPopup(this, world, {
       common: {
         x: world.width / 2,
-        y: world.height / 2
+        y: world.height / 2,
+        width: world.width * 0.625,
+        height: world.height * 0.4,
       },
       title: {
-        title: 'Confirm'
+        title: 'Confirm',
+        style: {
+          fontSize: this.SIZES.FONTSIZE
+        }
       },
       content: {
-        title: 'Do you want to logout ?'
+        title: 'Do you want to logout ?',
+        style: {
+          fontSize: this.SIZES.FONTSIZE
+        }
       },
       onConfirm: () => {
         this.confirmLogoutDialog.setVisible(false)

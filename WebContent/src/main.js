@@ -14,8 +14,8 @@ const config = {
   // pixelArt: true,
   // roundPixels: false,
   parent: 'game-container',
-  width: 800,
-  height: 450,
+  width: 1280,
+  height: 720,
   dom: {
     createContainer: true
   },

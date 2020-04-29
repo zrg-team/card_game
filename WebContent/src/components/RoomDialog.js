@@ -1,10 +1,16 @@
+import dayjs from 'dayjs'
 import { createLabel, createButton, createToast, createLoading } from '../helplers/ui'
 import { getRooms, createRoom, joinRoom } from '../services/game'
 
 export default function generateRoomDialog (scene, store, option = {}) {
   let loading = false
-  let panel = null
+  let selectedRoom = null
   const roomList = []
+
+  let panel = null
+  let background = null
+  let buttons = null
+  let roomInfoText = null
 
   const destroyAll = () => {
     roomList.forEach(item => {
@@ -19,16 +25,41 @@ export default function generateRoomDialog (scene, store, option = {}) {
       panel.destroy()
       panel = null
     }
+    if (background) {
+      background.setVisible(false)
+      background.destroy()
+      background = null
+    }
+    if (buttons) {
+      buttons.setVisible(false)
+      buttons.destroy()
+      buttons = null
+    }
+    if (roomInfoText) {
+      roomInfoText.setVisible(false)
+      roomInfoText.destroy()
+      roomInfoText = null
+    }
   }
+
+  const SIZES = {
+    MAIN_PANEL_WIDTH: store.width * 0.7,
+    SUB_PANEL_WIDTH: store.width * 0.3,
+    INFOMATION_HEIGHT: store.height - store.height * 0.3,
+    BUTTON_CONTAINER: store.height * 0.3
+  }
+  background = scene.add
+    .image(store.width / 2, store.height / 2, 'gamelist-bg')
+    .setDisplaySize(store.width, store.height)
+    .setDepth(99)
+
   panel = scene.rexUI.add.scrollablePanel({
-    x: 400,
-    y: 220,
-    width: 600,
-    height: 400,
+    x: 0,
+    y: 0,
+    width: SIZES.MAIN_PANEL_WIDTH,
+    height: store.height,
 
     scrollMode: 0,
-
-    background: scene.add.image(0, 0, 'gamelist-bg'),
 
     panel: {
       child: scene.rexUI.add.fixWidthSizer({
@@ -47,65 +78,6 @@ export default function generateRoomDialog (scene, store, option = {}) {
         padding: 1
       }
     },
-    footer: scene.rexUI.add
-      .sizer({
-        orientation: 'x'
-      })
-      .add(createButton(
-        scene,
-        'Cancel',
-        {
-          backgroundColor: 0xe0c48f,
-          button: {
-            space: {
-              left: 20,
-              right: 20,
-              top: 20,
-              bottom: 20
-            }
-          },
-          onPress: destroyAll
-        }
-      ), 1)
-      .add(createButton(
-        scene,
-        'Create Room',
-        {
-          backgroundColor: 0xe0c48f,
-          button: {
-            space: {
-              left: 20,
-              right: 20,
-              top: 20,
-              bottom: 20
-            }
-          },
-          onPress: (button) => {
-            if (loading) {
-              return
-            }
-            loading = true
-            const loadingComponent = createLoading(scene, 'Creating...', store)
-            return createRoom('maubing').then((result) => {
-              if (result.errorCode) {
-                createToast(scene, store.width / 2, store.height - 40)
-                  .setOrigin(0.5, 0.5)
-                  .show(result.errorMessage)
-              } else {
-                destroyAll()
-                createToast(scene, store.width / 2, store.height - 40)
-                  .setOrigin(0.5, 0.5)
-                  .show('Room create.')
-                if (option.onCreateRoomSuccess) {
-                  option.onCreateRoomSuccess(result)
-                }
-              }
-              loadingComponent.setVisible(false)
-              loadingComponent.destroy()
-            })
-          }
-        }
-      ), 1),
 
     slider: {
       track: scene.rexUI.add.roundRectangle(0, 0, 20, 10, 10, 0xe0c48f),
@@ -121,18 +93,134 @@ export default function generateRoomDialog (scene, store, option = {}) {
       panel: 10,
       footer: 10
     }
-  }).layout().setDepth(999)
+  })
+  .setOrigin(0, 0)
+  .layout()
+
+  buttons = scene.rexUI.add
+    .sizer({
+      orientation: 'y',
+      x: store.width * 0.7,
+      y: store.height - SIZES.BUTTON_CONTAINER,
+      width: SIZES.BUTTON_CONTAINER,
+      height: SIZES.BUTTOUN_CONTAINER,
+    })
+    .add(createButton(
+      scene,
+      'Join Room',
+      {
+        backgroundColor: 0xe0c48f,
+        button: {
+          width: SIZES.SUB_PANEL_WIDTH - 10,
+          space: {
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: 20
+          }
+        },
+        onPress: (button) => {
+          if (loading || !selectedRoom) {
+            return
+          }
+          loading = true
+          const loadingComponent = createLoading(scene, 'Joining...', store)
+          return joinRoom('maubing', selectedRoom.id)
+            .then((result) => {
+              if (result.errorCode) {
+                createToast(scene, store.width / 2, store.height - 40)
+                  .setOrigin(0.5, 0.5)
+                  .show(result.errorMessage)
+              } else {
+                destroyAll()
+                createToast(scene, store.width / 2, store.height - 40)
+                  .setOrigin(0.5, 0.5)
+                  .show(`Joined to room ${selectedRoom.title}.`)
+                option.onJoinRoom(selectedRoom)
+              }
+              loadingComponent.setVisible(false)
+              loadingComponent.destroy()
+            })
+        }
+      }
+    ).setDepth(9999), 1)
+    .add(createButton(
+      scene,
+      'Create Room',
+      {
+        backgroundColor: 0xe0c48f,
+        button: {
+          width: SIZES.SUB_PANEL_WIDTH - 10,
+          space: {
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: 20
+          }
+        },
+        onPress: (button) => {
+          if (loading) {
+            return
+          }
+          loading = true
+          const loadingComponent = createLoading(scene, 'Creating...', store)
+          return createRoom('maubing').then((result) => {
+            if (result.errorCode) {
+              createToast(scene, store.width / 2, store.height - 40)
+                .setOrigin(0.5, 0.5)
+                .show(result.errorMessage)
+            } else {
+              destroyAll()
+              createToast(scene, store.width / 2, store.height - 40)
+                .setOrigin(0.5, 0.5)
+                .show('Room create.')
+              if (option.onCreateRoomSuccess) {
+                option.onCreateRoomSuccess(result)
+              }
+            }
+            loadingComponent.setVisible(false)
+            loadingComponent.destroy()
+          })
+        }
+      }
+    ).setDepth(9999), 1)
+    .add(createButton(
+      scene,
+      'Cancel',
+      {
+        backgroundColor: 0xe0c48f,
+        button: {
+          width: SIZES.SUB_PANEL_WIDTH - 10,
+          space: {
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: 20
+          }
+        },
+        onPress: destroyAll
+      }
+    ).setDepth(9999), 1)
+    .setOrigin(0, 0)
+    .layout()
 
   return getRooms()
     .then((result) => {
+      if (!panel) {
+        return
+      }
       const sizerList = panel.getElement('panel')
       if (!result.empty) {
+        const itemWidth = SIZES.MAIN_PANEL_WIDTH - 70
+        const itemHeight = itemWidth * 0.08
         result.forEach(doc => {
           const room = {
             id: doc.id,
             ...doc.data()
           }
-          const status = room.players.includes(store.user.uid)
+          const status = room.host === store.user.uid
+            ? '(host)'
+            : room.players.includes(store.user.uid)
               ? '(joined)'
               : ''
           const item = createLabel(
@@ -142,13 +230,18 @@ export default function generateRoomDialog (scene, store, option = {}) {
               label: {
                 x: 0,
                 y: 0,
-                width: 520,
-                height: 40,
+                width: itemWidth,
+                height: itemHeight,
                 space: {
-                  left: 15,
-                  right: 15,
-                  top: 20,
-                  bottom: 20
+                  left: 18,
+                  right: 18,
+                  top: 30,
+                  bottom: 30
+                }
+              },
+              text: {
+                style: {
+                  fontSize: '34px'
                 }
               },
               backgroundComponent: scene.rexUI.add
@@ -165,24 +258,40 @@ export default function generateRoomDialog (scene, store, option = {}) {
                 repeat: 0, // -1: infinity
                 yoyo: true
               })
-              const loadingComponent = createLoading(scene, 'Joining...', store)
-              joinRoom('maubing', room.id)
-                .then((result) => {
-                  if (result.errorCode) {
-                    createToast(scene, store.width / 2, store.height - 40)
-                      .setOrigin(0.5, 0.5)
-                      .show(result.errorMessage)
-                  } else {
-                    destroyAll()
-                    createToast(scene, store.width / 2, store.height - 40)
-                      .setOrigin(0.5, 0.5)
-                      .show(`Joined to room ${room.title}.`)
-                    option.onJoinRoom(room)
+              selectedRoom = room
+              if (roomInfoText) {
+                roomInfoText.setVisible(false)
+                roomInfoText.destroy()
+              }
+              roomInfoText = scene.add.text(
+                SIZES.MAIN_PANEL_WIDTH,
+                0,
+                `
+⚜️ ${selectedRoom.title} ⚜️
+
+🏷️ Draw: ${selectedRoom.draw} 🏷️
+⏱️ Created Date ⏱️
+${dayjs(selectedRoom.createDate).format('DD-MM-YYYY HH:mm')}
+
+👤 Players 👤
++ ${selectedRoom.playerNames.join('\n +')}
+
+
+`,
+                {
+                  font: '24px',
+                  align: 'center',
+                  fixedWidth: SIZES.SUB_PANEL_WIDTH,
+                  fixedHeight: SIZES.INFOMATION_HEIGHT,
+                  wordWrap: {
+                    width: SIZES.SUB_PANEL_WIDTH,
+                    useAdvancedWrap: true
                   }
-                  loadingComponent.setVisible(false)
-                  loadingComponent.destroy()
-                })
-            })
+                }
+              )
+              .setOrigin(0, 0)
+              .setDepth(998)
+            }).setDepth(998)
           roomList.push(item)
           sizerList.add(item)
         })
