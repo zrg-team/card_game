@@ -474,7 +474,7 @@ class MenuScene extends Phaser.Scene {
 
   wathUserInformation () {
     const user = store.get('information')
-    this.userBalance.text = `${user.balance} 💎`
+    this.userBalance.text = `${user && user.balance} 💎`
   }
 
   update (time, delta) {

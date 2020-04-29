@@ -24,7 +24,7 @@ class Scene1 extends Phaser.Scene {
     this.randomChangeOrder = 0
   }
 
-  async init (roomData) {
+  async init (roomData) {    
     this.room = roomData.room || {
       id: '1587274686115'
     }
@@ -55,7 +55,7 @@ class Scene1 extends Phaser.Scene {
             y: world.height - 200
           },
           openedCard: {
-            x: 170,
+            x: 250,
             y: world.height - 200
           },
           icon: {
@@ -67,7 +67,7 @@ class Scene1 extends Phaser.Scene {
             x: 20,
             y: world.height - world.width * 0.12 + 40,
             style: {
-              fontSize: '26px',
+              fontSize: '24px',
               wordWrap: { width: world.width * 0.14, useAdvancedWrap: true },
               align: 'left',
               fixedWidth: world.width * 0.14
@@ -82,6 +82,10 @@ class Scene1 extends Phaser.Scene {
               wordWrap: { width: world.width * 0.14, useAdvancedWrap: true }
             },
             origin: [0, 0]
+          },
+          drawText: {
+            x: 250,
+            y: world.height - 300,
           }
         },
         2: {
@@ -90,7 +94,7 @@ class Scene1 extends Phaser.Scene {
             y: world.height - 200
           },
           openedCard: {
-            x: world.width - 130,
+            x: world.width - 300,
             y: world.height - 200
           },
           icon: {
@@ -102,7 +106,7 @@ class Scene1 extends Phaser.Scene {
             x: world.width - 20,
             y: world.height - world.width * 0.12 + 40,
             style: {
-              fontSize: '26px',
+              fontSize: '24px',
               wordWrap: { width: world.width * 0.14, useAdvancedWrap: false },
               align: 'right',
               fixedWidth: world.width * 0.14
@@ -117,17 +121,21 @@ class Scene1 extends Phaser.Scene {
               wordWrap: { width: world.width * 0.14, useAdvancedWrap: true }
             },
             origin: [1, 0]
+          },
+          drawText: {
+            x: world.width - 300,
+            y: world.height - 300,
           }
         },
         // TOP
         3: {
           card: {
-            x: world.width - 170,
-            y: 80
+            x: world.width - 130,
+            y: 150
           },
           openedCard: {
-            x: world.width - 170,
-            y: 80
+            x: world.width - 300,
+            y: world.height - 200
           },
           icon: {
             x: world.width - 20,
@@ -138,7 +146,7 @@ class Scene1 extends Phaser.Scene {
             x: world.width - 20,
             y: 60,
             style: {
-              fontSize: '26px',
+              fontSize: '24px',
               wordWrap: { width: world.width * 0.18, useAdvancedWrap: true }
             },
             origin: [1, 0]
@@ -147,20 +155,24 @@ class Scene1 extends Phaser.Scene {
             x: world.width - 20,
             y: 90,
             style: {
-              fontSize: '18px',
+              fontSize: '24px',
               wordWrap: { width: world.width * 0.14, useAdvancedWrap: true }
             },
             origin: [1, 0]
+          },
+          drawText: {
+            x: world.width - 300,
+            y: 310,
           }
         },
         4: {
           card: {
             x: 170,
-            y: 80
+            y: 150
           },
           openedCard: {
-            x: 170,
-            y: 60,
+            x: world.width - 300,
+            y: world.height - 200,
           },
           icon: {
             x: 20,
@@ -184,6 +196,10 @@ class Scene1 extends Phaser.Scene {
               wordWrap: { width: world.width * 0.14, useAdvancedWrap: true }
             },
             origin: [0, 0]
+          },
+          drawText: {
+            x: 250,
+            y: 310,
           }
         }
       }
@@ -325,7 +341,7 @@ class Scene1 extends Phaser.Scene {
       let y = this.UISizes.users[i].openedCard.y;
 
       for (let j = 0; j < cards[i-1].length; j++) {
-        this.openedCards[i][j] = this.add.image(x, y, cards[i-1][j])
+        this.openedCards[i-1][j] = this.add.image(x, y, cards[i-1][j])
         .setDisplaySize(this.UISizes.openedCard.width, this.UISizes.openedCard.height)
         .setOrigin(0.5, 0.5)
   
@@ -350,17 +366,17 @@ class Scene1 extends Phaser.Scene {
       const number = back + foul + front + maubinh + mid + winACE;
 
       if (number > 0) {
-        this.drawText[i] = this.add
+        this.drawText[i-1] = this.add
         .text(x, y, `Thắng ${Math.abs(Number(number))} chi`, {
           fontFamily: '"Arial Black"',
-          fontSize: 15,
+          fontSize: 18,
         })
         .setOrigin(0.5, 0.5)
       } else {
-        this.drawText[i] = this.add
+        this.drawText[i-1] = this.add
         .text(x, y, `Thua ${Math.abs(Number(number))} chi`, {
           fontFamily: '"Arial Black"',
-          fontSize: 15,
+          fontSize: 18,
         })
         .setOrigin(0.5, 0.5)
       }
@@ -431,15 +447,14 @@ class Scene1 extends Phaser.Scene {
     })
   }
 
-  async handleChooseHiddenCard (players) {
+  async handleChooseHiddenCard (readyPlayers) {
     this.buttonStart.disableInteractive()
     this.buttonStart.setVisible(false)
 
     // xoc bai
     this.loadingShufflingCard = this.handleShufflingCard()
 
-    const user = store.get('user')
-    if (players[0] === user.uid) {
+    if (readyPlayers.length === 4) {
       console.log('randomAllCards>>>>>>>>>>>>>')
       randomAllCards(this.room)
     }
@@ -719,7 +734,7 @@ class Scene1 extends Phaser.Scene {
 
     if (roomInfo.result && roomInfo.result.status === 'WAITING_FOR_RANDOM') {
       this.room = roomInfo
-      this.handleChooseHiddenCard(roomInfo.players)
+      this.handleChooseHiddenCard(roomInfo.readyPlayers)
       this.waitingText && this.waitingText.destroy()
     }
 
