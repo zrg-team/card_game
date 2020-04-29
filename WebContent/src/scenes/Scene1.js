@@ -615,9 +615,10 @@ class Scene1 extends Phaser.Scene {
             this.unvisibleCard[i].setVisible(false)
             this.unvisibleCard[i].destroy()
             delete this.unvisibleCard[i]
-            this.unvisibleCard = null
           }
         }
+        this.unvisibleCard = null
+
         this.createWaitingEndGameText()
       },
       countdown: 60
@@ -683,16 +684,17 @@ class Scene1 extends Phaser.Scene {
         for (let k = 0; k < 13; k++) {
           this.openedCards[i][k].destroy()
           delete this.openedCards[i][k]
-          this.openedCards = null
+          
         }
       }
+      this.openedCards = null
     }
     if (this.drawText) {
       for (let i = 1; i <= this.players.length; i++) {
         this.drawText[i].destroy()
         delete this.drawText[i]
-        this.drawText = null
       }
+      this.drawText = null
     }
 
     this.buttonStart.setVisible(false)
