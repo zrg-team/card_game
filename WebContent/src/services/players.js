@@ -1,24 +1,23 @@
 import firebase from '../helplers/firebase'
 
 export const getPlayersInfo = async (game, room) => {
-  return firebase.db.collection('rooms').doc(room.id)
+  const players = room.players
+  const playerInfo = []
+  for (let i = 0; i < players.length; i++) {
+    await firebase.db.collection('rooms').doc(`${room.id}`)
     .collection('users')
+    .doc(players[i])
     .get()
-    .then(function (data) {
-      const players = []
-
-      data.forEach(function (doc) {
-        const player = {
-          name: doc.data().name,
-          balance: doc.data().balance
-        }
-        players.push(player)
-      })
-
-      return players
+    .then(result => {
+      const player = {
+        name: result.data().name,
+        balance: result.data().balance
+      }
+      playerInfo.push(player)
+    }).catch(err => {
+      console.log(err)
+      return playerInfo
     })
-    .catch(err => {
-      console.log('can not get players info', err)
-      return []
-    })
+  }
+  return playerInfo;
 }

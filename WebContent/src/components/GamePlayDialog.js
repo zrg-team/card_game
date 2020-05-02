@@ -6,7 +6,7 @@ export default async function generateGamePlayDialog (scene, store, roomId, opti
   countdown: 60,
   onSuccess
 }) {
-  const userCard = await getUserCards('maubing', roomId)
+  const userCard = await getUserCards('maubinh', roomId)
   const cards = userCard.cards || ['XC', 'XD', '2D', '4C', '6D', 'QD', 'KH', 'AH', 'AC', '3D', '4S', '9D', '8C']
 
   let loading = false
@@ -73,7 +73,7 @@ export default async function generateGamePlayDialog (scene, store, roomId, opti
     loading = true
     clearInterval(timeInstance)
     const loadingComponent = createLoading(scene, 'Submit...', store)
-    await submitCards('maubing', scene.room, results)
+    await submitCards('maubinh', scene.room, results)
     loadingComponent.setVisible(false)
     loadingComponent.destroy()
     destroyAll()

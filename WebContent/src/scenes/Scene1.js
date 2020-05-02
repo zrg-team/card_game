@@ -207,7 +207,7 @@ class Scene1 extends Phaser.Scene {
   }
 
   async create () {
-    this.players = await getPlayersInfo('maubing', this.room)
+    this.players = await getPlayersInfo('maubinh', this.room)
 
     const world = store.getAll()
     this.bg = this.add
@@ -255,7 +255,7 @@ class Scene1 extends Phaser.Scene {
           repeat: 0,
           yoyo: true
         })
-        deletePlayerFromRoom('maubing', this.room, user)
+        deletePlayerFromRoom('maubinh', this.room, user)
         this.scene.start('MenuScene')
       })
   }
@@ -692,7 +692,7 @@ class Scene1 extends Phaser.Scene {
   }
 
   handleReadyToPlay () {
-    readyToPlay('maubing', this.room)
+    readyToPlay('maubinh', this.room)
 
     if (this.openedCards) {
       for (let i = 1; i <= this.players.length; i++) {
@@ -722,12 +722,12 @@ class Scene1 extends Phaser.Scene {
     const user = store.get('user')
 
     if (this.room.players.length !== roomInfo.players.length) {
-      this.players = await getPlayersInfo('maubing', roomInfo)
+      this.players = await getPlayersInfo('maubinh', roomInfo)
       this.createUserIcons()
     }
 
     if (this.playerDone && roomInfo.result.status === 'DONE' && !roomInfo.readyPlayers.includes(user.uid)) {
-      this.result = await getResult('maubing', roomInfo)
+      this.result = await getResult('maubinh', roomInfo)
       console.log('into done')
       this.handleEndGame(this.result)
     }
@@ -739,6 +739,7 @@ class Scene1 extends Phaser.Scene {
     }
 
     if (roomInfo.result && roomInfo.result.status === 'PLAYING') {
+      console.log('playing')
       this.room = roomInfo
       this.handleBeforePlaying(roomInfo.randomNumber)
     }

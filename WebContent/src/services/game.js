@@ -79,6 +79,18 @@ export function watchRoomInfo (roomId) {
     })
 }
 
+export function getRoomInfo (game, roomId) {
+  return firebase.db.collection('rooms').doc(roomId)
+    .get()
+    .then(result => {
+      return { ...result.data(), id: roomId }
+    }).catch(err => {
+      const errorCode = err.code
+      const errorMessage = err.message
+      return { errorCode, errorMessage, empty: true }
+    })
+}
+
 export function randomAllCards (roomInfo) {
   const user = store.get('user')
   if (!user || !user.uid) {

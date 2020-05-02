@@ -125,7 +125,7 @@ export default function generateRoomDialog (scene, store, option = {}) {
           }
           loading = true
           const loadingComponent = createLoading(scene, 'Joining...', store)
-          return joinRoom('maubing', selectedRoom.id)
+          return joinRoom('maubinh', selectedRoom.id)
             .then((result) => {
               if (result.errorCode) {
                 createToast(scene, store.width / 2, store.height - 40)
@@ -164,7 +164,7 @@ export default function generateRoomDialog (scene, store, option = {}) {
           }
           loading = true
           const loadingComponent = createLoading(scene, 'Creating...', store)
-          return createRoom('maubing').then((result) => {
+          return createRoom('maubinh').then((result) => {
             if (result.errorCode) {
               createToast(scene, store.width / 2, store.height - 40)
                 .setOrigin(0.5, 0.5)
@@ -218,9 +218,7 @@ export default function generateRoomDialog (scene, store, option = {}) {
             id: doc.id,
             ...doc.data()
           }
-          const status = room.host === store.user.uid
-            ? '(host)'
-            : room.players.includes(store.user.uid)
+          const status = room.players.includes(store.user.uid)
               ? '(joined)'
               : ''
           const item = createLabel(
