@@ -125,8 +125,10 @@ export default function generateRoomDialog (scene, store, option = {}) {
           }
           loading = true
           const loadingComponent = createLoading(scene, 'Joining...', store)
+          console.time('[START_JOIN]')
           return joinRoom('maubinh', selectedRoom.id)
             .then((result) => {
+              console.timeEnd('[START_JOIN]')
               if (result.errorCode) {
                 createToast(scene, store.width / 2, store.height - 40)
                   .setOrigin(0.5, 0.5)

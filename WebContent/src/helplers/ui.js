@@ -17,10 +17,6 @@ export function createTextBox (scene, x, y, config) {
     .setOrigin(0.5)
     .setInteractive()
     .on('pointerdown', () => {
-      if (editor) {
-        editor.close()
-        editor.destroy()
-      }
       if (config.input && config.input.type === 'password') {
         printText.text = ''
         if (config.onTextChanged) {
@@ -31,7 +27,7 @@ export function createTextBox (scene, x, y, config) {
         ...config.input,
         onTextChanged: function (textObject, text) {
           if (config.input && config.input.type === 'password') {
-            textObject.text = '*********'
+            textObject.text = ''.padStart(`${text}`.length, '*')
           } else {
             textObject.text = text
           }
@@ -40,6 +36,9 @@ export function createTextBox (scene, x, y, config) {
             config.onTextChanged(textObject, text)
           }
         }
+      }
+      if (editor) {
+        return editor.open(editorConfig)
       }
       editor = scene.rexUI.edit(printText, editorConfig)
       if (config.onEditor) {

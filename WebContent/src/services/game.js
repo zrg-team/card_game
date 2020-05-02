@@ -162,24 +162,20 @@ export function getUserCards (game, roomId) {
 }
 
 export const deletePlayerFromRoom = (game, room, user) => {
-  firebase.db.collection('rooms').doc(room.id).collection('users').doc(user.uid).delete().then(function (result) {
-    return result.data()
-  }).catch(function (err) {
-    const errorCode = err.code
-    const errorMessage = err.message
-    return { errorCode, errorMessage }
-  })
-
-  const newPlayers = room.players.filter(player => player !== user.uid)
-  firebase.db.collection('rooms').doc(room.id).update({
-    players: newPlayers
-  }).then(function (result) {
-    return result.data()
-  }).catch(function (err) {
-    const errorCode = err.code
-    const errorMessage = err.message
-    return { errorCode, errorMessage }
-  })
+  return firebase
+    .functions
+    .httpsCallable('games-exitRoom')
+    ({
+      id: room.id,
+      game
+    })
+    .then(result => {
+      return result
+    }).catch(err => {
+      const errorCode = err.code
+      const errorMessage = err.message
+      return { errorCode, errorMessage }
+    })
 }
 
 export const getResult = async (game, room) => {
