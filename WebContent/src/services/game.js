@@ -179,28 +179,30 @@ export const deletePlayerFromRoom = (game, room, user) => {
 }
 
 export const getResult = async (game, room) => {
-  return firebase.db.collection('rooms').doc(room.id)
+  const players = room.players
+  
+  const result = {
+    cards: [],
+    draw: []
+  }
+  console.log(room)
+  for (let i = 0; i < players.length; i++) {
+    await firebase.db.collection('rooms').doc(`${room.id}`)
     .collection('users')
+    .doc(players[i])
     .get()
-    .then(function (data) {
-      const result = {
-        cards: [],
-        draw: [],
-      }
-
-      data.forEach(function (doc) {
-        const obj = {
-          name: doc.data().name,
-          balance: doc.data().balance
-        }
-        result.cards.push(doc.data().cards)
-        result.draw.push(doc.data().draw)
-      })
-
-      return result
+    .then(res => {
+      const cards =  res.data().cards
+      const draw = res.data().draw
+     
+      result.cards.push(cards)
+      result.draw.push(draw)
     })
     .catch(err => {
       console.log('can not get players info', err)
-      return []
     })
+  }
+  console.log(result)
+
+  return result
 }

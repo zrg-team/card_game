@@ -73,13 +73,15 @@ export default async function generateGamePlayDialog (scene, store, roomId, opti
     loading = true
     clearInterval(timeInstance)
     const loadingComponent = createLoading(scene, 'Submit...', store)
+
+    if (option.onSuccess) {
+      option.onSuccess()
+    }
+
     await submitCards('maubinh', scene.room, results)
     loadingComponent.setVisible(false)
     loadingComponent.destroy()
     destroyAll()
-    if (option.onSuccess) {
-      option.onSuccess()
-    }
   }
 
   const createCountdown = () => {
