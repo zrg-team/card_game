@@ -132,6 +132,7 @@ export function createLoading (scene, title, world) {
   return loadingComponent
 }
 
+let buttonSfx = null
 export function createButton (scene, title, option = {}) {
   const {
     background = true,
@@ -140,6 +141,9 @@ export function createButton (scene, title, option = {}) {
     text = {},
     button = {}
   } = option
+  if (!buttonSfx) {
+    buttonSfx = scene.sound.add('button-click')
+  }
   const buttonComponent = scene.rexUI.add.label({
     width: 40, // Minimum width of round-rectangle
     height: 40, // Minimum height of round-rectangle
@@ -179,6 +183,7 @@ export function createButton (scene, title, option = {}) {
   })
     .setInteractive()
     .on('pointerdown', () => {
+      buttonSfx && buttonSfx.play()
       scene.tweens.add({
         targets: buttonComponent,
         scaleX: 0.9,

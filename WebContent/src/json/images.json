@@ -113,17 +113,6 @@
     "key": "game-table",
     "load": [
       "game-table",
-      "assets/images/game-table.jpg"
-    ],
-    "height": 316,
-    "orientation": 1,
-    "width": 600,
-    "type": "jpg"
-  },
-  {
-    "key": "game-table",
-    "load": [
-      "game-table",
       "assets/images/game-table.png"
     ],
     "height": 316,

@@ -14,10 +14,6 @@ export const FIREBASE_CONFIG = {
 export const RESOURCES = {
   image: images,
   spritesheet: [
-    {
-      key: 'button-start',
-      load: ['button-start', 'assets/spritesheets/button-start.png', { frameWidth: 180, frameHeight: 180 }]
-    }
   ],
   audio: [
     {
@@ -25,6 +21,20 @@ export const RESOURCES = {
       load: [
         'sound-click',
         ['assets/sfx/audio-button.mp4', 'assets/sfx/audio-button.mp3', 'assets/sfx/audio-button.ogg']
+      ]
+    },
+    {
+      key: 'button-click',
+      load: [
+        'button-click',
+        ['assets/sfx/button.mp3']
+      ]
+    },
+    {
+      key: 'background-music',
+      load: [
+        'background-music',
+        ['assets/sfx/bgm2.mp3']
       ]
     }
   ]

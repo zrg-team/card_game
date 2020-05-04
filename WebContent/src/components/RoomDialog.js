@@ -4,6 +4,7 @@ import { getRooms, createRoom, joinRoom } from '../services/game'
 
 export default function generateRoomDialog (scene, store, option = {}) {
   let loading = false
+  let done = false
   let selectedRoom = null
   const roomList = []
 
@@ -128,6 +129,7 @@ export default function generateRoomDialog (scene, store, option = {}) {
           console.time('[START_JOIN]')
           return joinRoom('maubinh', selectedRoom.id)
             .then((result) => {
+              done = true
               console.timeEnd('[START_JOIN]')
               if (result.errorCode) {
                 createToast(scene, store.width / 2, store.height - 40)
@@ -208,7 +210,7 @@ export default function generateRoomDialog (scene, store, option = {}) {
 
   return getRooms()
     .then((result) => {
-      if (!panel) {
+      if (!panel || done) {
         return
       }
       const sizerList = panel.getElement('panel')

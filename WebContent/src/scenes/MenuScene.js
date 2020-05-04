@@ -33,6 +33,11 @@ class MenuScene extends Phaser.Scene {
       USER_HEADER_BUTTON_HEIGHT: world.height * 0.125,
       USER_HEADER_BUTTON_WIDTH: world.width * 0.125 - 40 * 4.5 / 3
     }
+    console.log('this.scene', this.scene)
+    this.backgroundMusic = this.sound.add('background-music', {
+      loop: true
+    })
+    this.backgroundMusic.play()
   }
 
   create () {
@@ -55,9 +60,9 @@ class MenuScene extends Phaser.Scene {
     this.createGamesPanel(
       [
         {
-          id: 'Scene1',
+          id: 'MauBinh',
           title: 'MẬU BINH',
-          scene: 'Scene1',
+          scene: 'MauBinh',
           icon: 'mau-binh',
           // scale: [0.8, 0.8],
           size: [220, 220],
@@ -66,7 +71,8 @@ class MenuScene extends Phaser.Scene {
             if (!user) {
               return
             }
-            this.createRoomDialog('Scene1')
+            this.buttonSfx.play()
+            this.createRoomDialog('MauBinh')
           }
         },
         {
@@ -337,6 +343,7 @@ class MenuScene extends Phaser.Scene {
     // TODO: Handle join game
     console.log('scene', scene, roomInfo)
     this.scene.start(scene, { room: roomInfo })
+    this.backgroundMusic.stop()
   }
 
   handleFullscreen () {

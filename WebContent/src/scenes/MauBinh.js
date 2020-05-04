@@ -13,9 +13,9 @@ import {
 } from '../services/game'
 import { getPlayersInfo } from '../services/players'
 
-class Scene1 extends Phaser.Scene {
+class MauBinh extends Phaser.Scene {
   constructor () {
-    super('Scene1')
+    super('MauBinh')
     this.handleChooseHiddenCard = this.handleChooseHiddenCard.bind(this)
     this.handleReadyToPlay = this.handleReadyToPlay.bind(this)
     this.handleChangeRoomInfo = this.handleChangeRoomInfo.bind(this)
@@ -208,11 +208,12 @@ class Scene1 extends Phaser.Scene {
   }
 
   async create () {
+    this.buttonSfx = this.sound.add('button-click')
     this.players = await getPlayersInfo('maubinh', this.room)
 
     const world = store.getAll()
     this.bg = this.add
-      .image(0, 0, 'main-background')
+      .image(0, 0, 'menu-bg')
       .setOrigin(0, 0)
       .setDisplaySize(world.width, world.height)
       .setDepth(0)
@@ -230,23 +231,23 @@ class Scene1 extends Phaser.Scene {
     setOnRoomInfoChange(this.handleChangeRoomInfo)
   }
 
-  update () {}
-
   createExitRoomButton (world) {
     const user = store.get('user')
 
     if (this.exitBtn) {
-      this.exitBtn.setVisible(false)
-      this.exitBtn.setActive(false)
+      this.exitBtn.setVisible(true)
+      this.exitBtn.setActive(true)
+      this.exitBtn.setInteractive(true)
     }
 
     this.exitBtn = this.add
-      .image(world.width - 40, 30, 'exit-button')
-      .setDisplaySize(100, 43)
-      .setOrigin(0.5, 0.5)
+      .image(world.width - 10, 30, 'exit-button')
+      .setDisplaySize(140, 42)
+      .setOrigin(1, 0.5)
       .setDepth(1000)
       .setInteractive()
       .on('pointerdown', async () => {
+        this.buttonSfx.play()
         this.tweens.add({
           targets: this.exitBtn,
           scaleX: 1.2,
@@ -257,6 +258,8 @@ class Scene1 extends Phaser.Scene {
           yoyo: true
         })
         deletePlayerFromRoom('maubinh', this.room, user)
+        setOnRoomInfoChange(null)
+        this.scene.stop()
         this.scene.start('MenuScene')
       })
   }
@@ -274,6 +277,7 @@ class Scene1 extends Phaser.Scene {
       .setOrigin(0.5, 0.5)
       .setInteractive()
       .on('pointerdown', async () => {
+        this.buttonSfx.play()
         this.tweens.add({
           targets: this.buttonStart,
           scale: 1.2,
@@ -296,7 +300,6 @@ class Scene1 extends Phaser.Scene {
   }
 
   createCommonUI (world) {
-    debugger;
     this.createButtonStart(world, this.handleReadyToPlay)
 
     this.hiddenCardNumberStyle = this.add
@@ -652,6 +655,7 @@ class Scene1 extends Phaser.Scene {
 
     generateGamePlayDialog(this, world, this.room.id, {
       onSuccess: () => {
+        this.buttonSfx.play()
         this.playerDone = true
         for (let i = 0; i < 52; i++) {
           if (this.unvisibleCard[i]) {
@@ -786,4 +790,4 @@ class Scene1 extends Phaser.Scene {
   }
 }
 
-export default Scene1
+export default MauBinh

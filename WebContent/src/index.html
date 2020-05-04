@@ -3,7 +3,24 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Card game</title>
+		<link rel="apple-touch-icon" sizes="57x57" href="./assets/public/apple-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="./assets/public/apple-icon-60x60.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="./assets/public/apple-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="./assets/public/apple-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="./assets/public/apple-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="./assets/public/apple-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="./assets/public/apple-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="./assets/public/apple-icon-152x152.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="./assets/public/apple-icon-180x180.png">
+		<link rel="icon" type="image/png" sizes="192x192"  href="./assets/public/android-icon-192x192.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="./assets/public/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="96x96" href="./assets/public/favicon-96x96.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="./assets/public/favicon-16x16.png">
 		<link rel="manifest" href="./assets/manifest.json">
+		<link rel="stylesheet" href="./assets/styles/modal.css">
+		<meta name="msapplication-TileColor" content="#ffffff">
+		<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+		<meta name="theme-color" content="#ffffff">
 		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 		<meta name="HandheldFriendly" content="True">
 		<meta name="MobileOptimized" content="320">
@@ -33,50 +50,75 @@
 					width: 60px;
 					height: 60px;
 				}
+				.hidden {
+					display: none
+				}
 		</style>
 	</head>
 	<body style="background-color: black;">
-		<div id="toggle"></div>
+		<!-- <div id="toggle"></div> -->
 		<div id="game-container" style="display: block; width: 100%;"></div>
+		<div class="content">
+			<div class="buttons hidden">
+				<div id="install" class="button">Install Game</div>
+			</div>
+		</div>
 		<script>
-			const button = document.getElementById('toggle')
-
-			button.addEventListener('click', function () {
-				const elem = document.getElementById('game-container')
-
-				if (elem.requestFullscreen) {
-					elem.requestFullscreen()
-				} else if (elem.mozRequestFullScreen) { /* Firefox */
-					elem.mozRequestFullScreen()
-				} else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-					elem.webkitRequestFullscreen()
-				} else if (elem.msRequestFullscreen) { /* IE/Edge */
-					elem.msRequestFullscreen()
-				}
-			})
-			watchFullScreen(function () {
-				if(window.innerHeight > window.innerWidth){
-    			const prefix = 'orientation' in window.screen ? 'orientation' :
-						'mozOrientation' in window.screen ? 'mozOrientation' :
-						'msOrientation' in window.screen ? 'msOrientation' :
-						null
-					if (prefix) {
-						window.screen[prefix].lock('landscape')
-					} else {
-					}
-				}
-			})
-			function watchFullScreen (func) {
-				const arr = ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'msfullscreenchange']
-				arr.forEach(
-					eventType => {
-						try {
-							document.removeEventListener(eventType, func, false)
-							document.addEventListener(eventType, func, false)
-						} catch (err) {
-						}
-					}
-				)
+			window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault()
+        document.getElementById('modal-container').className = 'buttons'
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        this.servicePrompt = e
+        console.log('[service] - beforeinstallprompt', userAccepted)
+        if (!userAccepted) {
+          // If user not yet accept install app, show popup again
+          this.servicePrompt.prompt()
+          document.getElementById('install').onclick = () => {
+            // Wait for the user to respond to the prompt
+            document.getElementById('buttons').remove()
+            this.servicePrompt.userChoice.then((choiceResult) => {
+              if (choiceResult.outcome === 'accepted') {
+                userAccepted = true
+                console.log('User accepted the A2HS prompt')
+              } else {
+                console.log('User dismissed the A2HS prompt')
+              }
+              this.servicePrompt = null
+            })
+          }
+        }
+      })
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('load', function() {
+					navigator.serviceWorker.register('assets/pwa/service-worker.js')
+						.then(reg => {
+              console.log('Service worker registered! 😎', reg);
+              reg.onupdatefound = () => {
+                const installingWorker = reg.installing
+                if (installingWorker == null) {
+                  return
+                }
+                installingWorker.onstatechange = () => {
+                  if (installingWorker.state === 'installed') {
+                    if (navigator.serviceWorker.controller) {
+                      document.getElementById('content').innerHTML = '<div id="buttons" class="buttons hidden"><div id="update" class="button">New update found. click here</div></div>'
+                      document.getElementById('update').onclick = () => {
+                        navigator.serviceWorker.ready.then(registration => {
+                          registration.unregister()
+                          setTimeout(() => {
+                            window.location.reload(window.location.href)
+                          }, 500)
+                        })
+                      }
+                    }
+                  }
+                }
+              }
+						})
+						.catch(err => {
+							console.log('😥 Service worker registration failed: ', err);
+						});
+				});
 			}
 		</script>
 	</body>

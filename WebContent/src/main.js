@@ -4,9 +4,7 @@ import store from './helplers/globalStore'
 import BootScene from './scenes/BootScene'
 import PreloaderScene from './scenes/PreloaderScene'
 import MenuScene from './scenes/MenuScene'
-import Scene1 from './scenes/Scene1'
-import DemoScene from './scenes/DemoScene'
-import Scene2 from './scenes/Scene2'
+import MauBinh from './scenes/MauBinh'
 
 const config = {
   // For more settings see <https://github.com/photonstorm/phaser/blob/master/src/boot/Config.js>
@@ -47,8 +45,7 @@ const config = {
     BootScene,
     PreloaderScene,
     MenuScene,
-    Scene1,
-    Scene2
+    MauBinh
   ]
 }
 window.addEventListener('load', function () {
