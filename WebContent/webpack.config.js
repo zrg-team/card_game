@@ -28,7 +28,7 @@ module.exports = {
         publicPath: './dev/',
         library: '[name]',
         libraryTarget: 'umd',
-        filename: '[name].[chunkhash].js'
+        filename: '[name].js'
     },
     watch: true, 
     plugins: [

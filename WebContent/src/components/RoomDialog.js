@@ -81,8 +81,8 @@ export default function generateRoomDialog (scene, store, option = {}) {
     },
 
     slider: {
-      track: scene.rexUI.add.roundRectangle(0, 0, 20, 10, 10, 0xe0c48f),
-      thumb: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 13, 0xFFFFFF)
+      track: scene.rexUI.add.roundRectangle(0, 0, 20, 20, 20, 0xe0c48f),
+      thumb: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 20, 0xFFFFFF)
     },
 
     space: {
@@ -136,7 +136,7 @@ export default function generateRoomDialog (scene, store, option = {}) {
                   .setOrigin(0.5, 0.5)
                   .show(result.errorMessage)
               } else {
-                destroyAll()
+                // destroyAll()
                 createToast(scene, store.width / 2, store.height - 40)
                   .setOrigin(0.5, 0.5)
                   .show(`Joined to room ${selectedRoom.title}.`)
@@ -215,7 +215,7 @@ export default function generateRoomDialog (scene, store, option = {}) {
       }
       const sizerList = panel.getElement('panel')
       if (!result.empty) {
-        const itemWidth = SIZES.MAIN_PANEL_WIDTH - 70
+        const itemWidth = SIZES.MAIN_PANEL_WIDTH - 90
         const itemHeight = itemWidth * 0.08
         result.forEach(doc => {
           const room = {

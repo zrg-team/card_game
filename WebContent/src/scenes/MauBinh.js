@@ -207,18 +207,46 @@ class MauBinh extends Phaser.Scene {
     }
   }
 
+  clearAll () {
+    if (this.buttonStart) {
+      this.buttonStart.destroy()
+      this.buttonStart = null
+    }
+    if (this.buttonSfx) {
+      this.buttonSfx.destroy()
+      this.buttonSfx = null
+    }
+    if (this.exitBtn) {
+      this.exitBtn.destroy
+      this.exitBtn = null
+    }
+    if (this.unvisibleCard) {
+      this.unvisibleCard.forEach((item) => {
+        this.tweens.killTweensOf(item)
+        item.destroy()
+      })
+      this.unvisibleCard = []
+      this.cardAnimates = []
+    }
+    if (this.hiddenCardNumber) {
+      this.hiddenCardNumber.destroy()
+      this.hiddenCardNumber = null
+    }
+    this.clearUserIcons()
+  }
+
   async create () {
     this.buttonSfx = this.sound.add('button-click')
     this.players = await getPlayersInfo('maubinh', this.room)
 
     const world = store.getAll()
-    this.bg = this.add
+    this.add
       .image(0, 0, 'menu-bg')
       .setOrigin(0, 0)
       .setDisplaySize(world.width, world.height)
       .setDepth(0)
 
-    this.gameTable = this.add
+    this.add
       .image(0, 0, 'game-table')
       .setDisplaySize(world.width, world.height)
       .setOrigin(0, 0)
@@ -259,8 +287,10 @@ class MauBinh extends Phaser.Scene {
         })
         deletePlayerFromRoom('maubinh', this.room, user)
         setOnRoomInfoChange(null)
+        this.clearAll()
         this.scene.stop()
-        this.scene.start('MenuScene')
+        this.scene.switch('MenuScene')
+        // this.scene.start('MenuScene')
       })
   }
 
@@ -302,7 +332,7 @@ class MauBinh extends Phaser.Scene {
   createCommonUI (world) {
     this.createButtonStart(world, this.handleReadyToPlay)
 
-    this.hiddenCardNumberStyle = this.add
+    this.add
       .image(world.width / 2, 40, 'time-bg')
       .setDisplaySize(200, 50)
       .setOrigin(0.5, 0.5)
@@ -394,6 +424,9 @@ class MauBinh extends Phaser.Scene {
   createUserIcons () {
     for (let i = 0; i < this.players.length; i++) {
       const user = this.UISizes.users[i + 1]
+      if (!user) {
+        return
+      }
       this.playersAvatar[i] = this.add
         .image(user.icon.x, user.icon.y, 'user-icon')
         .setOrigin(...(user.icon.origin || [0.5, 0.5]))

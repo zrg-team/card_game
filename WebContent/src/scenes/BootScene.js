@@ -6,6 +6,11 @@ class BootScene extends Phaser.Scene {
     super({
       key: 'BootScene'
     })
+    const divContainer = document.querySelector('#game-container div')
+    if (divContainer) {
+      console.log('divContainer', divContainer.hasAttribute)
+      divContainer.className = 'high-order'
+    }
   }
 
   preload () {
