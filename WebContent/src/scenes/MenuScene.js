@@ -4,7 +4,6 @@ import generateLoginDialog from '../components/LoginDialog'
 import generateRoomDialog from '../components/RoomDialog'
 import { createConfirmPopup } from '../helplers/ui'
 import { setOnUserInformationChange, wathUserChangeInfo, logout } from '../services/auth'
-import { getRoomInfo } from '../services/game'
 
 class MenuScene extends Phaser.Scene {
   constructor (test) {
@@ -337,12 +336,10 @@ class MenuScene extends Phaser.Scene {
     return sizer
   }
 
-  async handleJoinRoom (scene, room) {
-    // update latest room info
-    const roomInfo = await getRoomInfo('maubinh', room.id)
-    // TODO: Handle join game
-    console.log('scene', scene, roomInfo)
-    this.scene.start(scene, { room: roomInfo })
+  handleJoinRoom (scene, room) {
+      // TODO: Handle join game
+    console.log('scene', scene, room)
+    this.scene.start(scene, { room: room })
     this.backgroundMusic.stop()
   }
 

@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { createLabel, createButton, createToast, createLoading } from '../helplers/ui'
-import { getRooms, createRoom, joinRoom } from '../services/game'
+import { getRooms, createRoom, joinRoom, getRoomInfo } from '../services/game'
 
 export default function generateRoomDialog (scene, store, option = {}) {
   let loading = false
@@ -120,8 +120,17 @@ export default function generateRoomDialog (scene, store, option = {}) {
             bottom: 20
           }
         },
-        onPress: (button) => {
+        onPress: async (button) => {
           if (loading || !selectedRoom) {
+            return
+          }
+          // update latest room info
+          const roomInfo = await getRoomInfo('maubinh', selectedRoom.id)
+          selectedRoom = roomInfo
+          if (selectedRoom.players.length >= 4 && !selectedRoom.players.includes(store.user.uid)) {
+            createToast(scene, store.width / 2, store.height - 40)
+                  .setOrigin(0.5, 0.5)
+                  .show(`Room ${selectedRoom.title} has been fully.`)
             return
           }
           loading = true
