@@ -71,30 +71,36 @@
 			let userAccepted = false
 			window.addEventListener('beforeinstallprompt', (e) => {
 				e.preventDefault()
-				const buttonInstall = document.createElement('div')
-				buttonInstall.className = 'install button'
-				buttonInstall.innerText = 'Install Game'
-				buttonInstall.id = 'install'
-				document.getElementById('game-container').appendChild(buttonInstall)
-        // Prevent Chrome 67 and earlier from automatically showing the prompt
-        this.servicePrompt = e
-        console.log('[service] - beforeinstallprompt', userAccepted)
-        if (!userAccepted) {
-          // If user not yet accept install app, show popup again
-          buttonInstall.onclick = () => {
-						this.servicePrompt.prompt()
-            // Wait for the user to respond to the prompt
-            this.servicePrompt.userChoice.then((choiceResult) => {
-              if (choiceResult.outcome === 'accepted') {
-                userAccepted = true
-                console.log('User accepted the A2HS prompt')
-              } else {
-                console.log('User dismissed the A2HS prompt')
-              }
-              this.servicePrompt = null
-            })
-          }
-        }
+				if (window.matchMedia('(display-mode: standalone)').matches) {  
+						// do things here  
+						// set a variable to be used when calling something  
+						// e.g. call Google Analytics to track standalone use   
+				} else {
+					const buttonInstall = document.createElement('div')
+					buttonInstall.className = 'install button'
+					buttonInstall.innerText = 'Install Game'
+					buttonInstall.id = 'install'
+					document.getElementById('game-container').appendChild(buttonInstall)
+					// Prevent Chrome 67 and earlier from automatically showing the prompt
+					this.servicePrompt = e
+					console.log('[service] - beforeinstallprompt', userAccepted)
+					if (!userAccepted) {
+						// If user not yet accept install app, show popup again
+						buttonInstall.onclick = () => {
+							this.servicePrompt.prompt()
+							// Wait for the user to respond to the prompt
+							this.servicePrompt.userChoice.then((choiceResult) => {
+								if (choiceResult.outcome === 'accepted') {
+									userAccepted = true
+									console.log('User accepted the A2HS prompt')
+								} else {
+									console.log('User dismissed the A2HS prompt')
+								}
+								this.servicePrompt = null
+							})
+						}
+					}
+				}
       })
 			if ('serviceWorker' in navigator) {
 				window.addEventListener('load', function() {
