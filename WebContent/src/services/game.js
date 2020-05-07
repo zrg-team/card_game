@@ -128,7 +128,7 @@ export function readyToPlay (game, room) {
     })
 }
 
-export function submitCards (game, room, cards) {
+export async function submitCards (game, room, cards) {
   return firebase
     .functions
     .httpsCallable('games-submitCards')

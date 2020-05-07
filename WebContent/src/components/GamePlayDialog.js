@@ -78,7 +78,11 @@ export default async function generateGamePlayDialog (scene, store, roomId, opti
       option.onSuccess()
     }
 
-    await submitCards('maubinh', scene.room, results)
+    const res = await submitCards('maubinh', scene.room, results)
+    if (res.errorCode) {
+      await submitCards('maubinh', scene.room, results)
+    }
+  
     loadingComponent.setVisible(false)
     loadingComponent.destroy()
     destroyAll()

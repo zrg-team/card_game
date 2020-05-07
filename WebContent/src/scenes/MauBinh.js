@@ -512,13 +512,15 @@ class MauBinh extends Phaser.Scene {
   }
 
   async handleChooseHiddenCard (readyPlayers) {
+    const user = store.get('user')
+
     this.buttonStart.disableInteractive()
     this.buttonStart.setVisible(false)
    
     // xoc bai
     this.loadingShufflingCard = this.handleShufflingCard()
 
-    if (readyPlayers.length === 4) {
+    if (readyPlayers.length === 4 && readyPlayers[0] === user.uid) {
       console.log('randomAllCards>>>>>>>>>>>>>')
       randomAllCards(this.room)
     }
@@ -763,15 +765,16 @@ class MauBinh extends Phaser.Scene {
     if (this.openedCards) {
       for (let i = 0; i < this.players.length; i++) {
         for (let k = 0; k < 13; k++) {
+          this.openedCards[i][k].setVisible(false)
           this.openedCards[i][k].destroy()
           delete this.openedCards[i][k]
-          
         }
       }
       this.openedCards = null
     }
     if (this.drawText) {
       for (let i = 0; i < this.players.length; i++) {
+        this.drawText[i].setVisible(false)
         this.drawText[i].destroy()
         delete this.drawText[i]
       }
