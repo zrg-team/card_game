@@ -1,6 +1,7 @@
 import { createLabel, createTextBox, createToast, createButton, createLoading } from '../helplers/ui'
 import { login } from '../services/auth'
 
+let dialogInstance = null
 export default function generateLoginDialog (scene, store, option = {}) {
   let email = ''
   let password = ''
@@ -10,17 +11,22 @@ export default function generateLoginDialog (scene, store, option = {}) {
   let passwordEditor = null
 
   const destroyAll = () => {
-    if (emailEditor) {
-      emailEditor.close()
-      emailEditor.destroy()
+    try {
+      if (emailEditor) {
+        emailEditor.close()
+        emailEditor.destroy()
+      }
+      if (passwordEditor) {
+        passwordEditor.close()
+        passwordEditor.destroy()
+      }
+      if (dialog) {
+        dialog.setVisible(false)
+        dialog.destroy()
+        dialog = null
+      }
+    } catch (err) {
     }
-    if (passwordEditor) {
-      passwordEditor.close()
-      passwordEditor.destroy()
-    }
-    dialog.setVisible(false)
-    dialog.destroy()
-    dialog = null
   }
 
   let dialog = scene.rexUI.add.dialog({

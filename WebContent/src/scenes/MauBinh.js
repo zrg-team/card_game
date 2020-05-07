@@ -288,6 +288,7 @@ class MauBinh extends Phaser.Scene {
         deletePlayerFromRoom('maubinh', this.room, user)
         setOnRoomInfoChange(null)
         this.clearAll()
+        await delay(1000)
         this.scene.stop()
         this.scene.switch('MenuScene')
         // this.scene.start('MenuScene')
@@ -534,6 +535,7 @@ class MauBinh extends Phaser.Scene {
   async sendCardAnimation (count, i, totalPlayer) {
     // console.log('>>>>>>>>>', (count % totalPlayer) + 1)
     const position = this.UISizes.users[(count % totalPlayer) + 1].card
+    this.tweens.killTweensOf(this.unvisibleCard[i])
     this.tweens.add({
       targets: this.unvisibleCard[i],
       repeat: 0,
@@ -605,6 +607,7 @@ class MauBinh extends Phaser.Scene {
       const spaceBetweenCard = 0.25
       const startWidth = (world.width - 51 * spaceBetweenCard) / 2
       for (let i = 0; i < 52; i++) {
+        this.tweens.killTweensOf(this.unvisibleCard[i])
         this.unvisibleCard[i].setX(startWidth + spaceBetweenCard * i)
       }
       await delay(0)
@@ -616,6 +619,7 @@ class MauBinh extends Phaser.Scene {
 
     const cardNumber = 51
     for (let i = 0; i < this.randomChangeOrder; i++) {
+      this.tweens.killTweensOf(this.unvisibleCard[cardNumber - i])
       // this.unvisibleCard[cardNumber - i].setDepth(countAnimation)
       this.tweens.add({
         targets: this.unvisibleCard[cardNumber - i],
@@ -646,6 +650,7 @@ class MauBinh extends Phaser.Scene {
 
     for (let i = this.randomChangeOrder; i < cardNumber + 1; i++) {
       this.unvisibleCard[cardNumber - i].setDepth(countAnimation)
+      this.tweens.killTweensOf(this.unvisibleCard[cardNumber - i])
       this.tweens.add({
         targets: this.unvisibleCard[cardNumber - i],
         repeat: 0,
@@ -765,18 +770,22 @@ class MauBinh extends Phaser.Scene {
     if (this.openedCards) {
       for (let i = 0; i < this.players.length; i++) {
         for (let k = 0; k < 13; k++) {
-          this.openedCards[i][k].setVisible(false)
-          this.openedCards[i][k].destroy()
-          delete this.openedCards[i][k]
+          if (this.openedCards[i][k]) {
+            this.openedCards[i][k].setVisible(false)
+            this.openedCards[i][k].destroy()
+            delete this.openedCards[i][k]
+          }
         }
       }
       this.openedCards = null
     }
     if (this.drawText) {
       for (let i = 0; i < this.players.length; i++) {
-        this.drawText[i].setVisible(false)
-        this.drawText[i].destroy()
-        delete this.drawText[i]
+        if (this.drawText[i]) {
+          this.drawText[i].setVisible(false)
+          this.drawText[i].destroy()
+          delete this.drawText[i]
+        }
       }
       this.drawText = null
     }

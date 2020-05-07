@@ -339,6 +339,7 @@ class MenuScene extends Phaser.Scene {
   handleJoinRoom (scene, room) {
       // TODO: Handle join game
     console.log('scene', scene, room)
+    this.scene.stop()
     this.scene.start(scene, { room: room })
     this.backgroundMusic.stop()
   }
@@ -450,17 +451,16 @@ class MenuScene extends Phaser.Scene {
       repeat: 0,
       yoyo: true
     })
-    this.loginDialog = generateLoginDialog(
+    generateLoginDialog(
       this,
       this.world,
       {
         loginSuccess: (user) => {
-          this.userLogin.removeAllListeners()
           this.userLogin.destroy()
-          this.userSignup.removeAllListeners()
           this.userSignup.destroy()
 
           this.createUserInformationPanel()
+          window.location.reload()
         }
       }
     )
