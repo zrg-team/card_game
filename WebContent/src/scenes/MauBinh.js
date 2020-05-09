@@ -10,6 +10,7 @@ import {
   watchRoomInfo,
   deletePlayerFromRoom,
   getResult,
+  getRoomInfo,
 } from '../services/game'
 import { getPlayersInfo } from '../services/players'
 
@@ -237,6 +238,9 @@ class MauBinh extends Phaser.Scene {
 
   async create () {
     this.buttonSfx = this.sound.add('button-click')
+
+    this.room = await getRoomInfo('maubinh', this.room.id)
+
     this.players = await getPlayersInfo('maubinh', this.room)
 
     const world = store.getAll()
@@ -384,10 +388,10 @@ class MauBinh extends Phaser.Scene {
         .setDisplaySize(this.UISizes.openedCard.width, this.UISizes.openedCard.height)
         .setOrigin(0.5, 0.5)
   
-        x = x + 20;
+        x = x + 25;
         if( j === 2 || j === 7) {
           x = this.UISizes.users[i].openedCard.x;
-          y = y + 30;
+          y = y + 35;
         }
       }
     }
@@ -812,7 +816,6 @@ class MauBinh extends Phaser.Scene {
       this.room = roomInfo
 
       this.result = await getResult('maubinh', roomInfo)
-      console.log('into done')
       
       this.handleEndGame(this.result)
     }
