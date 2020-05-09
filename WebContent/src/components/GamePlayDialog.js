@@ -1,5 +1,5 @@
 import { createLoading } from '../helplers/ui'
-import { formatCountdown } from '../utils'
+import { formatCountdown, delay } from '../utils'
 import { submitCards, getUserCards } from '../services/game'
 
 export default async function generateGamePlayDialog (scene, store, roomId, option = {
@@ -7,7 +7,7 @@ export default async function generateGamePlayDialog (scene, store, roomId, opti
   onSuccess
 }) {
   const userCard = await getUserCards('maubinh', roomId)
-  const cards = userCard.cards || ['XC', 'XD', '2D', '4C', '6D', 'QD', 'KH', 'AH', 'AC', '3D', '4S', '9D', '8C']
+  const cards = userCard ? userCard.cards : ['XC', 'XD', '2D', '4C', '6D', 'QD', 'KH', 'AH', 'AC', '3D', '4S', '9D', '8C']
 
   let loading = false
   let locked = false
@@ -80,6 +80,7 @@ export default async function generateGamePlayDialog (scene, store, roomId, opti
 
     const res = await submitCards('maubinh', scene.room, results)
     if (res.errorCode) {
+      await delay(3000)
       await submitCards('maubinh', scene.room, results)
     }
   
@@ -189,8 +190,9 @@ export default async function generateGamePlayDialog (scene, store, roomId, opti
       column++
     }
   })
-  bottomPanel = scene.add.image(0, store.height + 15, 'bottom-panel')
-    .setSize(store.width, 10)
+  bottomPanel = scene.add.image(0, store.height, 'bottom-panel')
+    .setDisplaySize(store.width, 60)
+    .setOrigin(0, 1)
     .setDepth(999)
   timePanel = scene.add.image(store.width - 110, 25, 'time-bg')
     .setDisplaySize(200, 40)

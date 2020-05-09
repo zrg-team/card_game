@@ -276,7 +276,6 @@ class MauBinh extends Phaser.Scene {
       .image(world.width - 10, 30, 'exit-button')
       .setDisplaySize(140, 42)
       .setOrigin(1, 0.5)
-      .setDepth(1000)
       .setInteractive()
       .on('pointerdown', async () => {
         this.buttonSfx.play()
@@ -300,6 +299,7 @@ class MauBinh extends Phaser.Scene {
   }
 
   createButtonStart (world, callback) {
+    console.log('createButtonStart')
     if (this.buttonStart) {
       this.buttonStart.setVisible(true)
       this.buttonStart.setActive(true)
@@ -375,7 +375,7 @@ class MauBinh extends Phaser.Scene {
   }
 
   createUserOpenedCards (cards) {
-    console.log(cards)
+    console.log('createUserOpenedCards', cards)
     this.openedCards = [[],[],[],[]]
 
     for (let i = 1; i <= this.players.length; i++) {
@@ -398,6 +398,7 @@ class MauBinh extends Phaser.Scene {
   }
 
   createDrawText (draw) {
+    console.log('createDrawText', draw)
     this.drawText = []
   
     for (let i = 1; i <= this.players.length; i++) {
@@ -481,6 +482,12 @@ class MauBinh extends Phaser.Scene {
   createWaitingForPlayText () {
     const world = store.getAll()
 
+    if (this.waitingText) {
+      this.tweens.killTweensOf(this.waitingText)
+      this.waitingText.setVisible(false)
+      this.waitingText.destroy()
+    }
+
     this.waitingText = this.add
       .text(world.width / 2, world.height / 2, 'Waiting for others...', {
         font: '34px Arial',
@@ -500,6 +507,11 @@ class MauBinh extends Phaser.Scene {
   createWaitingEndGameText () {
     const world = store.getAll()
 
+    if (this.waitingTextEnd) {
+      this.tweens.killTweensOf(this.waitingTextEnd)
+      this.waitingTextEnd.setVisible(false)
+      this.waitingTextEnd.destroy()
+    }
     this.waitingTextEnd = this.add
       .text(world.width / 2 - 5, 200, 'Waiting for result ...', {
         font: '30px Arial',
@@ -517,6 +529,7 @@ class MauBinh extends Phaser.Scene {
   }
 
   async handleChooseHiddenCard (readyPlayers) {
+    console.log('handleChooseHiddenCard', readyPlayers)
     const user = store.get('user')
 
     this.buttonStart.disableInteractive()
@@ -526,7 +539,6 @@ class MauBinh extends Phaser.Scene {
     this.loadingShufflingCard = this.handleShufflingCard()
 
     if (readyPlayers.length === 4 && readyPlayers[0] === user.uid) {
-      console.log('randomAllCards>>>>>>>>>>>>>')
       randomAllCards(this.room)
     }
 
@@ -717,16 +729,16 @@ class MauBinh extends Phaser.Scene {
   }
 
   handleEndGame (result) {
+    console.log('handleEndGame', result)
     const world = store.getAll()
 
-    if (this.waitingText) {
-      this.waitingText.setVisible(true)
-      this.waitingText.setActive(true)
-    }
+    this.createWaitingForPlayText()
     if (this.waitingTextEnd) {
+      this.tweens.killTweensOf(this.waitingTextEnd)
+      this.waitingTextEnd.setVisible(false)
       this.waitingTextEnd.destroy()
+      this.waitingTextEnd = null
     }
-    console.log(result)
     if (!this.openedCards && !this.drawText) {
       this.createUserOpenedCards(result.cards)
       this.createDrawText(result.draw)
@@ -768,6 +780,7 @@ class MauBinh extends Phaser.Scene {
   }
 
   handleReadyToPlay () {
+    console.log('handleReadyToPlay')
     readyToPlay('maubinh', this.room)
     this.isPlayingGame = false
 
@@ -802,7 +815,7 @@ class MauBinh extends Phaser.Scene {
 
   async handleChangeRoomInfo (roomInfo) {
     const user = store.get('user')
-
+    console.log('handleChangeRoomInfo', roomInfo)
     if (this.room.players.length !== roomInfo.players.length) {
       this.room = roomInfo
   
@@ -812,7 +825,10 @@ class MauBinh extends Phaser.Scene {
       this.createUserIcons()
     }
 
-    if (this.playerDone && roomInfo.result.status === 'DONE' && !roomInfo.readyPlayers.includes(user.uid)) {
+    if (
+      this.playerDone && roomInfo.result.status === 'DONE' &&
+      !roomInfo.readyPlayers.includes(user.uid)
+    ) {
       this.room = roomInfo
 
       this.result = await getResult('maubinh', roomInfo)
@@ -823,7 +839,12 @@ class MauBinh extends Phaser.Scene {
     if (roomInfo.result && roomInfo.result.status === 'WAITING_FOR_RANDOM') {
       this.room = roomInfo
       this.handleChooseHiddenCard(roomInfo.readyPlayers)
-      this.waitingText && this.waitingText.destroy()
+      if (this.waitingText) {
+        this.tweens.killTweensOf(this.waitingText)
+        this.waitingText.setVisible(false)
+        this.waitingText.destroy()
+        this.waitingText = null
+      }
     }
 
     if (roomInfo.result && roomInfo.result.status === 'PLAYING') {
