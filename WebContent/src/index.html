@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Card game</title>
+		<link rel="apple-touch-icon" sizes="57x57" href="./assets/public/apple-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="./assets/public/apple-icon-60x60.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="./assets/public/apple-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="./assets/public/apple-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="./assets/public/apple-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="./assets/public/apple-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="./assets/public/apple-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="./assets/public/apple-icon-152x152.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="./assets/public/apple-icon-180x180.png">
+		<link rel="icon" type="image/png" sizes="192x192"  href="./assets/public/android-icon-192x192.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="./assets/public/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="96x96" href="./assets/public/favicon-96x96.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="./assets/public/favicon-16x16.png">
+		<link rel="manifest" href="./assets/manifest.json">
+		<link rel="stylesheet" href="./assets/styles/modal.css">
+		<meta name="msapplication-TileColor" content="#ffffff">
+		<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+		<meta name="theme-color" content="#ffffff">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+		<meta name="HandheldFriendly" content="True">
+		<meta name="MobileOptimized" content="320">
+		<meta http-equiv="cleartype" content="on">
+		<meta name="format-detection" content="telephone=no">
+		<style>
+				html,
+				body {
+					margin: 0;
+					padding: 0;
+					image-rendering: optimizeSpeed;              /* Older versions of FF */
+					image-rendering: -moz-crisp-edges;           /* FF 6.0+ */
+					image-rendering: -webkit-optimize-contrast;  /* Webkit (non standard naming) */
+					image-rendering: -o-crisp-edges;             /* OS X & Windows Opera (12.02+) */
+					image-rendering: crisp-edges;                /* Possible future browsers. */
+					-ms-interpolation-mode: nearest-neighbor;    /* IE (non standard naming) */
+					image-rendering: pixelated;                  /* Chrome 41 */
+				}
+				#toggle {
+					position: absolute;
+					right: 20px;
+					bottom: 20px;
+					background-image: url("./assets/images/setting-button.png");
+					background-position: center;
+					background-repeat: no-repeat;
+					background-size: contain;
+					width: 60px;
+					height: 60px;
+				}
+				.hidden {
+					display: none
+				}
+				.high-order {
+					z-index: 999;
+				}
+				.install {
+					position: absolute;
+					bottom: 0px;
+					width: 100px;
+					left: calc(50% - 50px);
+				}
+		</style>
+	</head>
+	<body style="background-color: black;">
+		<!-- <div id="toggle"></div> -->
+		<div id="game-container" style="display: block; width: 100%;z-index: 999"></div>
+		<script>
+			let userAccepted = false
+			window.addEventListener('beforeinstallprompt', (e) => {
+				e.preventDefault()
+				if (window.matchMedia('(display-mode: standalone)').matches) {  
+						// do things here  
+						// set a variable to be used when calling something  
+						// e.g. call Google Analytics to track standalone use   
+				} else {
+					const buttonInstall = document.createElement('div')
+					buttonInstall.className = 'install button'
+					buttonInstall.innerText = 'Install Game'
+					buttonInstall.id = 'install'
+					document.getElementById('game-container').appendChild(buttonInstall)
+					// Prevent Chrome 67 and earlier from automatically showing the prompt
+					this.servicePrompt = e
+					console.log('[service] - beforeinstallprompt', userAccepted)
+					if (!userAccepted) {
+						// If user not yet accept install app, show popup again
+						buttonInstall.onclick = () => {
+							this.servicePrompt.prompt()
+							// Wait for the user to respond to the prompt
+							this.servicePrompt.userChoice.then((choiceResult) => {
+								if (choiceResult.outcome === 'accepted') {
+									userAccepted = true
+									console.log('User accepted the A2HS prompt')
+								} else {
+									console.log('User dismissed the A2HS prompt')
+								}
+								this.servicePrompt = null
+							})
+						}
+					}
+				}
+      })
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('load', function() {
+					navigator.serviceWorker.register('service-worker.js')
+						.then(reg => {
+              console.log('Service worker registered! 😎', reg);
+              reg.onupdatefound = () => {
+                const installingWorker = reg.installing
+                if (installingWorker == null) {
+                  return
+                }
+                installingWorker.onstatechange = () => {
+                  if (installingWorker.state === 'installed') {
+                    if (navigator.serviceWorker.controller) {
+											const buttonUpdate = document.createElement('div')
+											buttonUpdate.className = 'install button'
+											buttonUpdate.innerText = 'Update Game'
+											buttonUpdate.id = 'update'
+											document.getElementById('game-container').appendChild(buttonUpdate)
+                      buttonUpdate.getElementById('update').onclick = () => {
+                        navigator.serviceWorker.ready.then(registration => {
+                          registration.unregister()
+                          setTimeout(() => {
+                            window.location.reload(window.location.href)
+                          }, 500)
+                        })
+                      }
+                    }
+                  }
+                }
+              }
+						})
+						.catch(err => {
+							console.log('😥 Service worker registration failed: ', err);
+						});
+				});
+			}
+		</script>
+	</body>
+</html>

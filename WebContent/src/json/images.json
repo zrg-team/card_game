@@ -1,0 +1,962 @@
+[
+  {
+    "key": "bg",
+    "load": [
+      "bg",
+      "assets/images/bg.png"
+    ],
+    "height": 750,
+    "width": 1334,
+    "type": "png"
+  },
+  {
+    "key": "bottom-panel",
+    "load": [
+      "bottom-panel",
+      "assets/images/bottom-panel.jpg"
+    ],
+    "height": 161,
+    "width": 2001,
+    "type": "png"
+  },
+  {
+    "key": "box-bottom",
+    "load": [
+      "box-bottom",
+      "assets/images/box-bottom.png"
+    ],
+    "height": 49,
+    "width": 143,
+    "type": "png"
+  },
+  {
+    "key": "button",
+    "load": [
+      "button",
+      "assets/images/button.png"
+    ],
+    "height": 76,
+    "width": 269,
+    "type": "png"
+  },
+  {
+    "key": "dark-button",
+    "load": [
+      "dark-button",
+      "assets/images/dark-button.png"
+    ],
+    "height": 111,
+    "width": 234,
+    "type": "png"
+  },
+  {
+    "key": "default-button",
+    "load": [
+      "default-button",
+      "assets/images/default-button.png"
+    ],
+    "height": 111,
+    "width": 234,
+    "type": "png"
+  },
+  {
+    "key": "dialog-bg",
+    "load": [
+      "dialog-bg",
+      "assets/images/dialog-bg.png"
+    ],
+    "height": 990,
+    "width": 1644,
+    "type": "png"
+  },
+  {
+    "key": "dialog-close",
+    "load": [
+      "dialog-close",
+      "assets/images/dialog-close.png"
+    ],
+    "height": 64,
+    "width": 65,
+    "type": "png"
+  },
+  {
+    "key": "done-button",
+    "load": [
+      "done-button",
+      "assets/images/done-button.png"
+    ],
+    "height": 49,
+    "width": 143,
+    "type": "png"
+  },
+  {
+    "key": "exit-button",
+    "load": [
+      "exit-button",
+      "assets/images/exit-button.png"
+    ],
+    "height": 245,
+    "width": 582,
+    "type": "png"
+  },
+  {
+    "key": "game-bg-1",
+    "load": [
+      "game-bg-1",
+      "assets/images/game-bg-1.png"
+    ],
+    "height": 540,
+    "width": 1009,
+    "type": "png"
+  },
+  {
+    "key": "game-table",
+    "load": [
+      "game-table",
+      "assets/images/game-table.png"
+    ],
+    "height": 316,
+    "width": 600,
+    "type": "png"
+  },
+  {
+    "key": "gamelist-bg",
+    "load": [
+      "gamelist-bg",
+      "assets/images/gamelist-bg.png"
+    ],
+    "height": 219,
+    "width": 316,
+    "type": "png"
+  },
+  {
+    "key": "ic_send_verify",
+    "load": [
+      "ic_send_verify",
+      "assets/images/ic_send_verify.png"
+    ],
+    "height": 78,
+    "width": 246,
+    "type": "png"
+  },
+  {
+    "key": "icon-poker",
+    "load": [
+      "icon-poker",
+      "assets/images/icon-poker.png"
+    ],
+    "height": 256,
+    "width": 300,
+    "type": "png"
+  },
+  {
+    "key": "loading-background",
+    "load": [
+      "loading-background",
+      "assets/images/loading-background.png"
+    ],
+    "height": 48,
+    "width": 331,
+    "type": "png"
+  },
+  {
+    "key": "login-button",
+    "load": [
+      "login-button",
+      "assets/images/login-button.png"
+    ],
+    "height": 111,
+    "width": 234,
+    "type": "png"
+  },
+  {
+    "key": "logo-card",
+    "load": [
+      "logo-card",
+      "assets/images/logo-card.png"
+    ],
+    "height": 2048,
+    "width": 2048,
+    "type": "png"
+  },
+  {
+    "key": "mau-binh",
+    "load": [
+      "mau-binh",
+      "assets/images/mau-binh.jpg"
+    ],
+    "height": 300,
+    "width": 300,
+    "type": "jpg"
+  },
+  {
+    "key": "menu-bg",
+    "load": [
+      "menu-bg",
+      "assets/images/menu-bg.png"
+    ],
+    "height": 750,
+    "width": 1334,
+    "type": "png"
+  },
+  {
+    "key": "overlay",
+    "load": [
+      "overlay",
+      "assets/images/overlay.png"
+    ],
+    "height": 998,
+    "width": 990,
+    "type": "png"
+  },
+  {
+    "key": "play-button",
+    "load": [
+      "play-button",
+      "assets/images/play-button.png"
+    ],
+    "height": 111,
+    "width": 234,
+    "type": "png"
+  },
+  {
+    "key": "playnow-button",
+    "load": [
+      "playnow-button",
+      "assets/images/playnow-button.png"
+    ],
+    "height": 49,
+    "width": 143,
+    "type": "png"
+  },
+  {
+    "key": "progress-bg",
+    "load": [
+      "progress-bg",
+      "assets/images/progress-bg.png"
+    ],
+    "height": 27,
+    "width": 726,
+    "type": "png"
+  },
+  {
+    "key": "progress-line",
+    "load": [
+      "progress-line",
+      "assets/images/progress-line.png"
+    ],
+    "height": 27,
+    "width": 726,
+    "type": "png"
+  },
+  {
+    "key": "register-button",
+    "load": [
+      "register-button",
+      "assets/images/register-button.png"
+    ],
+    "height": 111,
+    "width": 234,
+    "type": "png"
+  },
+  {
+    "key": "setting-button",
+    "load": [
+      "setting-button",
+      "assets/images/setting-button.png"
+    ],
+    "height": 170,
+    "width": 170,
+    "type": "png"
+  },
+  {
+    "key": "time-bg",
+    "load": [
+      "time-bg",
+      "assets/images/time-bg.png"
+    ],
+    "height": 75,
+    "width": 528,
+    "type": "png"
+  },
+  {
+    "key": "top-panel",
+    "load": [
+      "top-panel",
+      "assets/images/top-panel.png"
+    ],
+    "height": 90,
+    "width": 1334,
+    "type": "png"
+  },
+  {
+    "key": "user-icon",
+    "load": [
+      "user-icon",
+      "assets/images/user-icon.png"
+    ],
+    "height": 88,
+    "width": 84,
+    "type": "png"
+  },
+  {
+    "key": "user-panel",
+    "load": [
+      "user-panel",
+      "assets/images/user-panel.png"
+    ],
+    "height": 123,
+    "width": 450,
+    "type": "png"
+  },
+  {
+    "key": "zoomout-button",
+    "load": [
+      "zoomout-button",
+      "assets/images/zoomout-button.png"
+    ],
+    "height": 298,
+    "width": 294,
+    "type": "png"
+  },
+  {
+    "key": "2C",
+    "load": [
+      "2C",
+      "assets/images/cards/2C.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "2D",
+    "load": [
+      "2D",
+      "assets/images/cards/2D.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "2H",
+    "load": [
+      "2H",
+      "assets/images/cards/2H.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "2S",
+    "load": [
+      "2S",
+      "assets/images/cards/2S.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "3C",
+    "load": [
+      "3C",
+      "assets/images/cards/3C.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "3D",
+    "load": [
+      "3D",
+      "assets/images/cards/3D.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "3H",
+    "load": [
+      "3H",
+      "assets/images/cards/3H.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "3S",
+    "load": [
+      "3S",
+      "assets/images/cards/3S.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "4C",
+    "load": [
+      "4C",
+      "assets/images/cards/4C.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "4D",
+    "load": [
+      "4D",
+      "assets/images/cards/4D.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "4H",
+    "load": [
+      "4H",
+      "assets/images/cards/4H.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "4S",
+    "load": [
+      "4S",
+      "assets/images/cards/4S.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "5C",
+    "load": [
+      "5C",
+      "assets/images/cards/5C.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "5D",
+    "load": [
+      "5D",
+      "assets/images/cards/5D.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "5H",
+    "load": [
+      "5H",
+      "assets/images/cards/5H.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "5S",
+    "load": [
+      "5S",
+      "assets/images/cards/5S.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "6C",
+    "load": [
+      "6C",
+      "assets/images/cards/6C.png"
+    ],
+    "height": 1052,
+    "width": 683,
+    "type": "png"
+  },
+  {
+    "key": "6D",
+    "load": [
+      "6D",
+      "assets/images/cards/6D.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "6H",
+    "load": [
+      "6H",
+      "assets/images/cards/6H.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "6S",
+    "load": [
+      "6S",
+      "assets/images/cards/6S.png"
+    ],
+    "height": 1052,
+    "width": 683,
+    "type": "png"
+  },
+  {
+    "key": "7C",
+    "load": [
+      "7C",
+      "assets/images/cards/7C.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "7D",
+    "load": [
+      "7D",
+      "assets/images/cards/7D.png"
+    ],
+    "height": 1052,
+    "width": 683,
+    "type": "png"
+  },
+  {
+    "key": "7H",
+    "load": [
+      "7H",
+      "assets/images/cards/7H.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "7S",
+    "load": [
+      "7S",
+      "assets/images/cards/7S.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "8C",
+    "load": [
+      "8C",
+      "assets/images/cards/8C.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "8D",
+    "load": [
+      "8D",
+      "assets/images/cards/8D.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "8H",
+    "load": [
+      "8H",
+      "assets/images/cards/8H.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "8S",
+    "load": [
+      "8S",
+      "assets/images/cards/8S.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "9C",
+    "load": [
+      "9C",
+      "assets/images/cards/9C.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "9D",
+    "load": [
+      "9D",
+      "assets/images/cards/9D.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "9H",
+    "load": [
+      "9H",
+      "assets/images/cards/9H.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "9S",
+    "load": [
+      "9S",
+      "assets/images/cards/9S.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "AC",
+    "load": [
+      "AC",
+      "assets/images/cards/AC.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "AD",
+    "load": [
+      "AD",
+      "assets/images/cards/AD.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "AH",
+    "load": [
+      "AH",
+      "assets/images/cards/AH.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "AS",
+    "load": [
+      "AS",
+      "assets/images/cards/AS.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "JC",
+    "load": [
+      "JC",
+      "assets/images/cards/JC.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "JD",
+    "load": [
+      "JD",
+      "assets/images/cards/JD.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "JH",
+    "load": [
+      "JH",
+      "assets/images/cards/JH.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "JS",
+    "load": [
+      "JS",
+      "assets/images/cards/JS.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "KC",
+    "load": [
+      "KC",
+      "assets/images/cards/KC.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "KD",
+    "load": [
+      "KD",
+      "assets/images/cards/KD.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "KH",
+    "load": [
+      "KH",
+      "assets/images/cards/KH.png"
+    ],
+    "height": 1052,
+    "width": 683,
+    "type": "png"
+  },
+  {
+    "key": "KS",
+    "load": [
+      "KS",
+      "assets/images/cards/KS.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "QC",
+    "load": [
+      "QC",
+      "assets/images/cards/QC.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "QD",
+    "load": [
+      "QD",
+      "assets/images/cards/QD.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "QH",
+    "load": [
+      "QH",
+      "assets/images/cards/QH.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "QS",
+    "load": [
+      "QS",
+      "assets/images/cards/QS.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "XC",
+    "load": [
+      "XC",
+      "assets/images/cards/XC.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "XD",
+    "load": [
+      "XD",
+      "assets/images/cards/XD.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "XH",
+    "load": [
+      "XH",
+      "assets/images/cards/XH.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "XS",
+    "load": [
+      "XS",
+      "assets/images/cards/XS.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "aces",
+    "load": [
+      "aces",
+      "assets/images/cards/aces.png"
+    ],
+    "height": 1465,
+    "width": 2451,
+    "type": "png"
+  },
+  {
+    "key": "back_cards-07",
+    "load": [
+      "back_cards-07",
+      "assets/images/cards/back_cards-07.png"
+    ],
+    "height": 1562,
+    "width": 3231,
+    "type": "png"
+  },
+  {
+    "key": "blue_back",
+    "load": [
+      "blue_back",
+      "assets/images/cards/blue_back.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "gray_back",
+    "load": [
+      "gray_back",
+      "assets/images/cards/gray_back.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "green_back",
+    "load": [
+      "green_back",
+      "assets/images/cards/green_back.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "honor_clubs",
+    "load": [
+      "honor_clubs",
+      "assets/images/cards/honor_clubs.png"
+    ],
+    "height": 1473,
+    "width": 2394,
+    "type": "png"
+  },
+  {
+    "key": "honor_diamond",
+    "load": [
+      "honor_diamond",
+      "assets/images/cards/honor_diamond.png"
+    ],
+    "height": 1440,
+    "width": 2488,
+    "type": "png"
+  },
+  {
+    "key": "honor_heart-14",
+    "load": [
+      "honor_heart-14",
+      "assets/images/cards/honor_heart-14.png"
+    ],
+    "height": 1436,
+    "width": 2429,
+    "type": "png"
+  },
+  {
+    "key": "honors_spade-14",
+    "load": [
+      "honors_spade-14",
+      "assets/images/cards/honors_spade-14.png"
+    ],
+    "height": 1379,
+    "width": 2347,
+    "type": "png"
+  },
+  {
+    "key": "purple_back",
+    "load": [
+      "purple_back",
+      "assets/images/cards/purple_back.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "red_back",
+    "load": [
+      "red_back",
+      "assets/images/cards/red_back.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  },
+  {
+    "key": "yellow_back",
+    "load": [
+      "yellow_back",
+      "assets/images/cards/yellow_back.png"
+    ],
+    "height": 1056,
+    "width": 691,
+    "type": "png"
+  }
+]
